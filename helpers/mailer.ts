@@ -15,11 +15,11 @@ export const sendEmail = async ({email,emailType,userId}:any)=>{
             //forgot password email
         }
 
-        const nodemailer = require("nodemailer");
+        const nodemailerr = require("nodemailer");
 
           // Looking to send emails in production? Check out our Email API/SMTP product!
            // Looking to send emails in production? Check out our Email API/SMTP product!
-            var transporter = nodemailer.createTransport({
+            var transporter = nodemailerr.createTransport({
             host: "sandbox.smtp.mailtrap.io",
             port: 2525,
             auth: {
@@ -35,7 +35,7 @@ export const sendEmail = async ({email,emailType,userId}:any)=>{
                 html:`<p>click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}"> </a> to ${emailType==='VERIFY' ? "verify your email" : "reset your password"} or copy paste link into browser. <br>
                 ${process.env.DOMAIN}/verifyemail?token=${hashedToken}</p>`
 
-                //todo for forgot password email
+ 
             };
           const mailResponse=await transporter.sendMail(mailOptions)
           return mailResponse

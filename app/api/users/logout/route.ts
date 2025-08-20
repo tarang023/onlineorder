@@ -14,7 +14,6 @@ export async function GET(req: NextRequest) {
             success:true,
            
         })
-        console.log("hrere");
         response.cookies.set("token","",{httpOnly:true,expires:new Date(0)})
         return response
     }catch(error:any){  

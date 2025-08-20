@@ -4,6 +4,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Icon from "../components/AppIcon";
 import Image from "../components/AppImage";
+import axios from 'axios';
+import toast from "react-hot-toast";
+
 function CustomerLoginRegister() {
   const router = useRouter();
   const pathname = usePathname();
@@ -49,6 +52,24 @@ function CustomerLoginRegister() {
     setPasswordStrength(0);
   }, [activeTab]);
 
+
+  
+    const sendData = async () => {
+        try {
+            setIsLoading(true);
+            const response = await axios.post("/api/users/customer-login-register",formData);
+            console.log("Signup success", response.data);
+            setActiveTab("login")
+            
+        } catch (error) {
+            console.log("Signup failed", error.message);
+            
+            toast.error(error.message);
+        }finally {
+            setIsLoading(false);
+        }
+    }
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const inputValue = type === "checkbox" ? checked : value;
@@ -66,10 +87,12 @@ function CustomerLoginRegister() {
       }));
     }
 
+
     // Calculate password strength for register mode
     if (name === "password" && activeTab === "register") {
       calculatePasswordStrength(value);
     }
+     
   };
 
   const calculatePasswordStrength = (password) => {
@@ -158,6 +181,8 @@ function CustomerLoginRegister() {
           setIsLoading(false);
           return;
         }
+      }else{
+        sendData();
       }
 
       // Success - redirect to intended page or menu
@@ -562,8 +587,10 @@ function CustomerLoginRegister() {
 
               {/* Submit Button */}
               <button
+
                 type="submit"
                 disabled={isLoading}
+                
                 className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-smooth font-body font-body-medium min-h-touch"
               >
                 {isLoading && (
