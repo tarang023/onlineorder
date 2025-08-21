@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
       const salt=await bcryptjs.genSalt(10);
       const hashedPassword=await bcryptjs.hash(password,salt);
-
+      const username=firstName+lastName;
      const newUser= new User({
           email,
           phone,
@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
         acceptTerms
       });
       const savedUser= await newUser.save();
+      console.log("newUser",newUser);
       console.log("savedUser",savedUser);
 
       //send verification email

@@ -1,35 +1,38 @@
-import type { NextRequest } from 'next/server'
-import { NextResponse } from 'next/server'
- 
+import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
-const path = request.nextUrl.pathname
+export function middleware(request) {
+    const path = request.nextUrl.pathname;
 
-  const isPublicPath = path === '/customer-login-register'  
+    // Define paths that are considered public (accessible without a token)
+    const isPublicPath = path === '/customer-login-register' || path === '/';
 
-  const token = request.cookies.get('token')?.value || ''
+    // Get the token from the user's cookies
+    const token = request.cookies.get('token')?.value || '';
 
-  if(isPublicPath && token) {
-    return NextResponse.redirect(new URL('/', request.nextUrl))
-  }
+    // If the user is trying to access a public path and they have a token,
+    // redirect them to a protected page (e.g., the menu)
+    if (isPublicPath && token) {
+        return NextResponse.redirect(new URL('/menu-browse-search', request.nextUrl));
+    }
 
-  if (!isPublicPath && !token) {
-    return NextResponse.redirect(new URL('/customer-login-register', request.nextUrl))
-  }
-    
+    // If the user is trying to access a protected path and they DON'T have a token,
+    // redirect them to the login page
+    if (!isPublicPath && !token) {
+        return NextResponse.redirect(new URL('/customer-login-register', request.nextUrl));
+    }
+
+    // If none of the above, let the request continue
+    return NextResponse.next();
 }
 
- 
 // See "Matching Paths" below to learn more
 export const config = {
-matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ]
-}
+    matcher: [
+        '/',
+        '/customer-login-register',
+        '/menu-browse-search',
+        '/shopping-cart-checkout',
+        // Add any other paths you want this middleware to run on
+    ],
+};

@@ -1,19 +1,43 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
-import Icon from '../AppIcon';
-import { usePathname } from 'next/navigation';
-import next from 'next';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Icon from "../AppIcon";
+import { usePathname } from "next/navigation";
+import next from "next";
+import { set } from "mongoose";
+import Cookies from "js-cookie";
+import axios from 'axios';
 
 function CustomerNavigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [cartItemCount] = useState(3); // This would come from cart context in real app
-  const [isLoggedIn] = useState(false); // This would come from auth context in real app
+
+  // const [isLoggedIn, setIsLoggedIn] = useState(false); // This would come from auth context in real app
+  const isLoggedIn = true;
   const location = usePathname();
 
+  // useEffect(() => {
+  //     const token = Cookies.get('token'); // Gets the token cookie
+  //     if (token) {
+  //       setIsLoggedIn(true);
+  //     }
+  //   }, []);
+  // ;
+  const signOut = async () => {
+    try {
+      const response = await axios.get("/api/users/logout");
+      if (response.status === 200) {
+        Cookies.remove("token"); // Remove the token cookie
+        // setIsLoggedIn(false); // Update state if using context
+        window.location.href = "/customer-login-register"; // Redirect to login page
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   const navigationItems = [
-    { label: 'Menu', path: '/menu-browse-search', icon: 'ChefHat' },
-    { label: 'Orders', path: '/order-tracking-status', icon: 'Clock' },
-    { label: 'Account', path: '/customer-account-order-history', icon: 'User' },
+    { label: "Menu", path: "/menu-browse-search", icon: "ChefHat" },
+    { label: "Orders", path: "/order-tracking-status", icon: "Clock" },
+    { label: "Account", path: "/customer-account-order-history", icon: "User" },
   ];
 
   const isActivePath = (path) => location.pathname === path;
@@ -31,7 +55,10 @@ function CustomerNavigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/menu-browse-search" className="flex items-center space-x-2">
+          <Link
+            href="/menu-browse-search"
+            className="flex items-center space-x-2"
+          >
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <Icon name="ChefHat" size={20} color="white" />
             </div>
@@ -48,7 +75,8 @@ function CustomerNavigation() {
                 href={item.path}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-smooth font-body font-body-medium ${
                   isActivePath(item.path)
-                    ? 'text-primary bg-primary-50' :'text-text-secondary hover:text-primary hover:bg-primary-50'
+                    ? "text-primary bg-primary-50"
+                    : "text-text-secondary hover:text-primary hover:bg-primary-50"
                 }`}
               >
                 <Icon name={item.icon} size={18} />
@@ -73,7 +101,7 @@ function CustomerNavigation() {
             </Link>
 
             {/* Auth Button */}
-            {isLoggedIn ? (
+            {/* {isLoggedIn ? (
               <Link
                 href="/customer-account-order-history"
                 className="hidden md:flex items-center space-x-2 px-4 py-2 text-text-secondary hover:text-primary transition-smooth"
@@ -81,16 +109,16 @@ function CustomerNavigation() {
                 <Icon name="User" size={18} />
                 <span className="font-body font-body-medium">Profile</span>
               </Link>
-            ) : (
-              <Link
-                href="/customer-login-register"
+            ) : ( */}
+            {
+              <button
+                onClick={signOut}
                 className="hidden md:flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-700 transition-smooth font-body font-body-medium"
               >
-                <Icon name="LogIn" size={18} />
-                <span>Sign In</span>
-              </Link>
-            )}
-
+                <Icon name="Logout" size={18} />
+                <span>logout</span>
+              </button>
+            }
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
@@ -113,14 +141,15 @@ function CustomerNavigation() {
                 onClick={closeMobileMenu}
                 className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-smooth font-body font-body-medium min-h-touch ${
                   isActivePath(item.path)
-                    ? 'text-primary bg-primary-50' :'text-text-secondary hover:text-primary hover:bg-primary-50'
+                    ? "text-primary bg-primary-50"
+                    : "text-text-secondary hover:text-primary hover:bg-primary-50"
                 }`}
               >
                 <Icon name={item.icon} size={20} />
                 <span>{item.label}</span>
               </Link>
             ))}
-            
+
             <div className="border-t border-border pt-4 mt-4">
               {isLoggedIn ? (
                 <Link

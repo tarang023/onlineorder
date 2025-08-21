@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
  
 
 const userSchema = new mongoose.Schema({
- 
     email:{
         type: String,
         required: [true,"please provide email"],
@@ -11,19 +10,19 @@ const userSchema = new mongoose.Schema({
     password:{
         type: String,
         required: [true,"please provide password"],
-        unique: true
+        
     },
     phone:{
         type:Number,
-        requird:[true,"phone number is required"]
+        required:[true,"phone number is required"]
     },
     firstName:{
         type:String,
-        requird:[true,"first name number is required"]
+        required:[true,"first name is required"]
     },
     lastName:{
         type:String,
-        requird:[true,"lastName is required"]
+        required:[true,"lastName is required"]
     },
     isVerified:{
         type: Boolean,

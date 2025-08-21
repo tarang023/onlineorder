@@ -6,6 +6,8 @@ import Icon from "../components/AppIcon";
 import Image from "../components/AppImage";
 import axios from 'axios';
 import toast from "react-hot-toast";
+import { useSession, signIn, signOut } from "next-auth/react";
+
 
 function CustomerLoginRegister() {
   const router = useRouter();
@@ -30,11 +32,11 @@ function CustomerLoginRegister() {
   const location = usePathname();
 
   // Mock credentials for testing
-  const mockCredentials = {
-    customer: { email: "customer@tastebite.com", password: "customer123" },
-    admin: { email: "admin@tastebite.com", password: "admin123" },
-    staff: { email: "staff@tastebite.com", password: "staff123" },
-  };
+  // const mockCredentials = {
+  //   customer: { email: "customer@tastebite.com", password: "customer123" },
+  //   admin: { email: "admin@tastebite.com", password: "admin123" },
+  //   staff: { email: "staff@tastebite.com", password: "staff123" },
+  // };
 
   useEffect(() => {
     // Reset form when switching tabs
@@ -68,6 +70,20 @@ function CustomerLoginRegister() {
         }finally {
             setIsLoading(false);
         }
+    }
+
+    const onLogin =async(email,password)=>{
+      try{
+        setIsLoading(true);
+        const response =await axios.post("/api/users/login", { email, password });
+        console.log("Login success", response.data);
+        return true;
+      }catch(error){
+        console.log("Login failed", error.message);
+        toast.error(error.message);
+      }finally{
+        setIsLoading(false);
+      }
     }
 
   const handleInputChange = (e) => {
@@ -120,7 +136,7 @@ function CustomerLoginRegister() {
 
   const validateForm = () => {
     const newErrors = {};
-
+    console.log("hrere");
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -156,7 +172,7 @@ function CustomerLoginRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     if (!validateForm()) {
       return;
     }
@@ -168,11 +184,13 @@ function CustomerLoginRegister() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       if (activeTab === "login") {
+
         // Check mock credentials
-        const isValidCredentials = Object.values(mockCredentials).some(
-          (cred) =>
-            cred.email === formData.email && cred.password === formData.password
-        );
+        const { email ,password} = formData;
+        console.log(email,password);
+        onLogin(email, password);
+        const isValidCredentials =  await onLogin(email, password);
+        console.log('login credential status received',isValidCredentials);
 
         if (!isValidCredentials) {
           setErrors({
@@ -186,8 +204,11 @@ function CustomerLoginRegister() {
       }
 
       // Success - redirect to intended page or menu
+      console.log("outside credential check");
       const redirectTo = location.state?.from || "/menu-browse-search";
-      navigate(redirectTo);
+      console.log("Redirecting to:", redirectTo);
+       
+    router.push(redirectTo);
     } catch (error) {
       setErrors({ submit: "Authentication failed. Please try again." });
     } finally {
@@ -197,6 +218,9 @@ function CustomerLoginRegister() {
 
   const handleSocialLogin = (provider) => {
     console.log(`${provider} login initiated`);
+
+      signIn("google");
+
     // Simulate social login success
     setTimeout(() => {
       router.push("/menu-browse-search");
@@ -619,7 +643,7 @@ function CustomerLoginRegister() {
             )}
 
             {/* Guest Checkout */}
-            <div className="mt-6 pt-6 border-t border-border text-center">
+            {/* <div className="mt-6 pt-6 border-t border-border text-center">
               <p className="text-sm text-text-secondary font-body mb-3">
                 Don't want to create an account?
               </p>
@@ -629,10 +653,10 @@ function CustomerLoginRegister() {
               >
                 Continue as guest
               </button>
-            </div>
+            </div> */}
 
             {/* Mock Credentials Info */}
-            <div className="mt-8 p-4 bg-accent-50 border border-accent-100 rounded-lg">
+            {/* <div className="mt-8 p-4 bg-accent-50 border border-accent-100 rounded-lg">
               <h4 className="text-sm font-body font-body-medium text-text-primary mb-2">
                 Demo Credentials:
               </h4>
@@ -650,7 +674,7 @@ function CustomerLoginRegister() {
                   {mockCredentials.staff.password}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
