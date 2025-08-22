@@ -2,13 +2,13 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import Icon from 'components/AppIcon';
-import KitchenInterface from 'components/ui/KitchenInterface';
+import Icon from '../AppIcon';
+import KitchenInterface from '../components/ui/KitchenInterface';
 
-import StationFilter from './components/StationFilter';
-import OrderStatusColumn from './components/OrderStatusColumn';
-import PerformanceMetrics from './components/PerformanceMetrics';
-import OrderModificationAlert from './components/OrderModificationAlert';
+import StationFilter from '../components/kitchen-display/StationFilter';
+import OrderStatusColumn from '../components/kitchen-display/OrderStatusColumn';
+import PerformanceMetrics from '../components/kitchen-display/PerformanceMetrics';
+import OrderModificationAlert from '../components/kitchen-display/OrderModificationAlert';
 
 function KitchenDisplaySystem() {
   const [orders, setOrders] = useState([]);

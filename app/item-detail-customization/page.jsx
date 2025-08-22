@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
-import CustomerNavigation from '@/app/components/ui/CustomerNavigation';
-import Icon from '@/app/components/AppIcon';
-import Image from '@/app/components/Image';
+// import  from '../../app/components/ui/CustomerNavigation';
+import CustomerNavigation from '../../app/components/ui/CustomerNavigation';
+import Icon from '../../app/components/AppIcon';
+import Image from '../../app/components/Image';
 
-import InteractiveButton from "@/app/components/InteractiveButton";
+import InteractiveButton from "../../app/components/InteractiveButton";
 function ItemDetailCustomization() {
   const navigate = useNavigate();
   const location = useLocation();
