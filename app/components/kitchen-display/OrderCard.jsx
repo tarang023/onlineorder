@@ -1,6 +1,6 @@
 // src/pages/kitchen-display-system/components/OrderCard.jsx
 import React, { useState, useEffect } from 'react';
-import Icon from 'components/AppIcon';
+import Icon from '../AppIcon';
 
 function OrderCard({
   order,

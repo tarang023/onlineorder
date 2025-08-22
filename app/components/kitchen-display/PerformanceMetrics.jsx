@@ -1,6 +1,6 @@
 // src/pages/kitchen-display-system/components/PerformanceMetrics.jsx
 import React from 'react';
-import Icon from 'components/AppIcon';
+import Icon from '../AppIcon';
 
 function PerformanceMetrics({ metrics, className = '' }) {
   const metricCards = [

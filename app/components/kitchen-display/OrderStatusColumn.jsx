@@ -1,6 +1,6 @@
 // src/pages/kitchen-display-system/components/OrderStatusColumn.jsx
 import React from 'react';
-import Icon from 'components/AppIcon';
+import Icon from '../AppIcon';
 import OrderCard from './OrderCard';
 
 function OrderStatusColumn({

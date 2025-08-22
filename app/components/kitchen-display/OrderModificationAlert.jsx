@@ -1,6 +1,6 @@
 // src/pages/kitchen-display-system/components/OrderModificationAlert.jsx
 import React from 'react';
-import Icon from 'components/AppIcon';
+import Icon from '../AppIcon';
 
 function OrderModificationAlert({ orders, onDismiss, className = '' }) {
   if (!orders || orders?.length === 0) {

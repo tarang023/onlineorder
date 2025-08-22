@@ -1,6 +1,6 @@
 // src/pages/kitchen-display-system/components/StationFilter.jsx
 import React from 'react';
-import Icon from 'components/AppIcon';
+import Icon from '../AppIcon';
 
 function StationFilter({ selectedStation, onStationChange, orderCounts, className = '' }) {
   const stations = [
