@@ -45,6 +45,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/item-detail-customization/page.js"
+    ],
+    "/order-tracking-status/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/order-tracking-status/page.js"
+    ],
+    "/customer-account-order-history/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/customer-account-order-history/page.js"
     ]
   }
 }

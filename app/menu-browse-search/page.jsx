@@ -584,8 +584,8 @@ function MenuBrowseSearch() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredItems.map((item) => (
                     <div
-                      id={item.productid}
-                      key={item.productId}
+                      id={item.id}
+                      key={item.id}
                       className={`bg-surface rounded-lg shadow-soft overflow-hidden transition-smooth hover:shadow-floating cursor-pointer group ${
                         !item.isAvailable ? "opacity-60" : ""
                       }`}

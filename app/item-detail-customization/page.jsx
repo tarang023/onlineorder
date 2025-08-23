@@ -20,6 +20,7 @@ function ItemDetailCustomization() {
   const [showNutrition, setShowNutrition] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(3);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Mock item data - would come from props/state in real app
   const mockItem = {
@@ -163,6 +164,7 @@ Our dough is prepared fresh daily using traditional techniques and aged for 24 h
   ];
 
   useEffect(() => {
+
     setSelectedItem(mockItem);
     // Initialize selected ingredients state
     const initialIngredients = {};
@@ -171,6 +173,11 @@ Our dough is prepared fresh daily using traditional techniques and aged for 24 h
     });
     setSelectedIngredients(initialIngredients);
   }, []);
+  useEffect(() => {
+    if(selectedItem){
+    setIsLoading(false);
+    }
+  }, [selectedItem]);
 
   const calculateTotalPrice = () => {
     if (!selectedItem) return 0;
@@ -637,8 +644,8 @@ Our dough is prepared fresh daily using traditional techniques and aged for 24 h
             <div className="flex space-x-4 overflow-x-auto pb-2">
               {mockRelatedItems.map((item) => (
                 <button
-                  key={item.productId}
-                  onClick={() => handleRelatedItemClick(item.productId)}
+                  key={item.id}
+                  onClick={() => handleRelatedItemClick(item.id)}
                   className="flex-shrink-0 w-48 bg-surface rounded-lg shadow-soft hover:shadow-floating transition-smooth"
                 >
                   <Image

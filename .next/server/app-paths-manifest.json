@@ -1,7 +1,8 @@
 {
-  "/api/getData/route": "app/api/getData/route.js",
-  "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js",
-  "/menu-browse-search/page": "app/menu-browse-search/page.js",
   "/item-detail-customization/page": "app/item-detail-customization/page.js",
+  "/menu-browse-search/page": "app/menu-browse-search/page.js",
+  "/order-tracking-status/page": "app/order-tracking-status/page.js",
+  "/customer-account-order-history/page": "app/customer-account-order-history/page.js",
+  "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js",
   "/_not-found/page": "app/_not-found/page.js"
 }

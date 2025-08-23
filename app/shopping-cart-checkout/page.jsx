@@ -28,38 +28,6 @@ function ShoppingCartCheckout() {
 
   // Mock data
    let cartData;
-
-    // const token = Cookies.get('token');
-    // console.log("Token in CartContext:", token);
-    // // const token = Cookies.get('token');
-    // if (token) {
-    // const fetchCartData = async () => {
-    //   try {
-    //     setIsLoading(true);
-    //     const response = await fetch('/api/cart', {
-    //       credentials: 'include' // ✅ Add this line
-    //     });
-    //     if (response.ok) {
-    //       cartData = await response.json();
-    //       console.log(cartData.cart);
-    //       setCartItems(cartData.cart);
-    //     //  cartData=data.cart;
-    //       // setCartItems(data.cart || []);
-    //     }
-       
-    //   } catch (error) {
-    //     console.error("Failed to fetch cart:", error);
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // };
-    // } else {
-    //   console.log("no token found")
-    //   setIsLoading(false);
-    // }
-
-
-
   const mockCartItems = [
     {
       id: 1,
@@ -190,9 +158,9 @@ useEffect(() => {
   
   // You can now do things with the data, like calculate the total
   if (cartItems.length > 0) {
-    // calculateTotal();
+    calculateTotal();
   }
-}, [cartItems]); 
+}, [cartItems]);
 
   const updateQuantity = async (item,productId, newQuantity) => {
     // const productId = items.productId;
@@ -200,17 +168,25 @@ useEffect(() => {
     const quantity = newQuantity;
    const response=await axios.post("/api/cart/update", { productId, quantity });
       console.log(response);
+      
 
-    // if (newQuantity === 0) {
-    //   setCartItems(cartItems.data.filter((item) => item.id !== itemId));
-    // } else {
-    //   setCartItems(
-    //     cartItems.data.map((item) =>
-    //       item.id ===  items.productId ? { ...item, quantity: newQuantity } : item
-    //     )
-    //   );
-    // }
-   
+       
+     const onLogin =async()=>{
+      try{
+        setIsLoading(true);
+        const response =await axios.post("/api/getData");
+        console.log("Login success", response.data,isLoading);
+        setCartItems(response.data);
+        return true;
+      }catch(error){
+        console.log("Login failed", error.message);
+        toast.error(error.message);
+      }finally{
+        setIsLoading(false);
+      }
+    }
+   onLogin();
+
   };
 
   const toggleItemExpansion = (itemId) => {
@@ -232,9 +208,11 @@ useEffect(() => {
 
   const calculateSubtotal = () => {
   if (isLoading) {
+    console.log("Loading, cannot calculate subtotal yet.");
     return 0;
   }
-  cartItems.data.reduce((total, item) => total + item.price * item.quantity, 0);
+  console.log("Calculating subtotal...");
+  return cartItems.data.map((item) => item.price * item.quantity).reduce((acc, curr) => acc + curr, 0);
 }
 
 
@@ -498,7 +476,7 @@ useEffect(() => {
                                 ${(item.price * item.quantity).toFixed(2)}
                               </span>
                               <button
-                                onClick={() => updateQuantity(item.id, 0)}
+                                onClick={() => updateQuantity(item,item.productId, 0)}
                                 className="p-1 text-error hover:bg-error-50 rounded transition-smooth"
                               >
                                 <Icon name="Trash2" size={16} />
@@ -717,7 +695,7 @@ useEffect(() => {
                         Subtotal
                       </span>
                       <span className="font-data font-data-normal">
-                        ${calculateSubtotal() }
+                        ${calculateSubtotal().toFixed(2) }
                       </span>
                     </div>
 
