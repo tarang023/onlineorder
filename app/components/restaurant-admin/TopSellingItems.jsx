@@ -20,7 +20,7 @@ function TopSellingItems({ items }) {
       <div className="space-y-4">
         {items.map((item) => (
           <div
-            key={item.id}
+            key={item.productId}
             className="flex items-center p-3 rounded-lg hover:bg-secondary-50 transition-smooth"
           >
             <div className="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center mr-3">

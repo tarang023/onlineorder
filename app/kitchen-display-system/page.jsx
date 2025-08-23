@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import Icon from '../AppIcon';
+import Icon from '../components/AppIcon';
 import KitchenInterface from '../components/ui/KitchenInterface';
 
 import StationFilter from '../components/kitchen-display/StationFilter';

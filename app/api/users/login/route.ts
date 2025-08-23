@@ -3,6 +3,7 @@ import User from "../../../../models/userModel";
 import {NextRequest,NextResponse } from 'next/server';
 import bcryptjs from 'bcryptjs';
 import { sendEmail } from "../../../../helpers/mailer";
+import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 connect();
 
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
 
         const tokenData ={
             id :user._id,
-            username: user.username,
+           
             email: user.email
         }
         console.log(tokenData);
@@ -35,8 +36,8 @@ export async function POST(req: NextRequest) {
                 message: "Login successful",
                 success:true,
                 
-            })
-
+            });
+        
             response.cookies.set("token",token,{httpOnly:true})
             return response
     }catch(error:any){

@@ -1,21 +1,20 @@
-import React from 'react';
-import Icon from '../AppIcon';
+import Icon from "../AppIcon";
 
 function OrderSummaryCard({ order }) {
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(price);
   };
 
   const formatOrderTime = (timestamp) => {
-    return timestamp.toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
+    return timestamp.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     });
   };
 
@@ -33,7 +32,7 @@ function OrderSummaryCard({ order }) {
       {/* Order Items */}
       <div className="space-y-4 mb-6">
         {order.items.map((item) => (
-          <div key={item.id} className="flex items-start space-x-3">
+          <div key={item.productId} className="flex items-start space-x-3">
             <div className="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0">
               <span className="text-primary font-body font-body-medium text-sm">
                 {item.quantity}
@@ -76,22 +75,30 @@ function OrderSummaryCard({ order }) {
       <div className="border-t border-border pt-4 space-y-2">
         <div className="flex items-center justify-between text-sm">
           <span className="text-text-secondary font-body">Subtotal</span>
-          <span className="text-text-primary font-body">{formatPrice(order.subtotal)}</span>
+          <span className="text-text-primary font-body">
+            {formatPrice(order.subtotal)}
+          </span>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-text-secondary font-body">Tax</span>
-          <span className="text-text-primary font-body">{formatPrice(order.tax)}</span>
+          <span className="text-text-primary font-body">
+            {formatPrice(order.tax)}
+          </span>
         </div>
         {order.deliveryFee > 0 && (
           <div className="flex items-center justify-between text-sm">
             <span className="text-text-secondary font-body">Delivery Fee</span>
-            <span className="text-text-primary font-body">{formatPrice(order.deliveryFee)}</span>
+            <span className="text-text-primary font-body">
+              {formatPrice(order.deliveryFee)}
+            </span>
           </div>
         )}
         {order.tip > 0 && (
           <div className="flex items-center justify-between text-sm">
             <span className="text-text-secondary font-body">Tip</span>
-            <span className="text-text-primary font-body">{formatPrice(order.tip)}</span>
+            <span className="text-text-primary font-body">
+              {formatPrice(order.tip)}
+            </span>
           </div>
         )}
         <div className="flex items-center justify-between text-lg font-heading font-heading-medium pt-2 border-t border-border">
@@ -105,7 +112,9 @@ function OrderSummaryCard({ order }) {
         <div className="flex items-center space-x-3">
           <Icon name="CreditCard" size={20} className="text-text-secondary" />
           <div>
-            <p className="text-sm text-text-secondary font-body">Payment Method</p>
+            <p className="text-sm text-text-secondary font-body">
+              Payment Method
+            </p>
             <p className="font-body font-body-medium text-text-primary">
               {order.paymentMethod}
             </p>
@@ -114,12 +123,18 @@ function OrderSummaryCard({ order }) {
       </div>
 
       {/* Delivery Address */}
-      {order.type === 'delivery' && (
+      {order.type === "delivery" && (
         <div className="mt-4 pt-4 border-t border-border">
           <div className="flex items-start space-x-3">
-            <Icon name="MapPin" size={20} className="text-text-secondary mt-0.5" />
+            <Icon
+              name="MapPin"
+              size={20}
+              className="text-text-secondary mt-0.5"
+            />
             <div>
-              <p className="text-sm text-text-secondary font-body">Delivery Address</p>
+              <p className="text-sm text-text-secondary font-body">
+                Delivery Address
+              </p>
               <p className="font-body font-body-medium text-text-primary">
                 {order.customer.address}
               </p>

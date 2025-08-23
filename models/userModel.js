@@ -1,5 +1,29 @@
 import mongoose from 'mongoose';
  
+const cartItemSchema = new mongoose.Schema({
+  // Using productId to store the unique ID from your menu items
+  productId: {
+    type: Number,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  image: String,
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
+    default: 1,
+  },
+});
+
+
 
 const userSchema = new mongoose.Schema({
     email:{
@@ -33,6 +57,7 @@ const userSchema = new mongoose.Schema({
         default: false
         
     },
+      cart: [cartItemSchema],
     forgotPasswordToken:String,
     forgotPasswordTokenExpiry:Date,
     verifyToken:String,
