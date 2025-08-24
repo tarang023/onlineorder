@@ -17,7 +17,18 @@ function OrderSummaryCard({ order }) {
       hour12: true,
     });
   };
+  const calculateSubtotal = () => {
+    let total=0
+    order.items.map((item) =>total+= item.price * item.quantity);
+    return total;
+  }
+  const calculateTax = () => {
+    return calculateSubtotal() * 0.08;
+  };
 
+  const calculateTotal = () => {
+    return calculateSubtotal() + calculateTax() + (order.deliveryFee || 0) + (order.tip || 0);
+  };
   return (
     <div className="bg-surface rounded-xl border border-border p-6">
       <div className="flex items-center justify-between mb-6">
@@ -76,13 +87,13 @@ function OrderSummaryCard({ order }) {
         <div className="flex items-center justify-between text-sm">
           <span className="text-text-secondary font-body">Subtotal</span>
           <span className="text-text-primary font-body">
-            {formatPrice(order.subtotal)}
+            {formatPrice(calculateSubtotal())}
           </span>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-text-secondary font-body">Tax</span>
           <span className="text-text-primary font-body">
-            {formatPrice(order.tax)}
+            {formatPrice(calculateTax())}
           </span>
         </div>
         {order.deliveryFee > 0 && (
@@ -103,7 +114,7 @@ function OrderSummaryCard({ order }) {
         )}
         <div className="flex items-center justify-between text-lg font-heading font-heading-medium pt-2 border-t border-border">
           <span className="text-text-primary">Total</span>
-          <span className="text-text-primary">{formatPrice(order.total)}</span>
+          <span className="text-text-primary">{formatPrice(calculateTotal())}</span>
         </div>
       </div>
 

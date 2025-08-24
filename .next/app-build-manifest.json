@@ -11,50 +11,55 @@
       "static/chunks/main-app.js",
       "static/chunks/app/not-found.js"
     ],
-    "/shopping-cart-checkout/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/shopping-cart-checkout/page.js"
-    ],
-    "/menu-browse-search/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/menu-browse-search/page.js"
-    ],
-    "/api/getData/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/getData/route.js"
+      "static/chunks/app/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/_not-found/page.js"
     ],
-    "/api/cart/update/route": [
+    "/api/users/login/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/cart/update/route.js"
+      "static/chunks/app/api/users/login/route.js"
     ],
-    "/api/cart/route": [
+    "/menu-browse-search/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/cart/route.js"
-    ],
-    "/item-detail-customization/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/item-detail-customization/page.js"
+      "static/chunks/app/menu-browse-search/page.js"
     ],
     "/order-tracking-status/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/order-tracking-status/page.js"
     ],
-    "/customer-account-order-history/page": [
+    "/api/orders/sendDetails/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/customer-account-order-history/page.js"
+      "static/chunks/app/api/orders/sendDetails/route.js"
+    ],
+    "/shopping-cart-checkout/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/shopping-cart-checkout/page.js"
+    ],
+    "/api/getData/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/getData/route.js"
+    ],
+    "/api/cart/update/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/cart/update/route.js"
+    ],
+    "/api/orders/place/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/orders/place/route.js"
     ]
   }
 }

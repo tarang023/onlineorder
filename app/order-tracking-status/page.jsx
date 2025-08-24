@@ -1,20 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Icon from "../components/AppIcon";
 import CustomerNavigation from "../components/ui/CustomerNavigation";
-
+import toast from "react-hot-toast";
 // Components
 import DeliveryMap from "../components/order-tracking/DeliveryMap";
 import DriverDetails from "../components/order-tracking/DriverDetails";
 import OrderActions from "../components/order-tracking/OrderActions";
 import OrderProgressTimeline from "../components/order-tracking/OrderProgressTimeline";
 import OrderSummaryCard from "../components/order-tracking/OrderSummaryCard";
+import axios from 'axios';
 
 function OrderTrackingStatus() {
-  const [currentOrder, setCurrentOrder] = useState(null);
+  const [currentOrder, setCurrentOrder] = useState();
   const [isLoading, setIsLoading] = useState(true);
-
+  
   // Mock order data
   const mockOrder = {
     id: "ORD-2024-001234",
@@ -114,28 +115,49 @@ function OrderTrackingStatus() {
     canModify: false,
     canCancel: false,
   };
+ 
 
-  useEffect(() => {
-    // Simulate loading order data
-    const loadOrder = async () => {
-      setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setCurrentOrder(mockOrder);
-      setIsLoading(false);
-    };
-
-    loadOrder();
-
-    // Simulate real-time updates
-    const interval = setInterval(() => {
-      if (mockOrder.status === "preparing") {
-        // Simulate random preparation updates
-        console.log("Order status update received");
+useEffect(() => {
+  const loadOrder =async()=>{
+      try{
+        setIsLoading(true);
+        const response =await axios.post("/api/orders/sendDetails");
+        console.log("Login success", response.data);
+        setCurrentOrder(response.data.data);
+        return true;
+      }catch(error){
+        console.log("Login failed", error.message);
+        toast.error(error.message);
+      }finally{
+        // setIsLoading(false);
       }
-    }, 30000);
+    }
+   loadOrder();
+  },[]);
 
-    return () => clearInterval(interval);
-  }, []);
+useEffect(() => {
+  // This code will only run AFTER the cartItems state has been successfully updated
+  if(currentOrder){
+    console.log("1. current orderd data is:",currentOrder);
+    setIsLoading(false);
+  }
+  console.log("2. React has re-rendered. The cartItems are now:",currentOrder);
+  if(!isLoading){
+
+    console.log("data type of cartitem",typeof currentOrder);
+    currentOrder.items.map((item) => {
+      console.log("Item:", item);
+    });
+  }
+},[currentOrder]);
+
+
+
+
+
+
+
+
 
   const handleReorder = () => {
     console.log("Reordering items:", currentOrder.items);
@@ -213,7 +235,7 @@ function OrderTrackingStatus() {
                   Order Tracking
                 </h1>
                 <p className="text-text-secondary font-body mt-1">
-                  Order #{currentOrder.id}
+                  Order #{currentOrder._id}
                 </p>
               </div>
               <div className="flex items-center space-x-4">

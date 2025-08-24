@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbconfig/dbConfig';
 import User from '@/models/userModel';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
-
+import axios from 'axios';
 await connect();
 
 // GET: To fetch the user's current cart
@@ -16,6 +16,7 @@ export async function GET(request) {
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
+   
 
     return NextResponse.json({ cart: user.cart, success: true});
   } catch (error) {
@@ -33,6 +34,8 @@ export async function POST(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
+     
+    
 
     const itemIndex = user.cart.findIndex(
       (cartItem) => cartItem.productId === itemToAdd.id

@@ -26,43 +26,7 @@ function ShoppingCartCheckout() {
   const [isLoading, setIsLoading] = useState(true);
   const [expandedItems, setExpandedItems] = useState({});
 
-  // Mock data
-   let cartData;
-  const mockCartItems = [
-    {
-      id: 1,
-      name: "Margherita Pizza",
-      image:
-        "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=300&h=200&fit=crop",
-      price: 18.99,
-      quantity: 2,
-      customizations: ["Large Size", "Extra Cheese", "Thin Crust"],
-      allergens: ["Gluten", "Dairy"],
-      prepTime: 15,
-    },
-    {
-      id: 2,
-      name: "Caesar Salad",
-      image:
-        "https://images.pexels.com/photos/1059905/pexels-photo-1059905.jpeg?w=300&h=200&fit=crop",
-      price: 12.5,
-      quantity: 1,
-      customizations: ["No Croutons", "Extra Dressing"],
-      allergens: ["Dairy", "Eggs"],
-      prepTime: 8,
-    },
-    {
-      id: 3,
-      name: "Chocolate Brownie",
-      image:
-        "https://images.pixabay.com/photo/2017/01/11/11/33/cake-1971552_1280.jpg?w=300&h=200&fit=crop",
-      price: 8.75,
-      quantity: 1,
-      customizations: ["With Ice Cream", "Extra Chocolate Sauce"],
-      allergens: ["Gluten", "Dairy", "Nuts"],
-      prepTime: 5,
-    },
-  ];
+  
 
   const savedAddresses = [
     {
@@ -93,25 +57,7 @@ function ShoppingCartCheckout() {
     { id: "cod", name: "Cash on Delivery", icon: "Banknote" },
   ];
 
-//   useEffect(() => {
-//     fetchCartData();
-
-//     console.log("cartdatappp\n");
-//     console.log(typeof cartData);
-//     console.log(cartData);
-   
-//     setCartItems(mockCartItems);
  
-//     if (savedAddresses.length > 0) {
-//       setSelectedAddress(savedAddresses[0].id);
-//     }
-//     if (timeSlots.length > 0) {
-//       setSelectedTimeSlot(timeSlots[0].id);
-//     }
-//     if (paymentMethods.length > 0) {
-//       setPaymentMethod(paymentMethods[0].id);
-//     }
-//   }, [cartData]);
 useEffect(() => {
   const onLogin =async()=>{
       try{
