@@ -1,9 +1,8 @@
 {
-  "/api/getData/route": "app/api/getData/route.js",
-  "/api/orders/sendDetails/route": "app/api/orders/sendDetails/route.js",
-  "/page": "app/page.js",
-  "/menu-browse-search/page": "app/menu-browse-search/page.js",
+  "/api/placeKitchenDisplay/kitchenDisplay/route": "app/api/placeKitchenDisplay/kitchenDisplay/route.js",
   "/order-tracking-status/page": "app/order-tracking-status/page.js",
-  "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js",
-  "/_not-found/page": "app/_not-found/page.js"
+  "/kitchen-display-system/page": "app/kitchen-display-system/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/menu-browse-search/page": "app/menu-browse-search/page.js",
+  "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js"
 }

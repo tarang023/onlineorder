@@ -33,6 +33,9 @@ export const config = {
         '/customer-login-register',
         '/menu-browse-search',
         '/shopping-cart-checkout',
+        '/order-tracking-status',
+        '/kitchen-display-system',
+        
         // Add any other paths you want this middleware to run on
     ],
 };

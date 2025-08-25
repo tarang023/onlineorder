@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 const orderSchema = new mongoose.Schema({
-  
+  orderId:{
+    type:String,
+    required:true
+  },
   status:{
     type:String,
     enum:['confirmed', 'preparing', 'ready', 'out_for_delivery', 'delivered'],
@@ -49,7 +52,7 @@ const orderSchema = new mongoose.Schema({
   ],
   paymentMethod:{
     type:String,
-    default:'cash_on_delivery'
+    default:'Cash on Delivery'
   },
   timeline:[
     {

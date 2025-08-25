@@ -57,6 +57,9 @@ const userSchema = new mongoose.Schema({
         default: false
         
     },
+    orderId:{
+      type:String,
+    },
       cart: [cartItemSchema],
     forgotPasswordToken:String,
     forgotPasswordTokenExpiry:Date,

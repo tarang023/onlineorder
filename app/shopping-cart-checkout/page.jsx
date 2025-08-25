@@ -210,7 +210,7 @@ useEffect(() => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const orderId = "ORD-" + Date.now();
       const total = calculateTotal().toFixed(2); // ✅ FIXED: Define total variable
-
+      await axios.post("/api/orders/place", { orderId,paymentMethod, selectedAddress });
       router.push(`/order-tracking-status?orderId=${orderId}&total=${total}`);
     } catch (error) {
       console.error("Order placement failed:", error);

@@ -4,47 +4,65 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Icon from '../components/AppIcon';
 import KitchenInterface from '../components/ui/KitchenInterface';
-
+import axios from 'axios';
 import StationFilter from '../components/kitchen-display/StationFilter';
 import OrderStatusColumn from '../components/kitchen-display/OrderStatusColumn';
 import PerformanceMetrics from '../components/kitchen-display/PerformanceMetrics';
 import OrderModificationAlert from '../components/kitchen-display/OrderModificationAlert';
 
 function KitchenDisplaySystem() {
+
   const [orders, setOrders] = useState([]);
   const [selectedStation, setSelectedStation] = useState('all');
   const [connectionStatus, setConnectionStatus] = useState('connected');
   const [isLoading, setIsLoading] = useState(true);
-  const [modifiedOrders, setModifiedOrders] = useState([]);
+  const [modifiedOrders, setModifiedOrders] = useState();
   const [showMetrics, setShowMetrics] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   // Mock WebSocket connection status
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // Load initial orders data
-  useEffect(() => {
-    const loadOrders = async () => {
+  const loadOrders = async () => {
+    console.log("here");
+    try {
       setIsLoading(true);
-      try {
-        // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setOrders(mockOrdersData);
-      } catch (error) {
-        console.error('Error loading orders:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      // 1. Call your API endpoint using axios.get
+            const response=await axios.post("/api/placeKitchenDisplay/kitchenDisplay");
+            setOrders(await response.data.order);
+            // setOrders(mockOrdersData);
+            console.log("Response from /api/placeKitchenDisplay/kitchenDisplay:", response.data.order, orders);
+      
+    } catch (error) {
+      console.error('Error loading orders:', error);
+    } finally {
+      // setIsLoading(false);
+    }
+  };
 
-    loadOrders();
-  }, []);
+  loadOrders();
+}, []); 
+  
+
+
+useEffect(() => {
+  if (orders && orders.length > 0) {
+    setIsLoading(false);
+    console.log("Orders loaded:", orders);
+    // if(filteredOrders.order.status=='new'){
+
+    //   console.log("New order detected:", filteredOrders.order);
+    // }
+
+  // if(typeof orders == Object){
+  //   setIsLoading(false);
+  //   console.log("Orders loaded:", orders);
+  // }
+   console.log("loading the ordere ...",orders)
+}
+},[orders]);
+
+
+
 
   // Handle order status updates
   const handleOrderStatusUpdate = useCallback((orderId, newStatus) => {
@@ -81,25 +99,43 @@ function KitchenDisplaySystem() {
     );
   }, []);
 
+
   // Filter orders by station
-  const filteredOrders = orders?.filter(order => {
+  const filteredOrders = ()=>{ 
+  
+  orders &&  orders?.filter(order => {
     if (selectedStation === 'all') return true;
     return order?.station === selectedStation;
   }) || [];
+}
 
   // Group orders by status
-  const ordersByStatus = {
-    new: filteredOrders?.filter(order => order?.status === 'new') || [],
-    'in-progress': filteredOrders?.filter(order => order?.status === 'in-progress') || [],
-    ready: filteredOrders?.filter(order => order?.status === 'ready') || [],
-    completed: filteredOrders?.filter(order => order?.status === 'completed') || []
-  };
+  const ordersByStatus={
+    new:filteredOrders && orders.filter((order)=>(order.status=='new')) || [],
+    'in-progress': filteredOrders && orders.filter((order)=>(order.status=='in-progress')) || [],
+    ready: filteredOrders && orders.filter((order)=>(order.status=='ready')) || [],
+    completed: filteredOrders && orders.filter((order)=>(order.status=='completed')) || []
+  }
+ 
+  // const ordersByStatus = {
+  //   new: filteredOrders && filteredOrders?.order?.status == 'new' || [],
+  //   'in-progress': filteredOrders?. order?.status === 'in-progress' || [],
+  //   ready: filteredOrders?.order?.status === 'ready' || [],
+  //   completed: filteredOrders?.order?.status === 'completed' || []
+  // };
+  // const ordersByStatus = {
+  //   new: filteredOrders && filteredOrders?.filter(order => order?.status === 'new') || [],
+  //   'in-progress': filteredOrders?.filter(order => order?.status === 'in-progress') || [],
+  //   ready: filteredOrders?.filter(order => order?.status === 'ready') || [],
+  //   completed: filteredOrders?.filter(order => order?.status === 'completed') || []
+  // };
 
   // Calculate performance metrics
   const performanceMetrics = {
     averagePrepTime: 12.5,
     completionRate: 94.2,
-    activeOrders: filteredOrders?.filter(order => order?.status !== 'completed')?.length || 0,
+    // activeOrders: filteredOrders?.filter(order => order?.status !== 'completed')?.length || 0,
+    activeOrders: filteredOrders?.order?.status !== 'completed'?.length || 0,
     totalOrders: filteredOrders?.length || 0
   };
 
@@ -160,17 +196,19 @@ function KitchenDisplaySystem() {
             </div>
           </div>
         </div>
+        
 
         {/* Station Filter */}
+       
         <StationFilter
           selectedStation={selectedStation}
           onStationChange={setSelectedStation}
           orderCounts={{
             all: orders?.length || 0,
-            grill: orders?.filter(order => order?.station === 'grill')?.length || 0,
-            fryer: orders?.filter(order => order?.station === 'fryer')?.length || 0,
-            salad: orders?.filter(order => order?.station === 'salad')?.length || 0,
-            beverages: orders?.filter(order => order?.station === 'beverages')?.length || 0
+            grill: orders?.length > 0 && orders.filter((order) => order.station === 'grill').length || 0,
+            fryer: orders?.length > 0 && orders.filter((order) => order.station === 'fryer').length || 0,
+            salad: orders?.length > 0 && orders.filter((order) => order.station === 'salad').length || 0,
+            beverages: orders?.length > 0 && orders.filter((order) => order.station === 'beverages').length || 0
           }}
         />
 
@@ -196,6 +234,7 @@ function KitchenDisplaySystem() {
             title="New Orders"
             status="new"
             orders={ordersByStatus.new}
+            // orders={orders}
             onOrderStatusUpdate={handleOrderStatusUpdate}
             onOrderPriorityUpdate={handleOrderPriorityUpdate}
             onItemToggle={handleItemToggle}
@@ -217,7 +256,7 @@ function KitchenDisplaySystem() {
           <OrderStatusColumn
             title="Ready"
             status="ready"
-            orders={ordersByStatus.ready}
+            orders={ordersByStatus.new}
             onOrderStatusUpdate={handleOrderStatusUpdate}
             onOrderPriorityUpdate={handleOrderPriorityUpdate}
             onItemToggle={handleItemToggle}
@@ -423,5 +462,7 @@ const mockOrdersData = [
     ]
   }
 ];
+
+ 
 
 export default KitchenDisplaySystem;

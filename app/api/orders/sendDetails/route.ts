@@ -11,13 +11,17 @@ import User from "@/models/userModel"
  export async function POST(req: NextRequest){
     try{
      //extract data from token
+    //  const reqBody = await req.json();
     const userId=await getDataFromToken(req);
       const user = await User.findById(userId);
-      const order=await Order.findOne({ user: userId });
+
       if(!user){
-         return NextResponse.json({message: "User not found"}, {status: 404});
+        return NextResponse.json({message: "User not found"}, {status: 404});
       }
-        if(!order){
+      // const orderId = reqBody.orderId;
+      const orderId=user.orderId;
+      const order=await Order.findOne({ orderId: orderId });
+      if(!order){
              return NextResponse.json({message: "Order not found"}, {status: 404});
         }
          order.items=user.cart;
