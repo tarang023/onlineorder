@@ -1,60 +1,35 @@
 {
   "pages": {
-    "/not-found": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/order-tracking-status/page": [
+    "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/order-tracking-status/page.js"
+      "static/chunks/app/not-found.js"
     ],
-    "/api/orders/sendDetails/route": [
+    "/restaurant-admin-dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/orders/sendDetails/route.js"
+      "static/chunks/app/restaurant-admin-dashboard/page.js"
     ],
-    "/shopping-cart-checkout/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/shopping-cart-checkout/page.js"
+      "static/chunks/app/_not-found/page.js"
     ],
-    "/api/getData/route": [
+    "/customer-account-order-history/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/getData/route.js"
+      "static/chunks/app/customer-account-order-history/page.js"
     ],
-    "/api/orders/place/route": [
+    "/api/users/my-orders/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/orders/place/route.js"
-    ],
-    "/kitchen-display-system/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/kitchen-display-system/page.js"
-    ],
-    "/api/placeKitchenDisplay/kitchenDisplay/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/placeKitchenDisplay/kitchenDisplay/route.js"
-    ],
-    "/menu-browse-search/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/menu-browse-search/page.js"
+      "static/chunks/app/api/users/my-orders/route.js"
     ]
   }
 }

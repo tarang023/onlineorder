@@ -209,18 +209,7 @@ function ProfileSection({ userProfile, setUserProfile }) {
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
-                Date of Birth
-              </label>
-              <input
-                type="date"
-                name="dateOfBirth"
-                value={editForm?.dateOfBirth || ''}
-                onChange={handleInputChange}
-                className="w-full px-3 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body"
-              />
-            </div>
+            
 
             <div className="flex space-x-3 pt-4">
               <button
@@ -268,15 +257,7 @@ function ProfileSection({ userProfile, setUserProfile }) {
                   {userProfile?.phone || 'Not provided'}
                 </p>
               </div>
-              
-              <div>
-                <label className="block text-sm font-body text-text-secondary mb-1">
-                  Date of Birth
-                </label>
-                <p className="font-body text-text-primary">
-                  {userProfile?.dateOfBirth || 'Not provided'}
-                </p>
-              </div>
+        
             </div>
           </div>
         )}

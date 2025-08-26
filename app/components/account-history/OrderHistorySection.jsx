@@ -1,7 +1,8 @@
 // src/pages/customer-account-order-history/components/OrderHistorySection.jsx
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo ,useEffect} from 'react';
  
 import Icon from '../AppIcon';
+import axios from 'axios';
 
 import { format } from 'date-fns';
 import { useRouter } from "next/navigation";
@@ -12,11 +13,50 @@ function OrderHistorySection() {
   const [locationFilter, setLocationFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('all');
   const [expandedOrder, setExpandedOrder] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useRouter();
+const [orders, setOrders] = useState([]); 
 
-  // Mock order data
-  const orders = [
+//   // Mock order data
+  useEffect(() => {
+  const loadOrders = async () => {
+    console.log("here");
+    try {
+      setIsLoading(true);
+      // 1. Call your API endpoint using axios.get
+            const response=await axios.post("/api/users/my-orders");
+            setOrders(await response.data.order);
+            // setOrders(mockOrdersData);
+            console.log("Response from /api/placeKitchenDisplay/kitchenDisplay:", response.data.order, orders);
+      
+    } catch (error) {
+      console.error('Error loading orders:', error);
+    } finally {
+      // setIsLoading(false);
+    }
+  };
+
+  loadOrders();
+}, []); 
+  
+
+
+useEffect(() => {
+  if (orders && orders.length > 0) {
+    setIsLoading(false);
+    console.log("Orders loaded:", orders);
+ 
+  console.log("orders from account history page",orders)
+   console.log("loading the ordere ...",orders)
+}
+},[orders]);
+
+
+
+
+
+
+  const morders = [
     {
       id: 'ORD-2024-001',
       date: new Date('2024-01-15T18:30:00'),
@@ -185,23 +225,25 @@ function OrderHistorySection() {
   };
 
   const handleTrackOrder = (order) => {
-    navigate('/order-tracking-status', { state: { orderId: order?.id } });
+    navigate('/order-tracking-status', { state: { orderId: order?.orderId } });
   };
 
   const handleDownloadReceipt = (order) => {
-    console.log('Downloading receipt for order:', order?.id);
+    console.log('Downloading receipt for order:', order?.orderId);
     // In real app, this would generate and download PDF
   };
 
   const handleRateOrder = (order) => {
-    console.log('Rating order:', order?.id);
+    console.log('Rating order:', order?.orderId);
     // In real app, this would open rating modal
   };
 
   const toggleOrderExpansion = (orderId) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
-
+  if(isLoading){
+    return (<h1>loading your history</h1>)
+  }
   return (
     <div className="space-y-6">
       {/* Search and Filters */}
@@ -292,7 +334,7 @@ function OrderHistorySection() {
 
       {/* Orders List */}
       {filteredOrders?.length === 0 ? (
-        <div className="bg-surface rounded-lg shadow-soft p-12 text-center">
+        <div key={filteredOrders._id}  className="bg-surface rounded-lg shadow-soft p-12 text-center">
           <div className="w-24 h-24 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Icon name="Package" size={32} className="text-secondary-400" />
           </div>
@@ -312,7 +354,7 @@ function OrderHistorySection() {
       ) : (
         <div className="space-y-4">
           {filteredOrders?.map((order) => (
-            <div key={order?.id} className="bg-surface rounded-lg shadow-soft overflow-hidden">
+            <div key={order?._id} className="bg-surface rounded-lg shadow-soft overflow-hidden">
               {/* Order Header */}
               <div 
                 className="p-6 cursor-pointer hover:bg-secondary-50 transition-smooth"
@@ -329,7 +371,7 @@ function OrderHistorySection() {
                       </div>
                       
                       <span className="text-sm text-text-secondary font-body">
-                        {format(new Date(order?.date), 'MMM dd, yyyy • h:mm a')}
+                        {format(new Date(order?.createdAt), 'MMM dd, yyyy • h:mm a')}
                       </span>
                     </div>
                     
@@ -449,7 +491,7 @@ function OrderHistorySection() {
                               <label className="block text-sm text-text-secondary font-body mb-1">
                                 Driver
                               </label>
-                              <p className="font-body text-text-primary">{order?.driver}</p>
+                              <p className="font-body text-text-primary">{order?.driver.name}</p>
                             </div>
                           </>
                         )}

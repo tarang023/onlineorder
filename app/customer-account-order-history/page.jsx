@@ -19,7 +19,6 @@ function CustomerAccountOrderHistory() {
     lastName: 'Doe',
     email: 'john.doe@example.com',
     phone: '+1 (555) 123-4567',
-    dateOfBirth: '1990-05-15',
     dietaryPreferences: ['vegetarian'],
     notifications: {
       email: true,
@@ -34,7 +33,7 @@ function CustomerAccountOrderHistory() {
     availableRewards: 12
   });
   const navigate = useRouter();
-
+// items
   const tabs = [
     { id: 'profile', label: 'Profile', icon: 'User' },
     { id: 'orders', label: 'Orders', icon: 'Package' },
@@ -42,6 +41,7 @@ function CustomerAccountOrderHistory() {
     { id: 'addresses', label: 'Addresses', icon: 'MapPin' },
     { id: 'payments', label: 'Payments', icon: 'CreditCard' }
   ];
+  // restaurant
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
