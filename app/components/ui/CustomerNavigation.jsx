@@ -9,19 +9,28 @@ import axios from 'axios';
 
 function CustomerNavigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [cartItemCount] = useState(3); // This would come from cart context in real app
+  const [cartItemCount, setCartItemCount] = useState(3); // This would come from cart context in real app
 
   // const [isLoggedIn, setIsLoggedIn] = useState(false); // This would come from auth context in real app
   const isLoggedIn = true;
   const location = usePathname();
-
-  // useEffect(() => {
-  //     const token = Cookies.get('token'); // Gets the token cookie
-  //     if (token) {
-  //       setIsLoggedIn(true);
-  //     }
-  //   }, []);
-  // ;
+  
+  useEffect(()=>{
+    const getItemCount = async () => {
+      try {
+          const response =await axios.post("/api/getData");
+        if (response.status === 200) {
+          setCartItemCount(response.data.data.length);
+        }else{
+          setCartItemCount(0);
+        }
+      } catch (error) {
+        console.error("Failed to fetch cart item count:", error);
+      }
+    };
+    getItemCount();
+  },[])
+ 
   const signOut = async () => {
     try {
       const response = await axios.get("/api/users/logout");

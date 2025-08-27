@@ -167,14 +167,14 @@ function OrderCard({
         <div className="space-y-2">
           {order?.items?.slice(0, isExpanded ? undefined : 3)?.map((item) => (
             <div
-              key={item?.id}
+              key={item.productId}
               className={`flex items-center justify-between p-2 rounded-lg transition-smooth ${
                 item?.completed ? 'bg-success-50' : 'bg-secondary-50'
               }`}
             >
               <div className="flex items-center space-x-3 flex-1">
                 <button
-                  onClick={() => onItemToggle?.(order?.id, item?.id)}
+                  onClick={() => onItemToggle?.(order?.id, item?.productId)}
                   className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-smooth ${
                     item?.completed
                       ? 'bg-success border-success text-white' :'border-secondary-300 hover:border-primary'
@@ -244,9 +244,7 @@ function OrderCard({
             </div>
             
             {/* Print Button */}
-            <button className="p-2 text-text-secondary hover:text-primary hover:bg-primary-50 rounded-lg transition-smooth min-w-touch min-h-touch">
-              <Icon name="Printer" size={16} />
-            </button>
+            
           </div>
           
           {/* Status Action Buttons */}

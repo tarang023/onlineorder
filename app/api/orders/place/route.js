@@ -5,6 +5,7 @@ import {NextRequest,NextResponse } from 'next/server';
 import User from "../../../../models/userModel";
 import axios from "axios";
 import { sendOrderToKitchen } from '@/lib/kitchenPlace';
+
 connect();
 
 
@@ -48,7 +49,7 @@ export async function POST(req ) {
       },]
   
          const newOrder= new Order({
-          orderId,
+           orderId,
             status,
             orderTime,
             estimatedDelivery, 
@@ -65,6 +66,7 @@ export async function POST(req ) {
         await user.save();
     
          await sendOrderToKitchen(newOrder,customerName);
+         console.log("order send to kitchen")
         return NextResponse.json({message: "Order created not exist successfully", order: savedOrder}, {status: 201});
     
         

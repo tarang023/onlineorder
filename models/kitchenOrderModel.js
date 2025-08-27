@@ -2,6 +2,10 @@ import { complex } from "framer-motion";
 import mongoose from "mongoose";
 import { idText } from "typescript";
 const kitchenOrderSchema = new mongoose.Schema({
+    id:{
+        type:String,
+        required:true
+    },
         customerName:{
             type: String,
             required: true

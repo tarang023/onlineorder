@@ -1,17 +1,16 @@
- import {connect } from "../../../../dbconfig/dbConfig";
+ import {connect } from "@/dbconfig/dbConfig";
  
  import {NextRequest,NextResponse } from 'next/server';
- import bcryptjs from 'bcryptjs';
- import jwt from 'jsonwebtoken';
- import { getDataFromToken } from "../../../../helpers/getDataFromToken";
+  
+ import { getDataFromToken } from "@/helpers/getDataFromToken";
 import Order from "@/models/orderModel";
 import User from "@/models/userModel"
+import KitchenOrder from "@/models/kitchenOrderModel";
  connect();
  
  export async function POST(req ){
     try{
-     //extract data from token
-    //  const reqBody = await req.json();
+   
     const userId=await getDataFromToken(req);
       const user = await User.findById(userId);
 
@@ -20,7 +19,7 @@ import User from "@/models/userModel"
       }
       // const orderId = reqBody.orderId;
       const orderId=user.orderId;
-      const order=await Order.findOne({ orderId: orderId });
+      const order=await KitchenOrder.find({});
       if(!order){
              return NextResponse.json({message: "Order not found"}, {status: 404});
         }
@@ -32,4 +31,4 @@ import User from "@/models/userModel"
         }catch(error){
             return NextResponse.json({message: "can not send details",error: error.message }, { status: 500 });
         }
-      }
+    }

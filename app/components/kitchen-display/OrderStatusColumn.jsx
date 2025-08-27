@@ -54,7 +54,7 @@ function OrderStatusColumn({
     switch (statusType) {
       case 'new':
         return 'Clock';
-      case 'in-progress':
+      case 'inprogress':
         return 'Timer';
       case 'ready':
         return 'CheckCircle';
@@ -108,7 +108,7 @@ function OrderStatusColumn({
                 {Math.floor(orders?.reduce((acc, order) => {
                   const elapsed = Math.floor((currentTime - new Date(order?.timestamp)) / 1000 / 60);
                   return acc + elapsed;
-                }, 0) / orderCount)}m
+                }, 0) / orderCount)}
               </span>
             </div>
           </div>
@@ -129,9 +129,9 @@ function OrderStatusColumn({
           </div>
         ) : (
           <div className="p-3 space-y-3 max-h-screen overflow-y-auto">
-            {orders?.map((order) => (
+            {orders.map((order) => (
               <OrderCard
-                key={order?.id}
+                key={order._id}
                 order={order}
                 onStatusUpdate={onOrderStatusUpdate}
                 onPriorityUpdate={onOrderPriorityUpdate}

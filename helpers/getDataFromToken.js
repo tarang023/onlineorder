@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import jwt from 'jsonwebtoken'
 
 
-export const getDataFromToken = (req:NextRequest)=>{
+export const getDataFromToken = (req)=>{
     try{    
         console.log("inside get token");
         const token= req.cookies.get("token")?.value || "";
@@ -12,16 +12,16 @@ export const getDataFromToken = (req:NextRequest)=>{
         
         const secret = process.env.TOKEN_SECRET;
 
-        // ✅ 2. Check if the secret key is loaded
+      
         if (!secret) {
             throw new Error("TOKEN_SECRET is not defined in .env.local file.");
         }
-        const decodedToken:any=jwt.verify(token,process.env.TOKEN_SECRET!)
+        const decodedToken=jwt.verify(token,process.env.TOKEN_SECRET)
         console.log("outside get token");
         console.log("Decoded Token:", decodedToken);
        return decodedToken.id
 
-    }catch(error:any){
+    }catch(error){
         throw new Error(error.message)
     
     }

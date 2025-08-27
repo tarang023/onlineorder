@@ -9,6 +9,7 @@ import StationFilter from '../components/kitchen-display/StationFilter';
 import OrderStatusColumn from '../components/kitchen-display/OrderStatusColumn';
 import PerformanceMetrics from '../components/kitchen-display/PerformanceMetrics';
 import OrderModificationAlert from '../components/kitchen-display/OrderModificationAlert';
+ 
 
 function KitchenDisplaySystem() {
 
@@ -24,13 +25,14 @@ function KitchenDisplaySystem() {
   useEffect(() => {
   const loadOrders = async () => {
     console.log("here");
+    setIsLoading(true);
     try {
       setIsLoading(true);
       // 1. Call your API endpoint using axios.get
-            const response=await axios.post("/api/placeKitchenDisplay/kitchenDisplay");
-            setOrders(await response.data.order);
+            const response=await axios.post("/api/placeKitchenDisplay");
+            setOrders(await response.data.data);
             // setOrders(mockOrdersData);
-            console.log("Response from /api/placeKitchenDisplay/kitchenDisplay:", response.data.order, orders);
+            console.log("Response from /api/placeKitchenDisplay/kitchenDisplay:", response.data.data, orders);
       
     } catch (error) {
       console.error('Error loading orders:', error);
@@ -48,15 +50,11 @@ useEffect(() => {
   if (orders && orders.length > 0) {
     setIsLoading(false);
     console.log("Orders loaded:", orders);
-    // if(filteredOrders.order.status=='new'){
-
-    //   console.log("New order detected:", filteredOrders.order);
-    // }
-
-  // if(typeof orders == Object){
-  //   setIsLoading(false);
-  //   console.log("Orders loaded:", orders);
-  // }
+     
+  if(typeof orders == Object){
+    setIsLoading(false);
+    console.log("Orders loaded:", orders);
+  }
    console.log("loading the ordere ...",orders)
 }
 },[orders]);
@@ -67,8 +65,8 @@ useEffect(() => {
   // Handle order status updates
   const handleOrderStatusUpdate = useCallback((orderId, newStatus) => {
     setOrders(prevOrders =>
-      prevOrders?.map(order =>
-        order?.id === orderId ? { ...order, status: newStatus, lastUpdated: new Date() } : order
+      prevOrders.map(order =>
+        order.id === orderId ? { ...order, status: newStatus, lastUpdated: new Date() } : order
       )
     );
   }, []);
@@ -84,13 +82,15 @@ useEffect(() => {
 
   // Handle item completion toggle
   const handleItemToggle = useCallback((orderId, itemId) => {
+ 
     setOrders(prevOrders =>
       prevOrders?.map(order => {
+        console.log(order.id)
         if (order?.id === orderId) {
           return {
             ...order,
             items: order?.items?.map(item =>
-              item?.id === itemId ? { ...item, completed: !item?.completed } : item
+              item?.productId === itemId ? { ...item, completed: !item?.completed } : item
             )
           };
         }
@@ -103,20 +103,24 @@ useEffect(() => {
   // Filter orders by station
   const filteredOrders = ()=>{ 
   
-  orders &&  orders?.filter(order => {
+  orders.length > 0 &&  orders?.filter(order => {
     if (selectedStation === 'all') return true;
     return order?.station === selectedStation;
   }) || [];
 }
 
   // Group orders by status
+  
   const ordersByStatus={
-    new:filteredOrders && orders.filter((order)=>(order.status=='new')) || [],
-    'in-progress': filteredOrders && orders.filter((order)=>(order.status=='in-progress')) || [],
-    ready: filteredOrders && orders.filter((order)=>(order.status=='ready')) || [],
-    completed: filteredOrders && orders.filter((order)=>(order.status=='completed')) || []
+    ready: filteredOrders  && orders.length > 0 && orders.map((order)=>(order.status=='ready')) || [],
+    inprogress: filteredOrders  && orders.length > 0 && orders.map((order)=>(order.status=='in-progress')) || [],
+    new:filteredOrders && orders.length > 0 && orders.filter((order)=>(order.status=='new')) || [],
+    completed: filteredOrders  && orders.length > 0  && orders.map((order)=>(order.status=='completed')) || []
   }
- 
+  const newOrder=orders.length > 0 && orders.filter((order)=>(order.status=='new')) || [];
+  const inprogressOrder=orders.length > 0 && orders.filter((order)=>(order.status=='in-progress')) || [];
+  const readyOrder=orders.length > 0 && orders.filter((order)=>(order.status=='ready')) || [];
+  const completedOrder=orders.length > 0 && orders.filter((order)=>(order.status=='completed')) || [];
   // const ordersByStatus = {
   //   new: filteredOrders && filteredOrders?.order?.status == 'new' || [],
   //   'in-progress': filteredOrders?. order?.status === 'in-progress' || [],
@@ -233,7 +237,7 @@ useEffect(() => {
           <OrderStatusColumn
             title="New Orders"
             status="new"
-            orders={ordersByStatus.new}
+            orders={newOrder}
             // orders={orders}
             onOrderStatusUpdate={handleOrderStatusUpdate}
             onOrderPriorityUpdate={handleOrderPriorityUpdate}
@@ -245,7 +249,7 @@ useEffect(() => {
           <OrderStatusColumn
             title="In Progress"
             status="in-progress"
-            orders={ordersByStatus['in-progress']}
+            orders={inprogressOrder}
             onOrderStatusUpdate={handleOrderStatusUpdate}
             onOrderPriorityUpdate={handleOrderPriorityUpdate}
             onItemToggle={handleItemToggle}
@@ -256,7 +260,7 @@ useEffect(() => {
           <OrderStatusColumn
             title="Ready"
             status="ready"
-            orders={ordersByStatus.new}
+            orders={readyOrder}
             onOrderStatusUpdate={handleOrderStatusUpdate}
             onOrderPriorityUpdate={handleOrderPriorityUpdate}
             onItemToggle={handleItemToggle}
@@ -267,7 +271,7 @@ useEffect(() => {
           <OrderStatusColumn
             title="Completed"
             status="completed"
-            orders={ordersByStatus.completed}
+            orders={completedOrder}
             onOrderStatusUpdate={handleOrderStatusUpdate}
             onOrderPriorityUpdate={handleOrderPriorityUpdate}
             onItemToggle={handleItemToggle}
