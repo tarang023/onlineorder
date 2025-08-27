@@ -12,16 +12,15 @@ import OrderProgressTimeline from "../components/order-tracking/OrderProgressTim
 import OrderSummaryCard from "../components/order-tracking/OrderSummaryCard";
 import axios from 'axios';
 
-import { useSearchParams } from 'next/navigation';
+// import { useSearchParams } from 'next/navigation';
 
 function OrderTrackingStatus() {
   const [currentOrder, setCurrentOrder] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const searchParams = useSearchParams();
 
 
-  const orderId = searchParams.get('orderId');
-  const total = searchParams.get('total');
+  // const orderId = searchParams.get('orderId');
+  // const total = searchParams.get('total');
   // Mock order data
   const mockOrder = {
     id: "ORD-2024-001234",
@@ -127,7 +126,6 @@ useEffect(() => {
   const loadOrder =async()=>{
       try{
         setIsLoading(true);
-        const orderId = searchParams.get('orderId');
         const response =await axios.post("/api/orders/sendDetails");
         console.log("Login success", response.data);
         setCurrentOrder(response.data.data);
