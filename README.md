@@ -1,108 +1,83 @@
-# React
+# **🍔 Restaurant Online Ordering System**
 
-A modern React-based project utilizing the latest frontend technologies and tools for building responsive web applications.
+A full-stack web application built with Next.js that provides a modern, seamless online ordering experience for a restaurant. It features a complete user authentication system, persistent shopping cart, and a full order management workflow.
 
-## 🚀 Features
+ 
 
-- **React 18** - React version with improved rendering and concurrent features
-- **Vite** - Lightning-fast build tool and development server
-- **Redux Toolkit** - State management with simplified Redux setup
-- **TailwindCSS** - Utility-first CSS framework with extensive customization
-- **React Router v6** - Declarative routing for React applications
-- **Data Visualization** - Integrated D3.js and Recharts for powerful data visualization
-- **Form Management** - React Hook Form for efficient form handling
-- **Animation** - Framer Motion for smooth UI animations
-- **Testing** - Jest and React Testing Library setup
+## **About The Project**
 
-## 📋 Prerequisites
+This project is a comprehensive online food ordering platform designed for a modern restaurant. It allows customers to browse a dynamic menu, add items to a persistent cart that is linked to their user account, and place orders securely. The application was built using the Next.js App Router, providing a fast, server-rendered experience. It features a complete RESTful API backend for managing users, carts, and orders, with a MongoDB database as the data source.
 
-- Node.js (v14.x or higher)
-- npm or yarn
+## **Key Features**
 
-## 🛠️ Installation
+* **Secure User Authentication**: Full email/password sign-up and login flow, with support for social logins (Google, Facebook) via NextAuth.js.  
+* **JWT Session Management**: Uses JSON Web Tokens stored in secure, HttpOnly cookies for managing user sessions.  
+* **Dynamic Menu**: A browsable menu page with real-time search and filtering capabilities.  
+* **Persistent Shopping Cart**: A global state-managed cart (using React Context) that is saved to the user's account in the database, allowing their cart to persist between sessions.  
+* **Order Management**: A complete checkout process that saves the final order to the database and provides an order history page for users.  
+* **Kitchen Display System**: A dedicated view for kitchen staff to see incoming orders in real-time.  
+* **RESTful API**: A well-structured backend API built with Next.js API Routes to handle all application logic.
+### **Frontend**
+* **Next.js – Modern React framework for SEO-optimized and fast-loading UI.
+* **Tailwind CSS – Sleek and responsive UI design.
+### **Backend**
+* **Next.js – Robust backend handling APIs and business logic.
+* **MongoDB & Mongoose – NoSQL database for scalable data management.
+* **JSON Web Tokens (JWT) & jose – Secure authentication & authorization.
+ 
 
-1. Install dependencies:
-   ```bash
+### **Database**
+* **MongoDb
+
+
+
+## **Getting Started**
+
+To get a local copy up and running, follow these simple steps.
+
+### **Prerequisites**
+
+You need to have Node.js and npm installed on your machine.
+
+* npm  
+  npm install npm@latest \-g
+
+### **Installation**
+
+1. Clone the repo  
+   git clone \[https://github.com/tarang023/onlineorder.git\](https://github.com/your\_username/your\_project\_repository.git)
+
+2. Install NPM packages  
    npm install
-   # or
-   yarn install
-   ```
-   
-2. Start the development server:
-   ```bash
-   npm start
-   # or
-   yarn start
-   ```
 
-## 📁 Project Structure
+3. Create a .env.local file in the root of your project and add the following environment variables:  
+   MONGO\_URL="your\_mongodb\_connection\_string"  
+   TOKEN\_SECRET="your\_super\_secret\_jwt\_string"
 
-```
-react_app/
-├── public/             # Static assets
-├── src/
-│   ├── components/     # Reusable UI components
-│   ├── pages/          # Page components
-│   ├── styles/         # Global styles and Tailwind configuration
-│   ├── App.jsx         # Main application component
-│   ├── Routes.jsx      # Application routes
-│   └── index.jsx       # Application entry point
-├── .env                # Environment variables
-├── index.html          # HTML template
-├── package.json        # Project dependencies and scripts
-├── tailwind.config.js  # Tailwind CSS configuration
-└── vite.config.js      # Vite configuration
-```
+   \# For NextAuth.js Google/Facebook login  
+   GOOGLE\_CLIENT\_ID="your\_google\_client\_id"  
+   GOOGLE\_CLIENT\_SECRET="your\_google\_client\_secret"  
+   FACEBOOK\_CLIENT\_ID="your\_facebook\_client\_id"  
+   FACEBOOK\_CLIENT\_SECRET="your\_facebook\_client\_secret"  
+   NEXTAUTH\_SECRET="a\_random\_string\_for\_nextauth"
 
-## 🧩 Adding Routes
+4. Run the development server  
+   npm run dev
 
-To add new routes to the application, update the `Routes.jsx` file:
+   The application will be available at http://localhost:3000.
 
-```jsx
-import { useRoutes } from "react-router-dom";
-import HomePage from "pages/HomePage";
-import AboutPage from "pages/AboutPage";
+## **API Endpoints**
 
-const ProjectRoutes = () => {
-  let element = useRoutes([
-    { path: "/", element: <HomePage /> },
-    { path: "/about", element: <AboutPage /> },
-    // Add more routes as needed
-  ]);
+The application uses a RESTful API structure for its backend operations:
 
-  return element;
-};
-```
+| Method | Endpoint | Description |
+| :---- | :---- | :---- |
+| POST | /api/users/signup | Creates a new user. |
+| POST | /api/users/login | Authenticates a user and returns a JWT. |
+| GET | /api/cart | Fetches the current user's cart. |
+| POST | /api/cart | Adds an item to the user's cart. |
+| POST | /api/cart/update | Updates the quantity of an item in the cart. |
+| POST | /api/orders/place | Creates a new order from the user's cart. |
+| GET | /api/users/my-orders | Fetches the order history for the logged-in user. |
 
-## 🎨 Styling
-
-This project uses Tailwind CSS for styling. The configuration includes:
-
-- Forms plugin for form styling
-- Typography plugin for text styling
-- Aspect ratio plugin for responsive elements
-- Container queries for component-specific responsive design
-- Fluid typography for responsive text
-- Animation utilities
-
-## 📱 Responsive Design
-
-The app is built with responsive design using Tailwind CSS breakpoints.
-
-
-## 📦 Deployment
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-## 🙏 Acknowledgments
-
-- Built with [Rocket.new](https://rocket.new)
-- Powered by React and Vite
-- Styled with Tailwind CSS
-
-Built with ❤️ on Rocket.new
-# online
+ 
