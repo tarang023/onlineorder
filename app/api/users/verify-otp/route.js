@@ -2,7 +2,7 @@ import { connect } from "../../../../dbconfig/dbConfig";
 import User from "../../../../models/userModel";
 import { NextResponse } from 'next/server';
 import jwt from "jsonwebtoken"; // Make sure you have 'jsonwebtoken' installed
-
+import {deleteUser} from '@/lib/deleteuser'
 connect();
 
 export async function POST(req) {
@@ -22,6 +22,7 @@ export async function POST(req) {
                 // If user is already verified, let them know. They should log in normally.
                 return NextResponse.json({ error: "Account already verified. Please log in." }, { status: 400 });
              }
+             await deleteUser(email); // Delete the unverified user
             return NextResponse.json({ error: "Invalid or expired OTP" }, { status: 400 });
         }
 

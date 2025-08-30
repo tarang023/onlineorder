@@ -21,7 +21,7 @@ export const sendEmail = async ({email,emailType,userId,otp})=>{
            // Looking to send emails in production? Check out our Email API/SMTP product!
             var transporter = nodemailerr.createTransport({
             host: process.env.MAIL_HOST,
-            port: 2525,
+            port: process.env.MAIL_PORT,
             auth: {
                 user: process.env.MAIL_USER,
                 pass: process.env.MAIL_PASS

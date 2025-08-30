@@ -1,9 +1,3 @@
 {
-  "/api/getData/route": "app/api/getData/route.js",
-  "/api/cart/route": "app/api/cart/route.js",
-  "/api/cart/update/route": "app/api/cart/update/route.js",
-  "/customer-login-register/page": "app/customer-login-register/page.js",
-  "/login/page": "app/login/page.js",
-  "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js",
-  "/menu-browse-search/page": "app/menu-browse-search/page.js"
+  "/page": "app/page.js"
 }
