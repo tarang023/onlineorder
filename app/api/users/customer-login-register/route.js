@@ -17,11 +17,15 @@ export async function POST(req ) {
           return NextResponse.json({error:"User already exists"}, {status:400});
 
       }
+            //send verification email
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
       const salt=await bcryptjs.genSalt(10);
       const hashedPassword=await bcryptjs.hash(password,salt);
       const username=firstName+lastName;
      const newUser= new User({
+      verifyOtp: otp,
+      verifyOtpExpiry: Date.now() + 15 * 60 * 1000, // 15 minutes from now
           email,
           phone,
           password:hashedPassword,
@@ -33,9 +37,9 @@ export async function POST(req ) {
       const savedUser= await newUser.save();
       console.log("newUser",newUser);
       console.log("savedUser",savedUser);
+      await sendEmail({email,emailType:"VERIFY",userId:savedUser._id,otp})
 
-      //send verification email
-      await sendEmail({email,emailType:"VERIFY",userId:savedUser._id})
+
       return NextResponse.json({message:"User registered successfully"}, {status:201});
 
 

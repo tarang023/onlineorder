@@ -23,7 +23,9 @@ export async function POST(req ) {
         if(!validPassword){
             return NextResponse.json({error:"Invalid password check your credentials"}, {status:400})
         }
-
+        if(!user.isVerified){
+            return NextResponse.json({error:"User is not verified"}, {status:400})
+        }
         const tokenData ={
             id :user._id,
            

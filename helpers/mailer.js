@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import User from "../models/userModel";
 import bcryptjs from 'bcryptjs'
 
-export const sendEmail = async ({email,emailType,userId})=>{
+export const sendEmail = async ({email,emailType,userId,otp})=>{
     try{
 
         //configure mail for usage has to add
@@ -20,20 +20,30 @@ export const sendEmail = async ({email,emailType,userId})=>{
           // Looking to send emails in production? Check out our Email API/SMTP product!
            // Looking to send emails in production? Check out our Email API/SMTP product!
             var transporter = nodemailerr.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
+            host: process.env.MAIL_HOST,
             port: 2525,
             auth: {
-                user: "115c2ccb225062",
-                pass: "889ff8ffb8902a"
+                user: process.env.MAIL_USER,
+                pass: process.env.MAIL_PASS
             }
             });
                         const mailOptions = {
                 from: "tarangkathiriya33@gmail.com",
                 to: email,
                 subject: emailType==='VERIFY' ? "Email Verification" : "FORGOT PASSWORD",
+                html: `
+                <div style="font-family: sans-serif; text-align: center; padding: 20px;">
+                    <h2>Email Verification</h2>
+                    <p>Thank you for signing up. Please use the following code to verify your email address:</p>
+                    <p style="font-size: 24px; font-weight: bold; letter-spacing: 2px; margin: 20px; padding: 10px; background: #f0f0f0; border-radius: 5px;">
+                        ${otp}
+                    </p>
+                    <p>This code is valid for 10 minutes.</p>
+                </div>
+            `
                
-                html:`<p>click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}"> </a> to ${emailType==='VERIFY' ? "verify your email" : "reset your password"} or copy paste link into browser. <br>
-                ${process.env.DOMAIN}/verifyemail?token=${hashedToken}</p>`
+                // html:`<p>click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}"> </a> to ${emailType==='VERIFY' ? "verify your email" : "reset your password"} or copy paste link into browser. <br>
+                // ${process.env.DOMAIN}/verifyemail?token=${hashedToken}</p>`
 
  
             };

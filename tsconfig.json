@@ -32,7 +32,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/customer-login-register/page.jsx", "app/api/getData/route.js", "app/api/cart/route.js", "app/api/cart/update/route.js", "app/api/orders/place/route.js", "app/api/orders/sendDetails/placeKitchenDisplay/kitchenDisplay/route.js", "app/api/orders/sendDetails/placeKitchenDisplay/route.js", "app/api/orders/sendDetails/route.js", "app/api/users/customer-login-register/route.js", "app/api/users/delete-all/route.js", "app/api/users/login/route.js", "app/api/users/logout/route.js", "app/api/users/me/route.js", "app/api/users/my-orders/route.js", "app/api/users/verifyemail/route.js", "helpers/mailer.js", "dbconfig/dbConfig.js", "helpers/getDataFromToken.js"  ],
+, "app/customer-login-register/page.jsx", "app/api/getData/route.js", "app/api/cart/route.js", "app/api/cart/update/route.js", "app/api/orders/place/route.js", "app/api/orders/sendDetails/placeKitchenDisplay/kitchenDisplay/route.js", "app/api/orders/sendDetails/placeKitchenDisplay/route.js", "app/api/orders/sendDetails/route.js", "app/api/users/customer-login-register/route.js", "app/api/users/delete-all/route.js", "app/api/users/login/route.js", "app/api/users/logout/route.js", "app/api/users/me/route.js", "app/api/users/my-orders/route.js", "app/api/users/verify-otp/route.js", "helpers/mailer.js", "dbconfig/dbConfig.js", "helpers/getDataFromToken.js"  ],
   "exclude": [
     "node_modules"
   ]

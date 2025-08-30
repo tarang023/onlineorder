@@ -1,18 +1,18 @@
 "use client";
-import Link from "next/link"
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Icon from "../components/AppIcon";
 import Image from "../components/AppImage";
-import axios from 'axios';
+import axios from "axios";
 import toast from "react-hot-toast";
 import { useSession, signIn, signOut } from "next-auth/react";
-
 
 function CustomerLoginRegister() {
   const router = useRouter();
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState("login");
+  const [otp, setOtp] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     phone: "",
@@ -30,7 +30,7 @@ function CustomerLoginRegister() {
   const [passwordStrength, setPasswordStrength] = useState(0);
   const navigate = useRouter();
   const location = usePathname();
-
+  const [email,setEmail]=useState("")
   // Mock credentials for testing
   // const mockCredentials = {
   //   customer: { email: "customer@tastebite.com", password: "customer123" },
@@ -54,37 +54,42 @@ function CustomerLoginRegister() {
     setPasswordStrength(0);
   }, [activeTab]);
 
+  const sendData = async () => {
+    try {
+      setIsLoading(true);
+      setEmail(formData.email)
+      const response = await axios.post(
+        "/api/users/customer-login-register",
+        formData
+      );
+      console.log("Signup success", response.data);
+      // setActiveTab("login")
+      setActiveTab("verify");
+    } catch (error) {
+      console.log("Signup failed", error.message);
 
-  
-    const sendData = async () => {
-        try {
-            setIsLoading(true);
-            const response = await axios.post("/api/users/customer-login-register",formData);
-            console.log("Signup success", response.data);
-            setActiveTab("login")
-            
-        } catch (error) {
-            console.log("Signup failed", error.message);
-            
-            toast.error(error.message);
-        }finally {
-            setIsLoading(false);
-        }
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    const onLogin =async(email,password)=>{
-      try{
-        setIsLoading(true);
-        const response =await axios.post("/api/users/login", { email, password });
-        console.log("Login success", response.data);
-        return true;
-      }catch(error){
-        console.log("Login failed", error.message);
-        toast.error(error.message);
-      }finally{
-        setIsLoading(false);
-      }
+  const onLogin = async (email, password) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.post("/api/users/login", {
+        email,
+        password,
+      });
+      console.log("Login success", response.data);
+      return true;
+    } catch (error) {
+      console.log("Login failed", error.message);
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -103,12 +108,10 @@ function CustomerLoginRegister() {
       }));
     }
 
-
     // Calculate password strength for register mode
     if (name === "password" && activeTab === "register") {
       calculatePasswordStrength(value);
     }
-     
   };
 
   const calculatePasswordStrength = (password) => {
@@ -172,7 +175,7 @@ function CustomerLoginRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -184,13 +187,12 @@ function CustomerLoginRegister() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       if (activeTab === "login") {
-
         // Check mock credentials
-        const { email ,password} = formData;
-        console.log(email,password);
+        const { email, password } = formData;
+        console.log(email, password);
         onLogin(email, password);
-        const isValidCredentials =  await onLogin(email, password);
-        console.log('login credential status received',isValidCredentials);
+        const isValidCredentials = await onLogin(email, password);
+        console.log("login credential status received", isValidCredentials);
 
         if (!isValidCredentials) {
           setErrors({
@@ -199,7 +201,7 @@ function CustomerLoginRegister() {
           setIsLoading(false);
           return;
         }
-      }else{
+      } else {
         sendData();
         return;
       }
@@ -208,10 +210,36 @@ function CustomerLoginRegister() {
       console.log("outside credential check");
       const redirectTo = "/menu-browse-search";
       console.log("Redirecting to:", redirectTo);
-       
-    router.push(redirectTo);
+
+      router.push(redirectTo);
     } catch (error) {
       setErrors({ submit: "Authentication failed. Please try again." });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    if (!otp || otp.length < 6) {
+      toast.error("Please enter a valid 6-digit OTP.");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      console.log(otp,typeof otp,formData.email);
+      await axios.post("/api/users/verify-otp", {
+        email: email,
+        votp: otp,
+      });
+      toast.success("Email verified successfully! Please sign in.");
+      setActiveTab("login");
+      setOtp("");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || "Verification failed.";
+      console.log("OTP Verification failed", errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -220,7 +248,7 @@ function CustomerLoginRegister() {
   const handleSocialLogin = (provider) => {
     console.log(`${provider} login initiated`);
 
-      signIn("google");
+    signIn("google");
 
     // Simulate social login success
     setTimeout(() => {
@@ -308,343 +336,369 @@ function CustomerLoginRegister() {
         </div>
 
         {/* Form Section */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-12">
+        {activeTab === "verify" ? (
+          <>
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-12">
           <div className="w-full max-w-md">
-            {/* Mobile Logo */}
-            <div className="lg:hidden text-center mb-8">
-              <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Icon name="ChefHat" size={32} color="white" />
-              </div>
-              <h1 className="text-2xl font-heading font-heading-medium text-text-primary">
-                Welcome to TasteBite
-              </h1>
-              <p className="text-text-secondary font-body mt-2">
-                Your favorite meals, just a click away
+       
+            <form onSubmit={handleVerifyOtp} className="space-y-4">
+              <h2 className="text-2xl ...">Verify Your Email</h2>
+              <p>
+                An OTP has been sent to <strong>{formData.email}</strong>.
               </p>
-            </div>
+              <input
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                // ... other input props
+              />
+            
 
-            {/* Tab Navigation */}
-            <div className="flex bg-secondary-50 rounded-lg p-1 mb-8">
-              <button
-                onClick={() => setActiveTab("login")}
-                className={`flex-1 py-3 px-4 rounded-md font-body font-body-medium transition-smooth ${
-                  activeTab === "login"
-                    ? "bg-surface text-primary shadow-soft"
-                    : "text-text-secondary hover:text-primary"
-                }`}
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => setActiveTab("register")}
-                className={`flex-1 py-3 px-4 rounded-md font-body font-body-medium transition-smooth ${
-                  activeTab === "register"
-                    ? "bg-surface text-primary shadow-soft"
-                    : "text-text-secondary hover:text-primary"
-                }`}
-              >
-                Sign Up
-              </button>
-            </div>
-
-            {/* Social Login */}
-            <div className="space-y-3 mb-6">
-              <button
-                onClick={() => handleSocialLogin("google")}
-                className="w-full flex items-center justify-center space-x-3 px-4 py-3 border border-border rounded-lg hover:bg-secondary-50 transition-smooth font-body font-body-medium min-h-touch"
-              >
-                <Icon name="Chrome" size={20} className="text-text-secondary" />
-                <span>Continue with Google</span>
-              </button>
-              <button
-                onClick={() => handleSocialLogin("facebook")}
-                className="w-full flex items-center justify-center space-x-3 px-4 py-3 border border-border rounded-lg hover:bg-secondary-50 transition-smooth font-body font-body-medium min-h-touch"
-              >
-                <Icon
-                  name="Facebook"
-                  size={20}
-                  className="text-text-secondary"
-                />
-                <span>Continue with Facebook</span>
-              </button>
-            </div>
-
-            {/* Divider */}
-            <div className="relative mb-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-background text-text-secondary font-body">
-                  Or continue with email
-                </span>
-              </div>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {activeTab === "register" && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
-                      First Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch ${
-                        errors.firstName ? "border-error" : "border-border"
-                      }`}
-                      placeholder="John"
-                    />
-                    {errors.firstName && (
-                      <p className="text-error text-sm font-body mt-1">
-                        {errors.firstName}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
-                      Last Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch ${
-                        errors.lastName ? "border-error" : "border-border"
-                      }`}
-                      placeholder="Doe"
-                    />
-                    {errors.lastName && (
-                      <p className="text-error text-sm font-body mt-1">
-                        {errors.lastName}
-                      </p>
-                    )}
-                  </div>
+              <button type="submit">Verify & Sign In</button>
+            </form>{" "}
+    </div>
+</div>
+          </>
+        ) : (
+          <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-12">
+            <div className="w-full max-w-md">
+              {/* Mobile Logo */}
+              <div className="lg:hidden text-center mb-8">
+                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Icon name="ChefHat" size={32} color="white" />
                 </div>
-              )}
+                <h1 className="text-2xl font-heading font-heading-medium text-text-primary">
+                  Welcome to TasteBite
+                </h1>
+                <p className="text-text-secondary font-body mt-2">
+                  Your favorite meals, just a click away
+                </p>
+              </div>
 
-              <div>
-                <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch ${
-                    errors.email ? "border-error" : "border-border"
+              {/* Tab Navigation */}
+              <div className="flex bg-secondary-50 rounded-lg p-1 mb-8">
+                <button
+                  onClick={() => setActiveTab("login")}
+                  className={`flex-1 py-3 px-4 rounded-md font-body font-body-medium transition-smooth ${
+                    activeTab === "login"
+                      ? "bg-surface text-primary shadow-soft"
+                      : "text-text-secondary hover:text-primary"
                   }`}
-                  placeholder="john@example.com"
-                />
-                {errors.email && (
-                  <p className="text-error text-sm font-body mt-1">
-                    {errors.email}
-                  </p>
-                )}
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => setActiveTab("register")}
+                  className={`flex-1 py-3 px-4 rounded-md font-body font-body-medium transition-smooth ${
+                    activeTab === "register"
+                      ? "bg-surface text-primary shadow-soft"
+                      : "text-text-secondary hover:text-primary"
+                  }`}
+                >
+                  Sign Up
+                </button>
               </div>
 
-              {activeTab === "register" && (
-                <div>
-                  <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
-                    Phone Number (Optional)
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch"
-                    placeholder="+1 (555) 123-4567"
+              {/* Social Login */}
+              <div className="space-y-3 mb-6">
+                <button
+                  onClick={() => handleSocialLogin("google")}
+                  className="w-full flex items-center justify-center space-x-3 px-4 py-3 border border-border rounded-lg hover:bg-secondary-50 transition-smooth font-body font-body-medium min-h-touch"
+                >
+                  <Icon
+                    name="Chrome"
+                    size={20}
+                    className="text-text-secondary"
                   />
-                </div>
-              )}
-
-              <div>
-                <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
-                  Password *
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-3 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch ${
-                      errors.password ? "border-error" : "border-border"
-                    }`}
-                    placeholder="••••••••"
+                  <span>Continue with Google</span>
+                </button>
+                <button
+                  onClick={() => handleSocialLogin("facebook")}
+                  className="w-full flex items-center justify-center space-x-3 px-4 py-3 border border-border rounded-lg hover:bg-secondary-50 transition-smooth font-body font-body-medium min-h-touch"
+                >
+                  <Icon
+                    name="Facebook"
+                    size={20}
+                    className="text-text-secondary"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary hover:text-primary transition-smooth"
-                  >
-                    <Icon name={showPassword ? "EyeOff" : "Eye"} size={20} />
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className="text-error text-sm font-body mt-1">
-                    {errors.password}
-                  </p>
-                )}
+                  <span>Continue with Facebook</span>
+                </button>
+              </div>
 
-                {activeTab === "register" && formData.password && (
-                  <div className="mt-2">
-                    <div className="flex items-center space-x-2 mb-1">
-                      <div className="flex-1 bg-secondary-100 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor()}`}
-                          style={{ width: `${passwordStrength}%` }}
-                        ></div>
-                      </div>
-                      <span className="text-xs font-body text-text-secondary">
-                        {getPasswordStrengthText()}
-                      </span>
+              {/* Divider */}
+              <div className="relative mb-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-border"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-background text-text-secondary font-body">
+                    Or continue with email
+                  </span>
+                </div>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {activeTab === "register" && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
+                        First Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch ${
+                          errors.firstName ? "border-error" : "border-border"
+                        }`}
+                        placeholder="John"
+                      />
+                      {errors.firstName && (
+                        <p className="text-error text-sm font-body mt-1">
+                          {errors.firstName}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
+                        Last Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch ${
+                          errors.lastName ? "border-error" : "border-border"
+                        }`}
+                        placeholder="Doe"
+                      />
+                      {errors.lastName && (
+                        <p className="text-error text-sm font-body mt-1">
+                          {errors.lastName}
+                        </p>
+                      )}
                     </div>
                   </div>
                 )}
-              </div>
 
-              {activeTab === "register" && (
                 <div>
                   <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
-                    Confirm Password *
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch ${
+                      errors.email ? "border-error" : "border-border"
+                    }`}
+                    placeholder="john@example.com"
+                  />
+                  {errors.email && (
+                    <p className="text-error text-sm font-body mt-1">
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
+
+                {activeTab === "register" && (
+                  <div>
+                    <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
+                      Phone Number (Optional)
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch"
+                      placeholder="+1 (555) 123-4567"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
+                    Password *
                   </label>
                   <div className="relative">
                     <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
                       onChange={handleInputChange}
                       className={`w-full px-3 py-3 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch ${
-                        errors.confirmPassword
-                          ? "border-error"
-                          : "border-border"
+                        errors.password ? "border-error" : "border-border"
                       }`}
                       placeholder="••••••••"
                     />
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
+                      onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary hover:text-primary transition-smooth"
                     >
-                      <Icon
-                        name={showConfirmPassword ? "EyeOff" : "Eye"}
-                        size={20}
-                      />
+                      <Icon name={showPassword ? "EyeOff" : "Eye"} size={20} />
                     </button>
                   </div>
-                  {errors.confirmPassword && (
+                  {errors.password && (
                     <p className="text-error text-sm font-body mt-1">
-                      {errors.confirmPassword}
+                      {errors.password}
                     </p>
                   )}
-                </div>
-              )}
 
-              {/* Checkboxes */}
-              <div className="space-y-3">
-                {activeTab === "login" && (
-                  <label className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
-                      name="rememberMe"
-                      checked={formData.rememberMe}
-                      onChange={handleInputChange}
-                      className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2"
-                    />
-                    <span className="text-sm font-body text-text-secondary">
-                      Remember me for 30 days
-                    </span>
-                  </label>
-                )}
+                  {activeTab === "register" && formData.password && (
+                    <div className="mt-2">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <div className="flex-1 bg-secondary-100 rounded-full h-2">
+                          <div
+                            className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor()}`}
+                            style={{ width: `${passwordStrength}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-xs font-body text-text-secondary">
+                          {getPasswordStrengthText()}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 {activeTab === "register" && (
-                  <label className="flex items-start space-x-3">
-                    <input
-                      type="checkbox"
-                      name="acceptTerms"
-                      checked={formData.acceptTerms}
-                      onChange={handleInputChange}
-                      className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2 mt-0.5"
-                    />
-                    <span className="text-sm font-body text-text-secondary">
-                      I agree to the{" "}
+                  <div>
+                    <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
+                      Confirm Password *
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-3 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch ${
+                          errors.confirmPassword
+                            ? "border-error"
+                            : "border-border"
+                        }`}
+                        placeholder="••••••••"
+                      />
                       <button
                         type="button"
-                        className="text-primary hover:text-primary-700 font-body-medium"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary hover:text-primary transition-smooth"
                       >
-                        Terms of Service
-                      </button>{" "}
-                      and{" "}
-                      <button
-                        type="button"
-                        className="text-primary hover:text-primary-700 font-body-medium"
-                      >
-                        Privacy Policy
+                        <Icon
+                          name={showConfirmPassword ? "EyeOff" : "Eye"}
+                          size={20}
+                        />
                       </button>
-                    </span>
-                  </label>
+                    </div>
+                    {errors.confirmPassword && (
+                      <p className="text-error text-sm font-body mt-1">
+                        {errors.confirmPassword}
+                      </p>
+                    )}
+                  </div>
                 )}
-              </div>
 
-              {errors.acceptTerms && (
-                <p className="text-error text-sm font-body">
-                  {errors.acceptTerms}
-                </p>
-              )}
+                {/* Checkboxes */}
+                <div className="space-y-3">
+                  {activeTab === "login" && (
+                    <label className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        name="rememberMe"
+                        checked={formData.rememberMe}
+                        onChange={handleInputChange}
+                        className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2"
+                      />
+                      <span className="text-sm font-body text-text-secondary">
+                        Remember me for 30 days
+                      </span>
+                    </label>
+                  )}
 
-              {errors.submit && (
-                <div className="p-3 bg-error-50 border border-error-100 rounded-lg">
+                  {activeTab === "register" && (
+                    <label className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        name="acceptTerms"
+                        checked={formData.acceptTerms}
+                        onChange={handleInputChange}
+                        className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2 mt-0.5"
+                      />
+                      <span className="text-sm font-body text-text-secondary">
+                        I agree to the{" "}
+                        <button
+                          type="button"
+                          className="text-primary hover:text-primary-700 font-body-medium"
+                        >
+                          Terms of Service
+                        </button>{" "}
+                        and{" "}
+                        <button
+                          type="button"
+                          className="text-primary hover:text-primary-700 font-body-medium"
+                        >
+                          Privacy Policy
+                        </button>
+                      </span>
+                    </label>
+                  )}
+                </div>
+
+                {errors.acceptTerms && (
                   <p className="text-error text-sm font-body">
-                    {errors.submit}
+                    {errors.acceptTerms}
                   </p>
+                )}
+
+                {errors.submit && (
+                  <div className="p-3 bg-error-50 border border-error-100 rounded-lg">
+                    <p className="text-error text-sm font-body">
+                      {errors.submit}
+                    </p>
+                  </div>
+                )}
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-smooth font-body font-body-medium min-h-touch"
+                >
+                  {isLoading && (
+                    <Icon name="Loader2" size={20} className="animate-spin" />
+                  )}
+                  <span>
+                    {isLoading
+                      ? "Please wait..."
+                      : activeTab === "login"
+                      ? "Sign In"
+                      : "Create Account"}
+                  </span>
+                </button>
+              </form>
+
+              {/* Additional Links */}
+              {activeTab === "login" && (
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={handleForgotPassword}
+                    className="text-sm text-primary hover:text-primary-700 font-body-medium transition-smooth"
+                  >
+                    Forgot your password?
+                  </button>
                 </div>
               )}
 
-              {/* Submit Button */}
-              <button
-
-                type="submit"
-                disabled={isLoading}
-                
-                className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-smooth font-body font-body-medium min-h-touch"
-              >
-                {isLoading && (
-                  <Icon name="Loader2" size={20} className="animate-spin" />
-                )}
-                <span>
-                  {isLoading
-                    ? "Please wait..."
-                    : activeTab === "login"
-                    ? "Sign In"
-                    : "Create Account"}
-                </span>
-              </button>
-            </form>
-
-            {/* Additional Links */}
-            {activeTab === "login" && (
-              <div className="mt-6 text-center">
-                <button
-                  onClick={handleForgotPassword}
-                  className="text-sm text-primary hover:text-primary-700 font-body-medium transition-smooth"
-                >
-                  Forgot your password?
-                </button>
-              </div>
-            )}
-
-            {/* Guest Checkout */}
-            {/* <div className="mt-6 pt-6 border-t border-border text-center">
+              {/* Guest Checkout */}
+              {/* <div className="mt-6 pt-6 border-t border-border text-center">
               <p className="text-sm text-text-secondary font-body mb-3">
                 Don't want to create an account?
               </p>
@@ -656,8 +710,8 @@ function CustomerLoginRegister() {
               </button>
             </div> */}
 
-            {/* Mock Credentials Info */}
-            {/* <div className="mt-8 p-4 bg-accent-50 border border-accent-100 rounded-lg">
+              {/* Mock Credentials Info */}
+              {/* <div className="mt-8 p-4 bg-accent-50 border border-accent-100 rounded-lg">
               <h4 className="text-sm font-body font-body-medium text-text-primary mb-2">
                 Demo Credentials:
               </h4>
@@ -676,8 +730,9 @@ function CustomerLoginRegister() {
                 </div>
               </div>
             </div> */}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
