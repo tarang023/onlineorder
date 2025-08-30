@@ -201,11 +201,12 @@ function CustomerLoginRegister() {
         }
       }else{
         sendData();
+        return;
       }
 
       // Success - redirect to intended page or menu
       console.log("outside credential check");
-      const redirectTo = location.state?.from || "/menu-browse-search";
+      const redirectTo = "/menu-browse-search";
       console.log("Redirecting to:", redirectTo);
        
     router.push(redirectTo);

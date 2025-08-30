@@ -1,60 +1,30 @@
 {
   "pages": {
-    "/not-found": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/kitchen-display-system/page": [
+    "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/kitchen-display-system/page.js"
+      "static/chunks/app/not-found.js"
     ],
-    "/api/users/delete-all/route": [
+    "/item-detail-customization/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/users/delete-all/route.js"
+      "static/chunks/app/item-detail-customization/page.js"
     ],
-    "/api/placeKitchenDisplay/route": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/placeKitchenDisplay/route.js"
-    ],
-    "/shopping-cart-checkout/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/shopping-cart-checkout/page.js"
+      "static/chunks/app/_not-found/page.js"
     ],
     "/api/getData/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/getData/route.js"
-    ],
-    "/api/orders/place/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/orders/place/route.js"
-    ],
-    "/order-tracking-status/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/order-tracking-status/page.js"
-    ],
-    "/api/orders/sendDetails/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/orders/sendDetails/route.js"
     ],
     "/menu-browse-search/page": [
       "static/chunks/webpack.js",
@@ -66,10 +36,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/cart/route.js"
     ],
-    "/api/cart/update/route": [
+    "/shopping-cart-checkout/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/cart/update/route.js"
+      "static/chunks/app/shopping-cart-checkout/page.js"
+    ],
+    "/restaurant-admin-dashboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/restaurant-admin-dashboard/page.js"
+    ],
+    "/kitchen-display-system/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/kitchen-display-system/page.js"
+    ],
+    "/api/placeKitchenDisplay/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/placeKitchenDisplay/route.js"
     ]
   }
 }

@@ -173,11 +173,8 @@ Our dough is prepared fresh daily using traditional techniques and aged for 24 h
     });
     setSelectedIngredients(initialIngredients);
   }, []);
-  useEffect(() => {
-    if(selectedItem){
-    setIsLoading(false);
-    }
-  }, [selectedItem]);
+  
+   
 
   const calculateTotalPrice = () => {
     if (!selectedItem) return 0;
