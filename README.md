@@ -18,16 +18,16 @@ This project is a comprehensive online food ordering platform designed for a mod
 * **Kitchen Display System**: A dedicated view for kitchen staff to see incoming orders in real-time.  
 * **RESTful API**: A well-structured backend API built with Next.js API Routes to handle all application logic.
 ### **Frontend**
-* **Next.js – Modern React framework for SEO-optimized and fast-loading UI.
+* Next.js – Modern React framework for SEO-optimized and fast-loading UI.
 * **Tailwind CSS – Sleek and responsive UI design.
 ### **Backend**
-* **Next.js – Robust backend handling APIs and business logic.
-* **MongoDB & Mongoose – NoSQL database for scalable data management.
-* **JSON Web Tokens (JWT) & jose – Secure authentication & authorization.
+* Next.js – Robust backend handling APIs and business logic.
+* MongoDB & Mongoose – NoSQL database for scalable data management.
+* JSON Web Tokens (JWT) & jose – Secure authentication & authorization.
  
 
 ### **Database**
-* **MongoDb
+* MongoDb
 
 
 
@@ -45,8 +45,7 @@ You need to have Node.js and npm installed on your machine.
 ### **Installation**
 
 1. Clone the repo  
-   git clone \[https://github.com/tarang023/onlineorder.git\](https://github.com/your\_username/your\_project\_repository.git)
-
+   git clone \[https://github.com/tarang023/onlineorder.git] 
 2. Install NPM packages  
    npm install
 
