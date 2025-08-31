@@ -7,7 +7,7 @@ import Image from "../components/AppImage";
 import CustomerNavigation from "../components/ui/CustomerNavigation";
 function MenuBrowseSearch() {
   const { addToCart } = useCart();
-  const navigate = useRouter();
+  // const navigate = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -231,21 +231,7 @@ function MenuBrowseSearch() {
     return filtered;
   }, [selectedCategory, searchQuery, filters, menuItems]);
 
-  // const handleAddToCart = (item) => {
-  //   if (!item.isAvailable) return;
-
-  //   setCartItems(prev => {
-  //     const existingItem = prev.find(cartItem => cartitem.productId === item.productId);
-  //     if (existingItem) {
-  //       return prev.map(cartItem =>
-  //         cartitem.productId === item.productId
-  //           ? { ...cartItem, quantity: cartItem.quantity + 1 }
-  //           : cartItem
-  //       );
-  //     }
-  //     return [...prev, { ...item, quantity: 1 }];
-  //   });
-  // };
+ 
 
   const handleItemClick = (item) => {
     // Pass the item ID as a query parameter

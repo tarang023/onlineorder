@@ -10,6 +10,23 @@ const cartItemSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description:{
+    type:String
+  },
+  category:{
+    type:String
+  },
+  prepTime:{
+    type:Number
+  },
+  isAvailable:{
+    type:Boolean,
+    default:true
+  },
+  rating:{
+    type:Number
+  },
+  
   price: {
     type: Number,
     required: true,

@@ -20,6 +20,7 @@ function KitchenDisplaySystem() {
   const [modifiedOrders, setModifiedOrders] = useState();
   const [showMetrics, setShowMetrics] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [status,changeStatus]=useState(false);
 
   // Mock WebSocket connection status
   useEffect(() => {
@@ -50,7 +51,7 @@ useEffect(() => {
   if (orders && orders.length > 0) {
     setIsLoading(false);
     console.log("Orders loaded:", orders);
-     
+    
   if(typeof orders == Object){
     setIsLoading(false);
     console.log("Orders loaded:", orders);
@@ -59,16 +60,19 @@ useEffect(() => {
 }
 },[orders]);
 
-
+ 
 
 
   // Handle order status updates
-  const handleOrderStatusUpdate = useCallback((orderId, newStatus) => {
+  const handleOrderStatusUpdate = useCallback(async (orderId, newStatus) => {
+    changeStatus(true);
     setOrders(prevOrders =>
       prevOrders.map(order =>
         order.id === orderId ? { ...order, status: newStatus, lastUpdated: new Date() } : order
       )
     );
+    await axios.post("/api/orders/changeOrder",{orderId:orderId,status:newStatus})
+
   }, []);
 
   // Handle order priority updates

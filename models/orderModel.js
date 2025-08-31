@@ -6,13 +6,21 @@ const orderSchema = new mongoose.Schema({
   },
   status:{
     type:String,
-    enum:['confirmed', 'preparing', 'ready', 'out_for_delivery', 'delivered'],
+    enum:['new','confirmed', 'preparing', 'ready', 'out_for_delivery', 'delivered'],
     default:'preparing'
   },
   orderTime:{
     type:Date,
     required:true,
     default:Date.now()
+  },
+  pickupTime:{
+    type:String,
+    required:true
+  },
+  address:{
+    type:String,
+    required:true
   },
   estimatedDelivery: {
     type: Date,
@@ -37,7 +45,7 @@ const orderSchema = new mongoose.Schema({
      customer: {
       name: String,
       phone: Number,
-      address: String
+      address: String 
     },
   items: [
     {
@@ -50,6 +58,10 @@ const orderSchema = new mongoose.Schema({
       customizations: { type: [String], default: [] },
     },
   ],
+  specialInstruction:{
+    type:String,
+  
+  },
   paymentMethod:{
     type:String,
     default:'Cash on Delivery'
@@ -59,7 +71,7 @@ const orderSchema = new mongoose.Schema({
       status: {
         type: String,
         enum: ['confirmed', 'preparing', 'ready', 'out_for_delivery', 'delivered'],
-        default: 'confirmed'
+        default: 'preparing'
       },
       timestamp: {
         type: Date,
@@ -96,10 +108,7 @@ const orderSchema = new mongoose.Schema({
       }
     }
   },
-  deliveryInstructions: {
-    type: String,
-    default: "Leave at the front door"
-  },
+   
   canModify: {
     type: Boolean,
     default: true

@@ -7,7 +7,6 @@ import Image from "../components/AppImage";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useSession, signIn, signOut } from "next-auth/react";
-
 function CustomerLoginRegister() {
   const router = useRouter();
   const pathname = usePathname();
@@ -47,7 +46,6 @@ function CustomerLoginRegister() {
       confirmPassword: "",
       firstName: "",
       lastName: "",
-      rememberMe: false,
       acceptTerms: false,
     });
     setErrors({});
@@ -74,12 +72,13 @@ function CustomerLoginRegister() {
     }
   };
 
-  const onLogin = async (email, password) => {
+  const onLogin = async (email, password ) => {
     try {
       setIsLoading(true);
       const response = await axios.post("/api/users/login", {
         email,
         password,
+         
       });
       console.log("Login success", response.data);
       return true;
@@ -191,7 +190,7 @@ function CustomerLoginRegister() {
         const { email, password } = formData;
         console.log(email, password);
         onLogin(email, password);
-        const isValidCredentials = await onLogin(email, password);
+        const isValidCredentials = await onLogin(email, password );
         console.log("login credential status received", isValidCredentials);
 
         if (!isValidCredentials) {
@@ -294,7 +293,7 @@ function CustomerLoginRegister() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex">
+      <div className="flex-1 flex h-full">
         {/* Background Image - Desktop Only */}
         <div className="hidden lg:flex lg:w-1/2 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-primary-900 to-primary-700 opacity-90"></div>
@@ -350,11 +349,13 @@ function CustomerLoginRegister() {
                 type="text"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
-                // ... other input props
+               
               />
             
-
-              <button type="submit">Verify & Sign In</button>
+            <div className="flex flex-wrap items-center gap-2 md:flex-row">
+                 <button className="bg-black text-white border-r-2" type="submit">Verify & Sign In</button>
+               </div>
+             
             </form>{" "}
     </div>
 </div>
@@ -400,7 +401,7 @@ function CustomerLoginRegister() {
               </div>
 
               {/* Social Login */}
-              <div className="space-y-3 mb-6">
+              {/* <div className="space-y-3 mb-6">
                 <button
                   onClick={() => handleSocialLogin("google")}
                   className="w-full flex items-center justify-center space-x-3 px-4 py-3 border border-border rounded-lg hover:bg-secondary-50 transition-smooth font-body font-body-medium min-h-touch"
@@ -423,10 +424,10 @@ function CustomerLoginRegister() {
                   />
                   <span>Continue with Facebook</span>
                 </button>
-              </div>
+              </div> */}
 
               {/* Divider */}
-              <div className="relative mb-6">
+              {/* <div className="relative mb-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-border"></div>
                 </div>
@@ -435,7 +436,7 @@ function CustomerLoginRegister() {
                     Or continue with email
                   </span>
                 </div>
-              </div>
+              </div> */}
 
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -608,20 +609,7 @@ function CustomerLoginRegister() {
 
                 {/* Checkboxes */}
                 <div className="space-y-3">
-                  {activeTab === "login" && (
-                    <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        name="rememberMe"
-                        checked={formData.rememberMe}
-                        onChange={handleInputChange}
-                        className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2"
-                      />
-                      <span className="text-sm font-body text-text-secondary">
-                        Remember me for 30 days
-                      </span>
-                    </label>
-                  )}
+                
 
                   {activeTab === "register" && (
                     <label className="flex items-start space-x-3">
@@ -686,50 +674,8 @@ function CustomerLoginRegister() {
               </form>
 
               {/* Additional Links */}
-              {activeTab === "login" && (
-                <div className="mt-6 text-center">
-                  <button
-                    onClick={handleForgotPassword}
-                    className="text-sm text-primary hover:text-primary-700 font-body-medium transition-smooth"
-                  >
-                    Forgot your password?
-                  </button>
-                </div>
-              )}
-
-              {/* Guest Checkout */}
-              {/* <div className="mt-6 pt-6 border-t border-border text-center">
-              <p className="text-sm text-text-secondary font-body mb-3">
-                Don't want to create an account?
-              </p>
-              <button
-                onClick={handleGuestCheckout}
-                className="text-sm text-primary hover:text-primary-700 font-body-medium transition-smooth"
-              >
-                Continue as guest
-              </button>
-            </div> */}
-
-              {/* Mock Credentials Info */}
-              {/* <div className="mt-8 p-4 bg-accent-50 border border-accent-100 rounded-lg">
-              <h4 className="text-sm font-body font-body-medium text-text-primary mb-2">
-                Demo Credentials:
-              </h4>
-              <div className="text-xs font-data space-y-1 text-text-secondary">
-                <div>
-                  Customer: {mockCredentials.customer.email} /{" "}
-                  {mockCredentials.customer.password}
-                </div>
-                <div>
-                  Admin: {mockCredentials.admin.email} /{" "}
-                  {mockCredentials.admin.password}
-                </div>
-                <div>
-                  Staff: {mockCredentials.staff.email} /{" "}
-                  {mockCredentials.staff.password}
-                </div>
-              </div>
-            </div> */}
+              
+           
             </div>
           </div>
         )}

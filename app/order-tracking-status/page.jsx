@@ -128,6 +128,7 @@ useEffect(() => {
         setIsLoading(true);
         const response =await axios.post("/api/orders/sendDetails");
         console.log("Login success", response.data);
+        // setCurrentOrder(mockOrder);
         setCurrentOrder(response.data.data);
         return true;
       }catch(error){
@@ -155,15 +156,7 @@ useEffect(() => {
     });
   }
 },[currentOrder]);
-
-
-
-
-
-
-
-
-
+ 
   const handleReorder = () => {
     console.log("Reordering items:", currentOrder.items);
     // Navigate to cart with items

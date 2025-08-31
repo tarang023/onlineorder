@@ -24,8 +24,11 @@ export async function POST(req ) {
         const status = "confirmed";
         const orderTime=Date.now();
         const estimatedDelivery = new Date(orderTime);
+        const specialInstruction=reqBody.specialInstruction;
         estimatedDelivery.setMinutes(estimatedDelivery.getMinutes() + 30);
         // const restaurant=reqBody.restaurant;
+        const pickupTime=reqBody.pickupTime;
+        const orderType=reqBody.orderType;
         const address=reqBody.selectedAddress;
         const  restaurant={
       name: "TasteBite Downtown",
@@ -39,23 +42,55 @@ export async function POST(req ) {
     };
 
       const order=await Order.findOne({ user: userId });
-      
-       const timeline = [
+    const timeline=[
       {
         status: "confirmed",
-        timestamp: new Date(Date.now() - 1800000),
+        timestamp: new Date(Date.now()),
         title: "Order Confirmed",
         description: "Your order has been received and confirmed",
-      },]
+      },
+      {
+        status: "preparing",
+        timestamp: new Date(Date.now() + 60000),
+        title: "Preparing Your Order",
+        description: "Our kitchen is preparing your delicious meal",
+        estimatedCompletion: new Date(Date.now() + 1200000),
+      },
+      {
+        status: "ready",
+        timestamp: new Date(Date.now()  ),
+        title: "Ready for Pickup",
+        description: "Your order is ready and waiting for delivery",
+        estimatedCompletion: new Date(Date.now() + 125000),
+      },
+      {
+        status: "out_for_delivery",
+        timestamp: new Date(Date.now()  ),
+        title: "Out for Delivery",
+        description: "Your order is on its way to you",
+        estimatedCompletion: new Date(Date.now() + 1300000),
+      },
+      {
+        status: "delivered",
+        timestamp: new Date(Date.now()  ),
+        title: "Delivered",
+        description: "Enjoy your meal!",
+        estimatedCompletion:new Date(Date.now() + 140000),
+      },
+    ];
   
          const newOrder= new Order({
            orderId,
             status,
             orderTime,
             estimatedDelivery, 
+            pickupTime,
+            address,
+            orderType,
             user, 
             customer,
             restaurant,
+            specialInstruction,
             timeline: timeline,
             items: user.cart,
             paymentMethod

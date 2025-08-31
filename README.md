@@ -19,7 +19,7 @@ This project is a comprehensive online food ordering platform designed for a mod
 * **RESTful API**: A well-structured backend API built with Next.js API Routes to handle all application logic.
 ### **Frontend**
 * Next.js – Modern React framework for SEO-optimized and fast-loading UI.
-* **Tailwind CSS – Sleek and responsive UI design.
+* Tailwind CSS – Sleek and responsive UI design.
 ### **Backend**
 * Next.js – Robust backend handling APIs and business logic.
 * MongoDB & Mongoose – NoSQL database for scalable data management.
@@ -45,7 +45,7 @@ You need to have Node.js and npm installed on your machine.
 ### **Installation**
 
 1. Clone the repo  
-   git clone \[https://github.com/tarang023/onlineorder.git] 
+   git clone \[https://github.com/tarang023/onlineorder.git\] 
 2. Install NPM packages  
    npm install
 

@@ -7,9 +7,8 @@ import Image from "../components/AppImage";
 import CustomerNavigation from "../components/ui/CustomerNavigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import axios from 'axios';
-  // const { updateCartItem } = useCart();
-
+import axios from "axios";
+// const { updateCartItem } = useCart();
 
 function ShoppingCartCheckout() {
   const router = useRouter();
@@ -25,11 +24,13 @@ function ShoppingCartCheckout() {
   const [usePoints, setUsePoints] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedItems, setExpandedItems] = useState({});
-
+const [isAddingAddress, setIsAddingAddress] = useState(false);
   
+  // 2. State to manage the new address input values
+  const [newAddress, setNewAddress] = useState({ label: "", address: "" });
 
-  const savedAddresses = [
-    {
+
+  const [savedAddresses,setSavedAddress]=useState([{
       id: 1,
       label: "Home",
       address: "123 Main Street, Apt 4B, Downtown, City 12345",
@@ -40,8 +41,42 @@ function ShoppingCartCheckout() {
       label: "Office",
       address: "456 Business Ave, Suite 200, Business District, City 12346",
       isDefault: false,
-    },
-  ];
+    }])
+  // const savedAddresses = [
+  //   {
+  //     id: 1,
+  //     label: "Home",
+  //     address: "123 Main Street, Apt 4B, Downtown, City 12345",
+  //     isDefault: true,
+  //   },
+  //   {
+  //     id: 2,
+  //     label: "Office",
+  //     address: "456 Business Ave, Suite 200, Business District, City 12346",
+  //     isDefault: false,
+  //   },
+  // ];
+const handleSaveAddress = () => {
+    // Basic validation
+    if (!newAddress.label || !newAddress.address) {
+      alert("Please fill out all address fields.");
+      return;
+    }
+    
+    // Create the new address object with a unique ID
+    const addressToAdd = {
+      ...newAddress,
+      id: Date.now(), // Simple unique ID for this example
+      isDefault: false,
+    };
+
+    // 4. Update the main addresses list
+    setSavedAddress(prevAddresses => [...prevAddresses, addressToAdd]);
+    
+    // 5. Reset the form and hide it
+    setNewAddress({ label: "", address: "" });
+    setIsAddingAddress(false);
+  };
 
   const timeSlots = [
     { id: 1, time: "ASAP (25-35 min)", available: true },
@@ -57,82 +92,85 @@ function ShoppingCartCheckout() {
     { id: "cod", name: "Cash on Delivery", icon: "Banknote" },
   ];
 
- 
-useEffect(() => {
-  const onLogin =async()=>{
-      try{
+  useEffect(() => {
+    const onLogin = async () => {
+      try {
         setIsLoading(true);
-        const response =await axios.post("/api/getData");
-        console.log("Login success", response.data,isLoading);
+        const response = await axios.post("/api/getData");
+        console.log("Login success", response.data, isLoading);
         setCartItems(response.data);
         return true;
-      }catch(error){
+      } catch (error) {
         console.log("Login failed", error.message);
         toast.error(error.message);
-      }finally{
+      } finally {
         setIsLoading(false);
       }
+    };
+    onLogin();
+    console.log(cartItems);
+    // You can set your other mock data here if needed, but it will be
+    // overwritten by the real cart data when the fetch completes.
+    if (savedAddresses.length > 0) {
+      setSelectedAddress(savedAddresses[0].id);
     }
-   onLogin();
-  console.log(cartItems);       
-  // You can set your other mock data here if needed, but it will be
-  // overwritten by the real cart data when the fetch completes.
-  if (savedAddresses.length > 0) {
-    setSelectedAddress(savedAddresses[0].id);
-  }
-  if (timeSlots.length > 0) {
-    setSelectedTimeSlot(timeSlots[0].id);
-  }
-  if (paymentMethods.length > 0) {
-    setPaymentMethod(paymentMethods[0].id);
-  }
+    if (timeSlots.length > 0) {
+      setSelectedTimeSlot(timeSlots[0].id);
+    }
+    if (paymentMethods.length > 0) {
+      setPaymentMethod(paymentMethods[0].id);
+    }
   }, []);
- 
-useEffect(() => {
-  // This code will only run AFTER the cartItems state has been successfully updated
-  if(cartItems.data){
-    setIsLoading(false);
-  }
-  console.log("2. React has re-rendered. The cartItems are now:",cartItems.data, typeof cartItems,isLoading);
-  if(!isLoading){
 
-    console.log("data type of cartitem",typeof cartItems.data);
-    cartItems.data.map((item) => {
-      console.log("Item:", item);
-    });
-  }
-  
-  // You can now do things with the data, like calculate the total
-  if (cartItems.length > 0) {
-    calculateTotal();
-  }
-}, [cartItems]);
+  useEffect(() => {
+    // This code will only run AFTER the cartItems state has been successfully updated
+    if (cartItems.data) {
+      setIsLoading(false);
+    }
+    console.log(
+      "2. React has re-rendered. The cartItems are now:",
+      cartItems.data,
+      typeof cartItems,
+      isLoading
+    );
+    if (!isLoading) {
+      console.log("data type of cartitem", typeof cartItems.data);
+      cartItems.data.map((item) => {
+        console.log("Item:", item);
+      });
+    }
 
-  const updateQuantity = async (item,productId, newQuantity) => {
+    // You can now do things with the data, like calculate the total
+    if (cartItems.length > 0) {
+      calculateTotal();
+    }
+  }, [cartItems]);
+
+  const updateQuantity = async (item, productId, newQuantity) => {
     // const productId = items.productId;
-    item.quantity=newQuantity;
+    item.quantity = newQuantity;
     const quantity = newQuantity;
-   const response=await axios.post("/api/cart/update", { productId, quantity });
-      console.log(response);
-      
+    const response = await axios.post("/api/cart/update", {
+      productId,
+      quantity,
+    });
+    console.log(response);
 
-       
-     const onLogin =async()=>{
-      try{
+    const onLogin = async () => {
+      try {
         setIsLoading(true);
-        const response =await axios.post("/api/getData");
-        console.log("Login success", response.data,isLoading);
+        const response = await axios.post("/api/getData");
+        console.log("Login success", response.data, isLoading);
         setCartItems(response.data);
         return true;
-      }catch(error){
+      } catch (error) {
         console.log("Login failed", error.message);
         toast.error(error.message);
-      }finally{
+      } finally {
         setIsLoading(false);
       }
-    }
-   onLogin();
-
+    };
+    onLogin();
   };
 
   const toggleItemExpansion = (itemId) => {
@@ -153,15 +191,19 @@ useEffect(() => {
   };
 
   const calculateSubtotal = () => {
-  if (isLoading) {
-    console.log("Loading, cannot calculate subtotal yet.");
-    return 0;
-  }
-  console.log("Calculating subtotal...");
-  return cartItems.data.map((item) => item.price * item.quantity).reduce((acc, curr) => acc + curr, 0);
-}
-
-
+    if (isLoading) {
+      console.log("Loading, cannot calculate subtotal yet.");
+      return 0;
+    }
+    console.log("Calculating subtotal...");
+    return cartItems.data
+      .map((item) => item.price * item.quantity)
+      .reduce((acc, curr) => acc + curr, 0);
+  };
+const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewAddress(prev => ({ ...prev, [name]: value }));
+  };
   const calculateDiscount = () => {
     if (promoMessage.includes("10%")) return calculateSubtotal() * 0.1;
     if (promoMessage.includes("20%")) return calculateSubtotal() * 0.2;
@@ -183,9 +225,9 @@ useEffect(() => {
   };
 
   const calculateTotal = () => {
-      if (isLoading) {
-         return 0;
-  }
+    if (isLoading) {
+      return 0;
+    }
     return (
       calculateSubtotal() -
       calculateDiscount() +
@@ -197,7 +239,9 @@ useEffect(() => {
 
   const getEstimatedPrepTime = () => {
     if (cartItems.length === 0) return 0;
-    const maxPrepTime = Math.max(...cartItems.data.map((item) => item.prepTime));
+    const maxPrepTime = Math.max(
+      ...cartItems.data.map((item) => item.prepTime)
+    );
     const kitchenLoad = 1.2; // Mock ML prediction factor
     return Math.ceil(maxPrepTime * kitchenLoad);
   };
@@ -209,19 +253,26 @@ useEffect(() => {
       // Simulate order placement
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const orderId = "ORD-" + Date.now();
-      const total = calculateTotal().toFixed(2);  
+      const total = calculateTotal().toFixed(2);
       console.log("placing order");
-      await axios.post("/api/orders/place", { orderId,paymentMethod, selectedAddress });
+      await axios.post("/api/orders/place", {
+        orderId,
+        paymentMethod,
+        selectedAddress,
+        pickupTime:selectedTimeSlot,
+        orderType:fulfillmentType,
+        specialInstruction:orderNotes
+
+      });
       router.push(`/order-tracking-status?orderId=${orderId}&total=${total}`);
     } catch (error) {
       console.error("Order placement failed:", error);
     } finally {
-      
     }
   };
 
   const minimumOrderValue = 15.0;
-  const isMinimumMet = calculateSubtotal()>= minimumOrderValue;
+  const isMinimumMet = calculateSubtotal() >= minimumOrderValue;
   if (isLoading) {
     return <div>Loading your cart...</div>;
   }
@@ -250,7 +301,7 @@ useEffect(() => {
             </div>
           </div>
 
-          {cartItems.length === 0  ? (
+          {cartItems.length === 0 ? (
             /* Empty Cart State */
             <div className="text-center py-16">
               <div className="w-24 h-24 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -287,18 +338,21 @@ useEffect(() => {
                         size={20}
                         className="text-warning-600"
                       />
-                     
-                        {((minimumOrderValue - calculateSubtotal()).toFixed(2)) > 0 ? (
-                           <p className="text-warning-700 font-body font-body-medium">
-                        Add $
-                          <span>{(minimumOrderValue - calculateSubtotal()).toFixed(2)} </span>
-                             more to meet minimum order value
-                      </p>
-                        ) : (
-                          <></>
 
-                        )}
-                     
+                      {(minimumOrderValue - calculateSubtotal()).toFixed(2) >
+                      0 ? (
+                        <p className="text-warning-700 font-body font-body-medium">
+                          Add $
+                          <span>
+                            {(minimumOrderValue - calculateSubtotal()).toFixed(
+                              2
+                            )}{" "}
+                          </span>
+                          more to meet minimum order value
+                        </p>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
                 )}
@@ -307,7 +361,7 @@ useEffect(() => {
                 <div className="space-y-4">
                   {cartItems.data.map((item) => (
                     <div
-                    id={item.productId}
+                      id={item.productId}
                       key={item.productId}
                       className="bg-surface border border-border rounded-lg p-6 shadow-soft"
                     >
@@ -337,7 +391,11 @@ useEffect(() => {
                             <div className="flex items-center space-x-3">
                               <button
                                 onClick={() =>
-                                  updateQuantity(item,item.productId, item.quantity - 1)
+                                  updateQuantity(
+                                    item,
+                                    item.productId,
+                                    item.quantity - 1
+                                  )
                                 }
                                 className="w-8 h-8 flex items-center justify-center border border-border rounded-lg hover:bg-secondary-50 transition-smooth"
                               >
@@ -348,8 +406,11 @@ useEffect(() => {
                               </span>
                               <button
                                 onClick={() =>
-                                 
-                                  updateQuantity(item,item.productId, item.quantity + 1)
+                                  updateQuantity(
+                                    item,
+                                    item.productId,
+                                    item.quantity + 1
+                                  )
                                 }
                                 className="w-8 h-8 flex items-center justify-center border border-border rounded-lg hover:bg-secondary-50 transition-smooth"
                               >
@@ -423,7 +484,9 @@ useEffect(() => {
                                 ${(item.price * item.quantity).toFixed(2)}
                               </span>
                               <button
-                                onClick={() => updateQuantity(item,item.productId, 0)}
+                                onClick={() =>
+                                  updateQuantity(item, item.productId, 0)
+                                }
                                 className="p-1 text-error hover:bg-error-50 rounded transition-smooth"
                               >
                                 <Icon name="Trash2" size={16} />
@@ -520,9 +583,42 @@ useEffect(() => {
                         </option>
                       ))}
                     </select>
-                    <button className="mt-3 text-sm text-primary hover:text-primary-700 font-body-medium transition-smooth">
+
+                                        
+                         {isAddingAddress ? (
+         
+                      <div className="space-y-3 mt-4">
+                        <input
+                          type="text"
+                          name="label"
+                          placeholder="Label (e.g., Work)"
+                          value={newAddress.label}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 border rounded-lg"
+                        />
+                        <input
+                          type="text"
+                          name="address"
+                          placeholder="Full Address"
+                          value={newAddress.address}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 border rounded-lg"
+                        />
+                        <div className="flex space-x-2">
+                          <button onClick={handleSaveAddress} className="px-4 py-2 bg-primary text-white rounded-lg">
+                            Save
+                          </button>
+                          <button onClick={() => setIsAddingAddress(false)} className="px-4 py-2 border rounded-lg">
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                    <button onClick={() => setIsAddingAddress(true)} className="mt-3 text-sm text-primary hover:text-primary-700 font-body-medium transition-smooth">
                       + Add New Address
                     </button>
+                     )}
+
                   </div>
                 )}
 
@@ -642,7 +738,7 @@ useEffect(() => {
                         Subtotal
                       </span>
                       <span className="font-data font-data-normal">
-                        ${calculateSubtotal().toFixed(2) }
+                        ${calculateSubtotal().toFixed(2)}
                       </span>
                     </div>
 

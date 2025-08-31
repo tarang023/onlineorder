@@ -19,6 +19,10 @@ function OrderProgressTimeline({ timeline, currentStatus }) {
     }
   };
 
+  const deliveredStep = timeline.find(step => step.status === 'delivered');
+
+// 2. Safely get the estimated completion time from that object
+const estimatedTime = deliveredStep?.estimatedCompletion;
   const getStatusColor = (status, isActive, isCompleted) => {
     if (isCompleted) return 'text-success bg-success-50 border-success';
     if (isActive) return 'text-primary bg-primary-50 border-primary';
@@ -35,16 +39,35 @@ function OrderProgressTimeline({ timeline, currentStatus }) {
     });
   };
 
-  const formatEstimatedTime = (estimatedTime) => {
-    if (!estimatedTime) return null;
-    const now = new Date();
-    const diff = estimatedTime.getTime() - now.getTime();
-    const minutes = Math.max(0, Math.ceil(diff / (1000 * 60)));
+  // const formatEstimatedTime = (estimatedTime) => {
+  //   if (!estimatedTime) return null;
+  //   const now = new Date();
+  //   const diff = estimatedTime.getTime() - now.getTime();
+  //   const minutes = Math.max(0, Math.ceil(diff / (1000 * 60)));
     
-    if (minutes === 0) return 'Any moment now';
-    if (minutes === 1) return 'In 1 minute';
-    return `In ${minutes} minutes`;
-  };
+  //   if (minutes === 0) return 'Any moment now';
+  //   if (minutes === 1) return 'In 1 minute';
+  //   return `In ${minutes} minutes`;
+  // };
+  const formatEstimatedTime = (estimatedTime) => {
+  // 1. Handle null or undefined input
+  if (!estimatedTime) return null;
+
+  // 2. THIS IS THE FIX: Convert the input into a Date object
+  const estimatedDate = new Date(estimatedTime);
+  
+  const now = new Date();
+
+  // 3. Now use the corrected 'estimatedDate' object for the calculation
+  const diff = estimatedDate.getTime() - now.getTime();
+
+  const minutes = Math.max(0, Math.ceil(diff / (1000 * 60)));
+
+  if (minutes === 0) return 'Any moment now';
+  
+  // (rest of your function logic...)
+  return `in ${minutes} minutes`; 
+};
 
   const getCurrentStepIndex = () => {
     return timeline.findIndex(step => step.status === currentStatus);
@@ -143,11 +166,22 @@ function OrderProgressTimeline({ timeline, currentStatus }) {
                 Estimated Delivery Time
               </p>
               <p className="text-lg font-heading font-heading-medium text-text-primary">
-                {timeline.find(step => step.status === 'delivered')?.estimatedCompletion?.toLocaleTimeString('en-US', {
+                {/* {timeline.find(step => step.status == 'delivered')?.estimatedCompletion
+                .toLocaleTimeString('en-US', {
                   hour: '2-digit',
                   minute: '2-digit',
                   hour12: true
-                }) || 'Calculating...'}
+                }) || 'Calculating...'} */}
+                {
+  // 3. Check if we found a time. If yes, convert and format it. If no, show the fallback.
+                estimatedTime
+                  ? new Date(estimatedTime).toLocaleTimeString('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })
+                  : 'Calculating...'
+                  }
               </p>
             </div>
             <div className="text-right">

@@ -1,3 +1,9 @@
 {
-  "/page": "app/page.js"
+  "/api/placeKitchenDisplay/route": "app/api/placeKitchenDisplay/route.js",
+  "/api/orders/sendDetails/route": "app/api/orders/sendDetails/route.js",
+  "/api/getData/route": "app/api/getData/route.js",
+  "/order-tracking-status/page": "app/order-tracking-status/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/kitchen-display-system/page": "app/kitchen-display-system/page.js",
+  "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js"
 }

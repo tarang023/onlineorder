@@ -3,7 +3,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 import axios from 'axios';
-import Cookies from "js-cookie"; 
+ 
 
 const CartContext = createContext(null);
 

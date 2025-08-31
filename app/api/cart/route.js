@@ -50,12 +50,17 @@ export async function POST(request) {
       user.cart[itemIndex].quantity += 1;
     } else {
       // If item doesn't exist, add it to the cart
-      user.cart.push({
+       user.cart.push({
         productId: itemToAdd.id,
         name: itemToAdd.name,
         price: itemToAdd.price,
         image: itemToAdd.image,
         quantity: 1,
+        description: itemToAdd.description,
+        category: itemToAdd.category,
+        prepTime: itemToAdd.prepTime,
+        isAvailable: itemToAdd.isAvailable,
+        rating: itemToAdd.rating,
       });
     }
 
