@@ -48,6 +48,8 @@ function CustomerAccountOrderHistory() {
     setIsMobileMenuOpen(false);
   };
 
+  
+
   const renderActiveSection = () => {
     switch (activeTab) {
       case 'profile':

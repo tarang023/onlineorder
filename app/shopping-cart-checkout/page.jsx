@@ -240,7 +240,7 @@ const handleInputChange = (e) => {
   const getEstimatedPrepTime = () => {
     if (cartItems.length === 0) return 0;
     const maxPrepTime = Math.max(
-      ...cartItems.data.map((item) => item.prepTime)
+      ...cartItems.data.map((item) => item.prepTime* item.quantity)
     );
     const kitchenLoad = 1.2; // Mock ML prediction factor
     return Math.ceil(maxPrepTime * kitchenLoad);
