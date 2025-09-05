@@ -6,6 +6,7 @@ import next from "next";
 import { set } from "mongoose";
 import Cookies from "js-cookie";
 import axios from 'axios';
+ 
 
 function CustomerNavigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,7 +21,7 @@ function CustomerNavigation() {
       try {
           const response =await axios.post("/api/getData");
         if (response.status === 200) {
-          setCartItemCount(response.data.data.length);
+          setCartItemCount(response.length);
         }else{
           setCartItemCount(0);
         }

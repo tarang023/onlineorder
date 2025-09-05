@@ -1,6 +1,5 @@
-import { complex } from "framer-motion";
-import mongoose from "mongoose";
-import { idText } from "typescript";
+ 
+import mongoose from 'mongoose';
 const kitchenOrderSchema = new mongoose.Schema({
     id:{
         type:String,
