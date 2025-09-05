@@ -17,8 +17,8 @@ function CheckoutClient({ initialCartItems }) {
   const [promoMessage, setPromoMessage] = useState("");
   const [fulfillmentType, setFulfillmentType] = useState("delivery"); // 'delivery' or 'pickup'
   const [selectedAddress, setSelectedAddress] = useState("");
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("strip");
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState("cod");
   const [orderNotes, setOrderNotes] = useState("");
   const [loyaltyPoints, setLoyaltyPoints] = useState(1250);
   const [usePoints, setUsePoints] = useState(false);
@@ -110,17 +110,17 @@ const handleSaveAddress = () => {
     // onLogin();
 
 //     console.log(cartItems);
-   
-//     if (savedAddresses.length > 0) {
-//       setSelectedAddress(savedAddresses[0].id);
-//     }
-//     if (timeSlots.length > 0) {
-//       setSelectedTimeSlot(timeSlots[0].id);
-//     }
-//     if (paymentMethods.length > 0) {
-//       setPaymentMethod(paymentMethods[0].id);
-//     }
-//   }, []);
+   useEffect(() => {
+    if (savedAddresses.length > 0) {
+      setSelectedAddress(savedAddresses[0].id);
+    }
+    if (timeSlots.length > 0) {
+      setSelectedTimeSlot(timeSlots[0].id);
+    }
+    if (paymentMethods.length > 0) {
+      setPaymentMethod(paymentMethods[0].id);
+    }
+  }, []);
 
 //   useEffect(() => {
 //     // This code will only run AFTER the cartItems state has been successfully updated
@@ -255,15 +255,23 @@ const handleInputChange = (e) => {
       const orderId = "ORD-" + Date.now();
       const total = calculateTotal().toFixed(2);
       console.log("placing order");
-      await axios.post("/api/orders/place", {
-        orderId,
-        paymentMethod,
-        selectedAddress,
-        pickupTime:selectedTimeSlot,
-        orderType:fulfillmentType,
-        specialInstruction:orderNotes
-
-      });
+      await axios.post("/api/orders/place",{
+        "orderId":orderId,
+    "paymentMethod": paymentMethod,
+    "selectedAddress":selectedAddress,
+    "specialInstruction":orderNotes,
+    "pickupTime":selectedTimeSlot,
+    "orderType": fulfillmentType
+      })
+      // await axios.post("/api/orders/place", {
+      //   orderId,
+      //   paymentMethod,
+      //   selectedAddress:selectedAddress,
+      //   specialInstruction:orderNotes,
+      //   pickupTime:selectedTimeSlot,
+      //   orderType:fulfillmentType
+       
+      // });
       router.push(`/order-tracking-status?orderId=${orderId}&total=${total}`);
     } catch (error) {
       console.error("Order placement failed:", error);

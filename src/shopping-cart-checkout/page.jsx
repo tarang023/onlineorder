@@ -113,7 +113,7 @@ function ShoppingCartCheckout() {
     // You can set your other mock data here if needed, but it will be
     // overwritten by the real cart data when the fetch completes.
     if (savedAddresses.length > 0) {
-      setSelectedAddress(savedAddresses[0].id);
+      setSelectedAddress(savedAddresses[0].address);
     }
     if (timeSlots.length > 0) {
       setSelectedTimeSlot(timeSlots[0].id);
@@ -578,7 +578,7 @@ function ShoppingCartCheckout() {
                       className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-body"
                     >
                       {savedAddresses.map((address) => (
-                        <option key={address.id} value={address.id}>
+                        <option key={address.id} value={address.address}>
                           {address.label} - {address.address}
                         </option>
                       ))}

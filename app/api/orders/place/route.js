@@ -1,5 +1,5 @@
 import {connect } from "../../../../dbconfig/dbConfig"
-import Order from "../../../../models/orderModel";
+import Order from "@/models/orderModel";
 import {NextRequest,NextResponse } from 'next/server';
  import { getDataFromToken } from "../../../../helpers/getDataFromToken";
 import User from "../../../../models/userModel";
@@ -41,7 +41,6 @@ export async function POST(req ) {
       address: address
     };
 
-      const order=await Order.findOne({ user: userId });
     const timeline=[
       {
         status: "confirmed",
@@ -95,7 +94,8 @@ export async function POST(req ) {
             items: user.cart,
             paymentMethod
          });
-        const savedOrder=await newOrder.save();
+         console.log("newOrder created",newOrder)
+         const savedOrder=await newOrder.save();
         
         user.orderId=orderId;
         await user.save();
