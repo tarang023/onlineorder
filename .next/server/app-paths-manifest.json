@@ -1,11 +1,8 @@
 {
-  "/api/getData/route": "app/api/getData/route.js",
-  "/api/orders/place/route": "app/api/orders/place/route.js",
-  "/api/orders/sendDetails/route": "app/api/orders/sendDetails/route.js",
-  "/admin-menu/page": "app/admin-menu/page.js",
-  "/customer-login-register/page": "app/customer-login-register/page.js",
   "/admin-customers/page": "app/admin-customers/page.js",
-  "/order-tracking-status/page": "app/order-tracking-status/page.js",
+  "/customer-login-register/page": "app/customer-login-register/page.js",
   "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js",
+  "/order-tracking-status/page": "app/order-tracking-status/page.js",
+  "/kitchen-display-system/page": "app/kitchen-display-system/page.js",
   "/_not-found/page": "app/_not-found/page.js"
 }

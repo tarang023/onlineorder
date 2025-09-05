@@ -99,7 +99,7 @@ function OrderCard({
           <div className="flex-1">
             <div className="flex items-center space-x-3 mb-2">
               <h3 className="text-lg font-heading font-heading-medium text-text-primary">
-                #{order?.number}
+                #{order?.id}
               </h3>
               <div className={`px-2 py-1 rounded-full text-xs font-body font-body-medium ${getPriorityColor(order?.priority)}`}>
                 {order?.priority?.toUpperCase()}

@@ -15,55 +15,14 @@ function KitchenDisplayClient({initialOrders}) {
 
   const [orders, setOrders] = useState(initialOrders);
   const [selectedStation, setSelectedStation] = useState('all');
-  const [connectionStatus, setConnectionStatus] = useState('connected');
+ 
   const [isLoading, setIsLoading] = useState(false);
   const [modifiedOrders, setModifiedOrders] = useState();
   const [showMetrics, setShowMetrics] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [status,changeStatus]=useState(false);
-
-  // Mock WebSocket connection status
-//   useEffect(() => {
-//   const loadOrders = async () => {
-//     console.log("here");
-//     setIsLoading(true);
-//     try {
-//       setIsLoading(true);
-//       // 1. Call your API endpoint using axios.get
-//             const response=await axios.post("/api/placeKitchenDisplay");
-//             setOrders(await response.data.data);
-//             // setOrders(mockOrdersData);
-//             console.log("Response from /api/placeKitchenDisplay/kitchenDisplay:", response.data.data, orders);
-      
-//     } catch (error) {
-//       console.error('Error loading orders:', error);
-//     } finally {
-//       // setIsLoading(false);
-//     }
-//   };
-
-//   loadOrders();
-// }, []); 
-  
-
-
-// useEffect(() => {
-//   if (orders && orders.length > 0) {
-//     setIsLoading(false);
-//     console.log("Orders loaded:", orders);
-    
-//   if(typeof orders == Object){
-//     setIsLoading(false);
-//     console.log("Orders loaded:", orders);
-//   }
-//    console.log("loading the ordere ...",orders)
-// }
-// },[orders]);
-
  
-
-
-  // Handle order status updates
+  //handle order update from server
   const handleOrderStatusUpdate = useCallback(async (orderId, newStatus) => {
     changeStatus(true);
     setOrders(prevOrders =>
@@ -115,28 +74,12 @@ function KitchenDisplayClient({initialOrders}) {
 
   // Group orders by status
   
-  const ordersByStatus={
-    ready: filteredOrders  && orders.length > 0 && orders.map((order)=>(order.status=='ready')) || [],
-    inprogress: filteredOrders  && orders.length > 0 && orders.map((order)=>(order.status=='in-progress')) || [],
-    new:filteredOrders && orders.length > 0 && orders.filter((order)=>(order.status=='new')) || [],
-    completed: filteredOrders  && orders.length > 0  && orders.map((order)=>(order.status=='completed')) || []
-  }
+   
   const newOrder=orders.length > 0 && orders.filter((order)=>(order.status=='new')) || [];
   const inprogressOrder=orders.length > 0 && orders.filter((order)=>(order.status=='in-progress')) || [];
   const readyOrder=orders.length > 0 && orders.filter((order)=>(order.status=='ready')) || [];
   const completedOrder=orders.length > 0 && orders.filter((order)=>(order.status=='completed')) || [];
-  // const ordersByStatus = {
-  //   new: filteredOrders && filteredOrders?.order?.status == 'new' || [],
-  //   'in-progress': filteredOrders?. order?.status === 'in-progress' || [],
-  //   ready: filteredOrders?.order?.status === 'ready' || [],
-  //   completed: filteredOrders?.order?.status === 'completed' || []
-  // };
-  // const ordersByStatus = {
-  //   new: filteredOrders && filteredOrders?.filter(order => order?.status === 'new') || [],
-  //   'in-progress': filteredOrders?.filter(order => order?.status === 'in-progress') || [],
-  //   ready: filteredOrders?.filter(order => order?.status === 'ready') || [],
-  //   completed: filteredOrders?.filter(order => order?.status === 'completed') || []
-  // };
+ 
 
   // Calculate performance metrics
   const performanceMetrics = {
@@ -160,7 +103,7 @@ function KitchenDisplayClient({initialOrders}) {
 
   return (
     <div className="min-h-screen bg-background">
-      <KitchenInterface />
+      {/* <KitchenInterface /> */}
       
       <div className="pt-20 p-4 lg:p-6">
         {/* Kitchen Header */}
@@ -188,24 +131,11 @@ function KitchenDisplayClient({initialOrders}) {
                 Metrics
               </button>
               
-              <div className={`flex items-center space-x-2 px-3 py-2 rounded-lg ${
-                connectionStatus === 'connected' ? 'bg-success-50 text-success' :
-                connectionStatus === 'disconnected'? 'bg-error-50 text-error' : 'bg-warning-50 text-warning'
-              }`}>
-                <Icon
-                  name={connectionStatus === 'connected' ? 'Wifi' : connectionStatus === 'disconnected' ? 'WifiOff' : 'RotateCw'}
-                  size={16}
-                  className={connectionStatus === 'reconnecting' ? 'animate-spin' : ''}
-                />
-                <span className="text-sm font-body font-body-medium capitalize">
-                  {connectionStatus}
-                </span>
-              </div>
             </div>
           </div>
         </div>
         
-
+                
         {/* Station Filter */}
        
         <StationFilter
@@ -218,6 +148,14 @@ function KitchenDisplayClient({initialOrders}) {
             salad: orders?.length > 0 && orders.filter((order) => order.station === 'salad').length || 0,
             beverages: orders?.length > 0 && orders.filter((order) => order.station === 'beverages').length || 0
           }}
+          orderByStatus={{
+             new: orders?.length > 0 && orders.filter((order) => order.status === 'new').length || 0,
+            inprogress: orders?.length > 0 && orders.filter((order) => order.status === 'inprogress').length || 0,
+            ready: orders?.length > 0 && orders.filter((order) => order.status === 'ready').length || 0,
+            completed: orders?.length > 0 && orders.filter((order) => order.status === 'completed').length || 0,
+
+          }
+          }
         />
 
         {/* Performance Metrics */}
@@ -248,6 +186,8 @@ function KitchenDisplayClient({initialOrders}) {
             onItemToggle={handleItemToggle}
             currentTime={currentTime}
             color="accent"
+            currentStation={selectedStation}
+
           />
           
           <OrderStatusColumn
@@ -259,6 +199,8 @@ function KitchenDisplayClient({initialOrders}) {
             onItemToggle={handleItemToggle}
             currentTime={currentTime}
             color="warning"
+            currentStation={selectedStation}
+
           />
           
           <OrderStatusColumn
@@ -270,6 +212,8 @@ function KitchenDisplayClient({initialOrders}) {
             onItemToggle={handleItemToggle}
             currentTime={currentTime}
             color="primary"
+            currentStation={selectedStation}
+
           />
           
           <OrderStatusColumn
@@ -281,196 +225,12 @@ function KitchenDisplayClient({initialOrders}) {
             onItemToggle={handleItemToggle}
             currentTime={currentTime}
             color="success"
+            currentStation={selectedStation}
           />
         </div>
       </div>
     </div>
   );
 }
-
-// Mock orders data
-const mockOrdersData = [
-  {
-    id: 'ORD-8901',
-    number: '8901',
-    customerName: 'John Smith',
-    timestamp: new Date(Date.now() - 5 * 60000),
-    deliveryMethod: 'dine-in',
-    estimatedTime: 15,
-    status: 'new',
-    priority: 'normal',
-    station: 'grill',
-    tableNumber: '12',
-    lastUpdated: new Date(),
-    items: [
-      {
-        id: 1,
-        name: 'Classic Cheeseburger',
-        quantity: 2,
-        specialInstructions: 'No onions, extra cheese',
-        completed: false
-      },
-      {
-        id: 2,
-        name: 'French Fries',
-        quantity: 2,
-        specialInstructions: 'Extra crispy',
-        completed: false
-      }
-    ]
-  },
-  {
-    id: 'ORD-8902',
-    number: '8902',
-    customerName: 'Sarah Johnson',
-    timestamp: new Date(Date.now() - 12 * 60000),
-    deliveryMethod: 'delivery',
-    estimatedTime: 25,
-    status: 'in-progress',
-    priority: 'high',
-    station: 'grill',
-    address: '123 Main St, Apt 4B',
-    lastUpdated: new Date(),
-    items: [
-      {
-        id: 3,
-        name: 'Margherita Pizza',
-        quantity: 1,
-        specialInstructions: 'Light cheese, extra basil',
-        completed: true
-      },
-      {
-        id: 4,
-        name: 'Caesar Salad',
-        quantity: 1,
-        specialInstructions: 'Dressing on the side',
-        completed: false
-      }
-    ]
-  },
-  {
-    id: 'ORD-8903',
-    number: '8903',
-    customerName: 'Mike Davis',
-    timestamp: new Date(Date.now() - 8 * 60000),
-    deliveryMethod: 'pickup',
-    estimatedTime: 10,
-    status: 'ready',
-    priority: 'normal',
-    station: 'fryer',
-    lastUpdated: new Date(),
-    items: [
-      {
-        id: 5,
-        name: 'Chicken Wings',
-        quantity: 12,
-        specialInstructions: 'Buffalo sauce, extra hot',
-        completed: true
-      },
-      {
-        id: 6,
-        name: 'Onion Rings',
-        quantity: 1,
-        specialInstructions: '',
-        completed: true
-      }
-    ]
-  },
-  {
-    id: 'ORD-8904',
-    number: '8904',
-    customerName: 'Emily Chen',
-    timestamp: new Date(Date.now() - 25 * 60000),
-    deliveryMethod: 'dine-in',
-    estimatedTime: 20,
-    status: 'completed',
-    priority: 'normal',
-    station: 'salad',
-    tableNumber: '8',
-    lastUpdated: new Date(),
-    items: [
-      {
-        id: 7,
-        name: 'Greek Salad',
-        quantity: 1,
-        specialInstructions: 'No olives',
-        completed: true
-      },
-      {
-        id: 8,
-        name: 'Iced Tea',
-        quantity: 2,
-        specialInstructions: 'Extra lemon',
-        completed: true
-      }
-    ]
-  },
-  {
-    id: 'ORD-8905',
-    number: '8905',
-    customerName: 'David Wilson',
-    timestamp: new Date(Date.now() - 3 * 60000),
-    deliveryMethod: 'delivery',
-    estimatedTime: 30,
-    status: 'new',
-    priority: 'urgent',
-    station: 'grill',
-    address: '456 Oak Ave',
-    lastUpdated: new Date(),
-    items: [
-      {
-        id: 9,
-        name: 'BBQ Bacon Burger',
-        quantity: 1,
-        specialInstructions: 'Medium rare, no pickles',
-        completed: false
-      },
-      {
-        id: 10,
-        name: 'Sweet Potato Fries',
-        quantity: 1,
-        specialInstructions: '',
-        completed: false
-      },
-      {
-        id: 11,
-        name: 'Chocolate Milkshake',
-        quantity: 1,
-        specialInstructions: 'Extra whipped cream',
-        completed: false
-      }
-    ]
-  },
-  {
-    id: 'ORD-8906',
-    number: '8906',
-    customerName: 'Lisa Brown',
-    timestamp: new Date(Date.now() - 18 * 60000),
-    deliveryMethod: 'pickup',
-    estimatedTime: 15,
-    status: 'in-progress',
-    priority: 'normal',
-    station: 'beverages',
-    lastUpdated: new Date(),
-    items: [
-      {
-        id: 12,
-        name: 'Cappuccino',
-        quantity: 2,
-        specialInstructions: 'Extra foam',
-        completed: true
-      },
-      {
-        id: 13,
-        name: 'Blueberry Muffin',
-        quantity: 2,
-        specialInstructions: 'Warmed',
-        completed: false
-      }
-    ]
-  }
-];
-
- 
 
 export default KitchenDisplayClient;

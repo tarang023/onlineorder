@@ -1,0 +1,182 @@
+// Mock orders data
+const mockOrdersData = [
+  {
+    id: 'ORD-8901',
+    number: '8901',
+    customerName: 'John Smith',
+    timestamp: new Date(Date.now() - 5 * 60000),
+    deliveryMethod: 'dine-in',
+    estimatedTime: 15,
+    status: 'new',
+    priority: 'normal',
+    station: 'grill',
+    tableNumber: '12',
+    lastUpdated: new Date(),
+    items: [
+      {
+        id: 1,
+        name: 'Classic Cheeseburger',
+        quantity: 2,
+        specialInstructions: 'No onions, extra cheese',
+        completed: false
+      },
+      {
+        id: 2,
+        name: 'French Fries',
+        quantity: 2,
+        specialInstructions: 'Extra crispy',
+        completed: false
+      }
+    ]
+  },
+  {
+    id: 'ORD-8902',
+    number: '8902',
+    customerName: 'Sarah Johnson',
+    timestamp: new Date(Date.now() - 12 * 60000),
+    deliveryMethod: 'delivery',
+    estimatedTime: 25,
+    status: 'in-progress',
+    priority: 'high',
+    station: 'grill',
+    address: '123 Main St, Apt 4B',
+    lastUpdated: new Date(),
+    items: [
+      {
+        id: 3,
+        name: 'Margherita Pizza',
+        quantity: 1,
+        specialInstructions: 'Light cheese, extra basil',
+        completed: true
+      },
+      {
+        id: 4,
+        name: 'Caesar Salad',
+        quantity: 1,
+        specialInstructions: 'Dressing on the side',
+        completed: false
+      }
+    ]
+  },
+  {
+    id: 'ORD-8903',
+    number: '8903',
+    customerName: 'Mike Davis',
+    timestamp: new Date(Date.now() - 8 * 60000),
+    deliveryMethod: 'pickup',
+    estimatedTime: 10,
+    status: 'ready',
+    priority: 'normal',
+    station: 'fryer',
+    lastUpdated: new Date(),
+    items: [
+      {
+        id: 5,
+        name: 'Chicken Wings',
+        quantity: 12,
+        specialInstructions: 'Buffalo sauce, extra hot',
+        completed: true
+      },
+      {
+        id: 6,
+        name: 'Onion Rings',
+        quantity: 1,
+        specialInstructions: '',
+        completed: true
+      }
+    ]
+  },
+  {
+    id: 'ORD-8904',
+    number: '8904',
+    customerName: 'Emily Chen',
+    timestamp: new Date(Date.now() - 25 * 60000),
+    deliveryMethod: 'dine-in',
+    estimatedTime: 20,
+    status: 'completed',
+    priority: 'normal',
+    station: 'salad',
+    tableNumber: '8',
+    lastUpdated: new Date(),
+    items: [
+      {
+        id: 7,
+        name: 'Greek Salad',
+        quantity: 1,
+        specialInstructions: 'No olives',
+        completed: true
+      },
+      {
+        id: 8,
+        name: 'Iced Tea',
+        quantity: 2,
+        specialInstructions: 'Extra lemon',
+        completed: true
+      }
+    ]
+  },
+  {
+    id: 'ORD-8905',
+    number: '8905',
+    customerName: 'David Wilson',
+    timestamp: new Date(Date.now() - 3 * 60000),
+    deliveryMethod: 'delivery',
+    estimatedTime: 30,
+    status: 'new',
+    priority: 'urgent',
+    station: 'grill',
+    address: '456 Oak Ave',
+    lastUpdated: new Date(),
+    items: [
+      {
+        id: 9,
+        name: 'BBQ Bacon Burger',
+        quantity: 1,
+        specialInstructions: 'Medium rare, no pickles',
+        completed: false
+      },
+      {
+        id: 10,
+        name: 'Sweet Potato Fries',
+        quantity: 1,
+        specialInstructions: '',
+        completed: false
+      },
+      {
+        id: 11,
+        name: 'Chocolate Milkshake',
+        quantity: 1,
+        specialInstructions: 'Extra whipped cream',
+        completed: false
+      }
+    ]
+  },
+  {
+    id: 'ORD-8906',
+    number: '8906',
+    customerName: 'Lisa Brown',
+    timestamp: new Date(Date.now() - 18 * 60000),
+    deliveryMethod: 'pickup',
+    estimatedTime: 15,
+    status: 'in-progress',
+    priority: 'normal',
+    station: 'beverages',
+    lastUpdated: new Date(),
+    items: [
+      {
+        id: 12,
+        name: 'Cappuccino',
+        quantity: 2,
+        specialInstructions: 'Extra foam',
+        completed: true
+      },
+      {
+        id: 13,
+        name: 'Blueberry Muffin',
+        quantity: 2,
+        specialInstructions: 'Warmed',
+        completed: false
+      }
+    ]
+  }
+];

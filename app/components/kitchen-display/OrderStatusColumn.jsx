@@ -12,6 +12,7 @@ function OrderStatusColumn({
   onItemToggle,
   currentTime,
   color = 'primary',
+  currentStation,
   className = ''
 }) {
   const getColorClasses = (colorName) => {
@@ -129,7 +130,7 @@ function OrderStatusColumn({
           </div>
         ) : (
           <div className="p-3 space-y-3 max-h-screen overflow-y-auto">
-            {orders.map((order) => (
+            {orders.map((order) => ( order.station===currentStation || currentStation==='all' ) && (
               <OrderCard
                 key={order._id}
                 order={order}
@@ -137,6 +138,7 @@ function OrderStatusColumn({
                 onPriorityUpdate={onOrderPriorityUpdate}
                 onItemToggle={onItemToggle}
                 currentTime={currentTime}
+                
               />
             ))}
           </div>

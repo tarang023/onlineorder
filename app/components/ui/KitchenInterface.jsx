@@ -4,7 +4,7 @@ import Icon from '../AppIcon';
 function KitchenInterface() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [connectionStatus, setConnectionStatus] = useState('connected'); // connected, disconnected, reconnecting
-  const [pendingOrders] = useState(12); // This would come from WebSocket in real app
+   
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -69,30 +69,7 @@ function KitchenInterface() {
           </div>
 
           {/* System Status and Info */}
-          <div className="flex items-center space-x-8">
-            {/* Pending Orders Count */}
-            <div className="flex items-center space-x-2 px-4 py-2 bg-accent-50 rounded-lg">
-              <Icon name="Clock" size={20} className="text-accent" />
-              <span className="font-data font-data-normal text-lg text-text-primary">
-                {pendingOrders}
-              </span>
-              <span className="text-sm text-text-secondary font-body">
-                pending
-              </span>
-            </div>
-
-            {/* Connection Status */}
-            <div className="flex items-center space-x-2">
-              <Icon 
-                name={getStatusIcon()} 
-                size={20} 
-                className={`${getStatusColor()} ${connectionStatus === 'reconnecting' ? 'animate-spin' : ''}`}
-              />
-              <span className={`text-sm font-body font-body-medium capitalize ${getStatusColor()}`}>
-                {connectionStatus}
-              </span>
-            </div>
-
+          <div className="flex items-center space-x-8">x
             {/* Current Time */}
             <div className="flex items-center space-x-2 px-4 py-2 bg-secondary-50 rounded-lg">
               <Icon name="Clock" size={18} className="text-secondary" />

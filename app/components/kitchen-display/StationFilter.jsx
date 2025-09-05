@@ -1,8 +1,8 @@
 // src/pages/kitchen-display-system/components/StationFilter.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import Icon from '../AppIcon';
 
-function StationFilter({ selectedStation, onStationChange, orderCounts, className = '' }) {
+function StationFilter({ selectedStation, onStationChange, orderCounts, className = '',orderByStatus }) {
   const stations = [
     { id: 'all', name: 'All Stations', icon: 'Grid3X3', count: orderCounts?.all || 0 },
     { id: 'grill', name: 'Grill', icon: 'Flame', count: orderCounts?.grill || 0 },
@@ -10,6 +10,9 @@ function StationFilter({ selectedStation, onStationChange, orderCounts, classNam
     { id: 'salad', name: 'Salad', icon: 'Salad', count: orderCounts?.salad || 0 },
     { id: 'beverages', name: 'Beverages', icon: 'Coffee', count: orderCounts?.beverages || 0 }
   ];
+  useEffect(() => {
+    console.log("StationFilter rendered with selectedStation:", orderCounts);
+  }, [selectedStation]);
 
   return (
     <div className={`mb-6 ${className}`}>
@@ -84,7 +87,7 @@ function StationFilter({ selectedStation, onStationChange, orderCounts, classNam
             
             <div className="text-center">
               <div className="text-lg font-data font-data-normal text-warning">
-                {Math.floor((orderCounts?.all || 0) * 0.3)}
+                {orderByStatus?.inprogress || 0}
               </div>
               <div className="text-xs text-text-secondary font-body">
                 In Progress
@@ -93,7 +96,7 @@ function StationFilter({ selectedStation, onStationChange, orderCounts, classNam
             
             <div className="text-center">
               <div className="text-lg font-data font-data-normal text-primary">
-                {Math.floor((orderCounts?.all || 0) * 0.2)}
+                {orderByStatus?.ready || 0}
               </div>
               <div className="text-xs text-text-secondary font-body">
                 Ready
@@ -102,7 +105,7 @@ function StationFilter({ selectedStation, onStationChange, orderCounts, classNam
             
             <div className="text-center">
               <div className="text-lg font-data font-data-normal text-success">
-                {Math.floor((orderCounts?.all || 0) * 0.5)}
+                {orderByStatus?.completed || 0}
               </div>
               <div className="text-xs text-text-secondary font-body">
                 Completed
