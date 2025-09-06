@@ -1,127 +1,20 @@
-// src/pages/customer-account-order-history/components/OrderHistorySection.jsx
-import React, { useState, useMemo ,useEffect} from 'react';
  
-import Icon from '../AppIcon';
-import axios from 'axios';
+import React, { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import Icon from '@/app/components/AppIcon';
 
 import { format } from 'date-fns';
-import { useRouter } from "next/navigation";
 
-function OrderHistorySection() {
+function OrderHistorySection({orders}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [locationFilter, setLocationFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('all');
   const [expandedOrder, setExpandedOrder] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useRouter();
-const [orders, setOrders] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-//   // Mock order data
-  useEffect(() => {
-  const loadOrders = async () => {
-    console.log("here");
-    try {
-      setIsLoading(true);
-      // 1. Call your API endpoint using axios.get
-            const response=await axios.post("/api/users/my-orders");
-            setOrders(await response.data.order);
-            // setOrders(mockOrdersData);
-            console.log("Response from /api/placeKitchenDisplay/kitchenDisplay:", response.data.order, orders);
-      
-    } catch (error) {
-      console.error('Error loading orders:', error);
-    } finally {
-      // setIsLoading(false);
-    }
-  };
-
-  loadOrders();
-}, []); 
   
-
-
-useEffect(() => {
-  if (orders && orders.length > 0) {
-    setIsLoading(false);
-    console.log("Orders loaded:", orders);
- 
-  console.log("orders from account history page",orders)
-   console.log("loading the ordere ...",orders)
-}
-},[orders]);
-
-
-
-
-
-
-  const morders = [
-    {
-      id: 'ORD-2024-001',
-      date: new Date('2024-01-15T18:30:00'),
-      status: 'delivered',
-      restaurant: 'Downtown Branch',
-      items: [
-        { name: 'Margherita Pizza', quantity: 1, price: 18.99 },
-        { name: 'Caesar Salad', quantity: 1, price: 12.99 },
-        { name: 'Coca Cola', quantity: 2, price: 3.99 }
-      ],
-      subtotal: 39.96,
-      tax: 3.20,
-      delivery: 2.99,
-      total: 46.15,
-      paymentMethod: 'Credit Card •••• 4242',
-      deliveryAddress: '123 Main St, Apt 4B',
-      estimatedTime: '25-35 mins',
-      actualTime: '28 mins',
-      driver: 'Mike Johnson',
-      rating: 5,
-      hasReview: true
-    },
-    {
-      id: 'ORD-2024-002',
-      date: new Date('2024-01-12T12:15:00'),
-      status: 'cancelled',
-      restaurant: 'Westside Location',
-      items: [
-        { name: 'BBQ Bacon Burger', quantity: 1, price: 19.99 },
-        { name: 'Sweet Potato Fries', quantity: 1, price: 8.99 }
-      ],
-      subtotal: 28.98,
-      tax: 2.32,
-      delivery: 2.99,
-      total: 34.29,
-      paymentMethod: 'PayPal',
-      deliveryAddress: '123 Main St, Apt 4B',
-      cancelReason: 'Restaurant was closed',
-      refundAmount: 34.29,
-      hasReview: false
-    },
-    {
-      id: 'ORD-2024-003',
-      date: new Date('2024-01-10T19:45:00'),
-      status: 'delivered',
-      restaurant: 'Downtown Branch',
-      items: [
-        { name: 'Spicy Thai Curry', quantity: 1, price: 16.99 },
-        { name: 'Jasmine Rice', quantity: 1, price: 4.99 },
-        { name: 'Spring Rolls', quantity: 1, price: 9.99 }
-      ],
-      subtotal: 31.97,
-      tax: 2.56,
-      delivery: 2.99,
-      total: 37.52,
-      paymentMethod: 'Credit Card •••• 8765',
-      deliveryAddress: '456 Oak Ave, Unit 2',
-      estimatedTime: '30-40 mins',
-      actualTime: '35 mins',
-      driver: 'Sarah Wilson',
-      rating: 4,
-      hasReview: true
-    }
-  ];
-
   const statusOptions = [
     { value: 'all', label: 'All Orders' },
     { value: 'delivered', label: 'Delivered' },
@@ -132,7 +25,7 @@ useEffect(() => {
 
   const locationOptions = [
     { value: 'all', label: 'All Locations' },
-    { value: 'Downtown Branch', label: 'Downtown Branch' },
+    { value: 'TasteBite Downtown', label: 'Downtown Branch' },
     { value: 'Westside Location', label: 'Westside Location' },
     { value: 'Northpoint Mall', label: 'Northpoint Mall' }
   ];
@@ -151,7 +44,7 @@ useEffect(() => {
     if (searchQuery) {
       filtered = filtered?.filter(order =>
         order?.id?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
-        order?.restaurant?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+        order?.restaurant?.name.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
         order?.items?.some(item => 
           item?.name?.toLowerCase()?.includes(searchQuery?.toLowerCase())
         )
@@ -165,7 +58,7 @@ useEffect(() => {
 
     // Location filter
     if (locationFilter !== 'all') {
-      filtered = filtered?.filter(order => order?.restaurant === locationFilter);
+      filtered = filtered?.filter(order => order?.restaurant.name === locationFilter);
     }
 
     // Date filter
@@ -225,25 +118,23 @@ useEffect(() => {
   };
 
   const handleTrackOrder = (order) => {
-    navigate('/order-tracking-status', { state: { orderId: order?.orderId } });
+    router.push('/order-tracking-status', { state: { orderId: order?.id } });
   };
 
   const handleDownloadReceipt = (order) => {
-    console.log('Downloading receipt for order:', order?.orderId);
+    console.log('Downloading receipt for order:', order?.id);
     // In real app, this would generate and download PDF
   };
 
   const handleRateOrder = (order) => {
-    console.log('Rating order:', order?.orderId);
+    console.log('Rating order:', order?.id);
     // In real app, this would open rating modal
   };
 
   const toggleOrderExpansion = (orderId) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
-  if(isLoading){
-    return (<h1>loading your history</h1>)
-  }
+
   return (
     <div className="space-y-6">
       {/* Search and Filters */}
@@ -334,7 +225,7 @@ useEffect(() => {
 
       {/* Orders List */}
       {filteredOrders?.length === 0 ? (
-        <div key={filteredOrders._id}  className="bg-surface rounded-lg shadow-soft p-12 text-center">
+        <div className="bg-surface rounded-lg shadow-soft p-12 text-center">
           <div className="w-24 h-24 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Icon name="Package" size={32} className="text-secondary-400" />
           </div>
@@ -371,17 +262,17 @@ useEffect(() => {
                       </div>
                       
                       <span className="text-sm text-text-secondary font-body">
-                        {format(new Date(order?.createdAt), 'MMM dd, yyyy • h:mm a')}
+                        {format(new Date(order?.orderTime), 'MMM dd, yyyy • h:mm a')}
                       </span>
                     </div>
                     
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-heading font-heading-medium text-text-primary mb-1">
-                          Order #{order?.id}
+                          Order #{order?.orderId}
                         </h3>
                         <p className="text-sm text-text-secondary font-body">
-                          {order?.restaurant} • {order?.items?.length} items • ${order?.total?.toFixed(2)}
+                          {order?.restaurant?.name} • {order?.items?.length} items • ${order?.total?.toFixed(2)}
                         </p>
                       </div>
                       

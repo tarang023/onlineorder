@@ -1,8 +1,15 @@
 {
-  "/admin-customers/page": "app/admin-customers/page.js",
-  "/customer-login-register/page": "app/customer-login-register/page.js",
-  "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js",
+  "/api/users/login/route": "app/api/users/login/route.js",
+  "/api/getData/route": "app/api/getData/route.js",
+  "/api/cart/route": "app/api/cart/route.js",
+  "/api/users/verify-otp/route": "app/api/users/verify-otp/route.js",
+  "/api/orders/place/route": "app/api/orders/place/route.js",
+  "/api/cart/update/route": "app/api/cart/update/route.js",
+  "/api/orders/sendDetails/route": "app/api/orders/sendDetails/route.js",
+  "/page": "app/page.js",
+  "/menu-browse-search/page": "app/menu-browse-search/page.js",
   "/order-tracking-status/page": "app/order-tracking-status/page.js",
-  "/kitchen-display-system/page": "app/kitchen-display-system/page.js",
-  "/_not-found/page": "app/_not-found/page.js"
+  "/customer-account-order-history/page": "app/customer-account-order-history/page.js",
+  "/support-page/page": "app/support-page/page.js",
+  "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js"
 }

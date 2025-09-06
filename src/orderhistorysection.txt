@@ -1,0 +1,66 @@
+// Mock order data
+  // const orders = [
+  //   {
+  //     id: 'ORD-2024-001',
+  //     date: new Date('2024-01-15T18:30:00'),
+  //     status: 'delivered',
+  //     restaurant: 'Downtown Branch',
+  //     items: [
+  //       { name: 'Margherita Pizza', quantity: 1, price: 18.99 },
+  //       { name: 'Caesar Salad', quantity: 1, price: 12.99 },
+  //       { name: 'Coca Cola', quantity: 2, price: 3.99 }
+  //     ],
+  //     subtotal: 39.96,
+  //     tax: 3.20,
+  //     delivery: 2.99,
+  //     total: 46.15,
+  //     paymentMethod: 'Credit Card •••• 4242',
+  //     deliveryAddress: '123 Main St, Apt 4B',
+  //     estimatedTime: '25-35 mins',
+  //     actualTime: '28 mins',
+  //     driver: 'Mike Johnson',
+  //     rating: 5,
+  //     hasReview: true
+  //   },
+  //   {
+  //     id: 'ORD-2024-002',
+  //     date: new Date('2024-01-12T12:15:00'),
+  //     status: 'cancelled',
+  //     restaurant: 'Westside Location',
+  //     items: [
+  //       { name: 'BBQ Bacon Burger', quantity: 1, price: 19.99 },
+  //       { name: 'Sweet Potato Fries', quantity: 1, price: 8.99 }
+  //     ],
+  //     subtotal: 28.98,
+  //     tax: 2.32,
+  //     delivery: 2.99,
+  //     total: 34.29,
+  //     paymentMethod: 'PayPal',
+  //     deliveryAddress: '123 Main St, Apt 4B',
+  //     cancelReason: 'Restaurant was closed',
+  //     refundAmount: 34.29,
+  //     hasReview: false
+  //   },
+  //   {
+  //     id: 'ORD-2024-003',
+  //     date: new Date('2024-01-10T19:45:00'),
+  //     status: 'delivered',
+  //     restaurant: 'Downtown Branch',
+  //     items: [
+  //       { name: 'Spicy Thai Curry', quantity: 1, price: 16.99 },
+  //       { name: 'Jasmine Rice', quantity: 1, price: 4.99 },
+  //       { name: 'Spring Rolls', quantity: 1, price: 9.99 }
+  //     ],
+  //     subtotal: 31.97,
+  //     tax: 2.56,
+  //     delivery: 2.99,
+  //     total: 37.52,
+  //     paymentMethod: 'Credit Card •••• 8765',
+  //     deliveryAddress: '456 Oak Ave, Unit 2',
+  //     estimatedTime: '30-40 mins',
+  //     actualTime: '35 mins',
+  //     driver: 'Sarah Wilson',
+  //     rating: 4,
+  //     hasReview: true
+  //   }
+  // ];

@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import Icon from "../components/AppIcon";
 import Image from "../components/AppImage";
 import CustomerNavigation from "../components/ui/CustomerNavigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
+import { set } from "mongoose";
 // const { updateCartItem } = useCart();
 
 function CheckoutClient({ initialCartItems }) {
@@ -122,6 +123,7 @@ const handleSaveAddress = () => {
     }
   }, []);
 
+ 
 //   useEffect(() => {
 //     // This code will only run AFTER the cartItems state has been successfully updated
 //     if (cartItems) {
@@ -155,23 +157,13 @@ const handleSaveAddress = () => {
       quantity,
     });
     console.log(response);
-
-    const onLogin = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.post("/api/getData");
-        console.log("Login success", response.data, isLoading);
-        setCartItems(response.data);
-        return true;
-      } catch (error) {
-        console.log("Login failed", error.message);
-        toast.error(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    onLogin();
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === productId ? { ...item, quantity } : item
+      )
+    );
   };
+   
 
   const toggleItemExpansion = (itemId) => {
     setExpandedItems((prev) => ({
@@ -196,6 +188,11 @@ const handleSaveAddress = () => {
       return 0;
     }
     console.log("Calculating subtotal...");
+    if (!Array.isArray(cartItems)) {
+ 
+    return 0; 
+}
+ 
     return cartItems
       .map((item) => item.price * item.quantity)
       .reduce((acc, curr) => acc + curr, 0);

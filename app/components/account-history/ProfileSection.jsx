@@ -1,13 +1,76 @@
 // src/pages/customer-account-order-history/components/ProfileSection.jsx
 import React, { useState } from 'react';
 import Icon from '../AppIcon';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+function DeleteAccountModal({ isOpen, onClose, onConfirm }) {
+    
+    const [isLoading, setIsLoading] = useState(false);
+
+    if (!isOpen) {
+        return null;
+    }
+
+    const handleConfirm = async () => {
+        setIsLoading(true);
+        try {
+            await onConfirm();
+        } catch (error) {
+            console.error("Failed to delete account:", error);
+            setIsLoading(false); 
+        }
+    };
+
+    return (
+        <div 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+            onClick={onClose}
+        >
+            <div 
+                className="relative w-full max-w-md p-8 m-4 bg-white dark:bg-gray-800 rounded-2xl shadow-lg"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="text-center">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/50">
+                        <svg className="h-6 w-6 text-red-600 dark:text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                    </div>
+                    <h3 className="mt-5 text-xl font-bold text-gray-900 dark:text-white">Delete Account</h3>
+                    <div className="mt-2">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Are you sure you want to delete your account? All of your data will be permanently removed. This action cannot be undone.</p>
+                    </div>
+                </div>
+                <div className="mt-8 flex flex-col sm:flex-row-reverse gap-3">
+                    <button
+                        type="button"
+                        disabled={isLoading}
+                        onClick={handleConfirm}
+                        className="w-full inline-flex justify-center rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 disabled:opacity-50"
+                    >
+                        {isLoading ? 'Deleting...' : 'Delete Account'}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        disabled={isLoading}
+                        className="w-full inline-flex justify-center rounded-lg bg-white dark:bg-gray-700 px-4 py-2.5 text-sm font-semibold text-gray-900 dark:text-gray-200 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 function ProfileSection({ userProfile, setUserProfile }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState(userProfile);
   const [errors, setErrors] = useState({});
   const [isSaving, setIsSaving] = useState(false);
-
+      const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const router=useRouter();
   const dietaryOptions = [
     { id: 'vegetarian', label: 'Vegetarian', icon: 'Leaf' },
     { id: 'vegan', label: 'Vegan', icon: 'Sprout' },
@@ -16,6 +79,20 @@ function ProfileSection({ userProfile, setUserProfile }) {
     { id: 'low-sodium', label: 'Low Sodium', icon: 'Heart' },
     { id: 'diabetic', label: 'Diabetic Friendly', icon: 'Activity' }
   ];
+const handleAccountDelete = async () => {
+      try{
+        const response =await axios.delete('/api/users/delete-account');
+        if(response.status==200){
+            setDeleteModalOpen(false);
+            router.push('/customer-login-register');
+        }else{
+            console.error("Failed to delete account");
+        }
+      }catch(error){
+        console.error("Failed to delete account:", error);
+      }
+    };
+
 
   const handleEditToggle = () => {
     if (isEditing) {
@@ -110,6 +187,13 @@ function ProfileSection({ userProfile, setUserProfile }) {
   const handleAccountAction = (action) => {
     console.log(`${action} clicked`);
     // In real app, these would trigger appropriate modals/flows
+    if(action === 'change-password'){
+      router.push('/change-password');
+      
+    }if(action === 'delete-account'){
+      router.push('/delete-account');
+    }
+
   };
 
   return (
@@ -309,68 +393,7 @@ function ProfileSection({ userProfile, setUserProfile }) {
         )}
       </div>
 
-      {/* Notification Settings */}
-      <div className="bg-surface rounded-lg shadow-soft p-6">
-        <h3 className="text-lg font-heading font-heading-medium text-text-primary mb-4">
-          Notification Preferences
-        </h3>
-        
-        <div className="space-y-4">
-          <label className="flex items-center justify-between p-3 border border-border rounded-lg">
-            <div className="flex items-center space-x-3">
-              <Icon name="Mail" size={20} className="text-text-secondary" />
-              <div>
-                <p className="font-body font-body-medium text-text-primary">Email Notifications</p>
-                <p className="text-sm text-text-secondary">Order updates, promotions, and news</p>
-              </div>
-            </div>
-            <input
-              type="checkbox"
-              name="notifications.email"
-              checked={isEditing ? editForm?.notifications?.email : userProfile?.notifications?.email}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-5 h-5 text-primary border-border rounded focus:ring-primary focus:ring-2"
-            />
-          </label>
-          
-          <label className="flex items-center justify-between p-3 border border-border rounded-lg">
-            <div className="flex items-center space-x-3">
-              <Icon name="MessageSquare" size={20} className="text-text-secondary" />
-              <div>
-                <p className="font-body font-body-medium text-text-primary">SMS Notifications</p>
-                <p className="text-sm text-text-secondary">Order status updates via text</p>
-              </div>
-            </div>
-            <input
-              type="checkbox"
-              name="notifications.sms"
-              checked={isEditing ? editForm?.notifications?.sms : userProfile?.notifications?.sms}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-5 h-5 text-primary border-border rounded focus:ring-primary focus:ring-2"
-            />
-          </label>
-          
-          <label className="flex items-center justify-between p-3 border border-border rounded-lg">
-            <div className="flex items-center space-x-3">
-              <Icon name="Bell" size={20} className="text-text-secondary" />
-              <div>
-                <p className="font-body font-body-medium text-text-primary">Push Notifications</p>
-                <p className="text-sm text-text-secondary">Real-time alerts on your device</p>
-              </div>
-            </div>
-            <input
-              type="checkbox"
-              name="notifications.push"
-              checked={isEditing ? editForm?.notifications?.push : userProfile?.notifications?.push}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-5 h-5 text-primary border-border rounded focus:ring-primary focus:ring-2"
-            />
-          </label>
-        </div>
-      </div>
+      
 
       {/* Account Management */}
       <div className="bg-surface rounded-lg shadow-soft p-6">
@@ -391,18 +414,7 @@ function ProfileSection({ userProfile, setUserProfile }) {
           </button>
           
           <button
-            onClick={() => handleAccountAction('download-data')}
-            className="w-full flex items-center justify-between p-3 border border-border rounded-lg hover:bg-secondary-50 transition-smooth text-left"
-          >
-            <div className="flex items-center space-x-3">
-              <Icon name="Download" size={20} className="text-text-secondary" />
-              <span className="font-body text-text-primary">Download My Data</span>
-            </div>
-            <Icon name="ChevronRight" size={20} className="text-text-secondary" />
-          </button>
-          
-          <button
-            onClick={() => handleAccountAction('delete-account')}
+            onClick={() => setDeleteModalOpen(true)}
             className="w-full flex items-center justify-between p-3 border border-error rounded-lg hover:bg-error-50 transition-smooth text-left"
           >
             <div className="flex items-center space-x-3">
@@ -413,6 +425,11 @@ function ProfileSection({ userProfile, setUserProfile }) {
           </button>
         </div>
       </div>
+       <DeleteAccountModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                onConfirm={handleAccountDelete}
+            />
     </div>
   );
 }

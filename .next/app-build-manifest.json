@@ -11,20 +11,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/not-found.js"
     ],
-    "/admin-categories/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin-categories/page.js"
+      "static/chunks/app/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/_not-found/page.js"
     ],
-    "/api/addCategories/route": [
+    "/api/users/login/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/addCategories/route.js"
+      "static/chunks/app/api/users/login/route.js"
+    ],
+    "/api/users/customer-login-register/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/users/customer-login-register/route.js"
+    ],
+    "/api/users/verify-otp/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/users/verify-otp/route.js"
     ],
     "/menu-browse-search/page": [
       "static/chunks/webpack.js",
@@ -36,60 +46,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/getData/route.js"
     ],
-    "/restaurant-admin-dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/restaurant-admin-dashboard/page.js"
-    ],
-    "/admin-menu/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin-menu/page.js"
-    ],
     "/api/cart/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/cart/route.js"
-    ],
-    "/api/addItem/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/addItem/route.js"
-    ],
-    "/customer-login-register/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/customer-login-register/page.js"
-    ],
-    "/api/users/login/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/users/login/route.js"
-    ],
-    "/admin-customers/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin-customers/page.js"
-    ],
-    "/kitchen-display-system/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/kitchen-display-system/page.js"
     ],
     "/shopping-cart-checkout/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/shopping-cart-checkout/page.js"
     ],
-    "/api/orders/place/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/orders/place/route.js"
-    ],
     "/api/cart/update/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/cart/update/route.js"
+    ],
+    "/api/orders/place/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/orders/place/route.js"
     ],
     "/order-tracking-status/page": [
       "static/chunks/webpack.js",
@@ -101,10 +76,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/orders/sendDetails/route.js"
     ],
-    "/api/orders/changeOrder/route": [
+    "/customer-account-order-history/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/orders/changeOrder/route.js"
+      "static/chunks/app/customer-account-order-history/page.js"
+    ],
+    "/support-page/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/support-page/page.js"
     ]
   }
 }

@@ -35,6 +35,7 @@ export const config = {
         '/shopping-cart-checkout',
         '/order-tracking-status',
         '/kitchen-display-system',
+        '/customer-account-history',
         
         // Add any other paths you want this middleware to run on
     ],
