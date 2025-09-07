@@ -25,7 +25,7 @@ function MenuBrowseSearch({menuItems,categories}) {
   // Filter and search logic
   const filteredItems = useMemo(() => {
     let filtered = menuItems;
-
+    console.log("menu items in client", menuItems);
     // Category filter
     if (selectedCategory !== "all") {
       filtered = filtered.filter((item) => item.category === selectedCategory);

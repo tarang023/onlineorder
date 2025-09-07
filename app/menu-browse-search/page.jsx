@@ -3,6 +3,7 @@ import { fetchCartItems } from '@/lib/cart';
 import { connect } from '@/dbconfig/dbConfig'; 
 import menuItems from '@/models/menuItemsModel'; 
 import itemCategory  from '@/models/itemCategories'
+export const revalidate = 0;
 async function getCartData() {
    await connect();
    const ordersFromDb = await menuItems.find({}).lean();
@@ -24,7 +25,7 @@ async function getCartData() {
 
 export default async function ShoppingCartCheckoutPage() {
   const initialMenuItems = await getCartData();
-  
+  console.log("initial menu items", initialMenuItems);
 
   return <MenuBrowseSearch menuItems={initialMenuItems.items} categories={initialMenuItems.categories} />;
 }

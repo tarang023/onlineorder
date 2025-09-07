@@ -10,7 +10,7 @@ await connect();
 export async function DELETE(request) {
   try {
     // The .deleteMany({}) method with an empty object deletes all documents
-    const result = await  KitchenOrder.deleteMany({});
+    const result = await   Order.deleteMany({});
 
     return NextResponse.json({
       message: `${result.deletedCount} kitchen orders were deleted successfully.`,

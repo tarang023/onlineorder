@@ -1,6 +1,6 @@
 "use client";
 // import { useCart } from "@/context/CartContext";
-
+import Script from "next/script";
 import { useRouter } from "next/navigation";
 import Icon from "../components/AppIcon";
 import Image from "../components/AppImage";
@@ -9,6 +9,7 @@ import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { set } from "mongoose";
+import { create } from "d3-selection";
 // const { updateCartItem } = useCart();
 
 function CheckoutClient({ initialCartItems }) {
@@ -25,13 +26,13 @@ function CheckoutClient({ initialCartItems }) {
   const [usePoints, setUsePoints] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [expandedItems, setExpandedItems] = useState({});
-const [isAddingAddress, setIsAddingAddress] = useState(false);
-  
+  const [isAddingAddress, setIsAddingAddress] = useState(false);
+
   // 2. State to manage the new address input values
   const [newAddress, setNewAddress] = useState({ label: "", address: "" });
 
-
-  const [savedAddresses,setSavedAddress]=useState([{
+  const [savedAddresses, setSavedAddress] = useState([
+    {
       id: 1,
       label: "Home",
       address: "123 Main Street, Apt 4B, Downtown, City 12345",
@@ -42,7 +43,8 @@ const [isAddingAddress, setIsAddingAddress] = useState(false);
       label: "Office",
       address: "456 Business Ave, Suite 200, Business District, City 12346",
       isDefault: false,
-    }])
+    },
+  ]);
   // const savedAddresses = [
   //   {
   //     id: 1,
@@ -57,13 +59,13 @@ const [isAddingAddress, setIsAddingAddress] = useState(false);
   //     isDefault: false,
   //   },
   // ];
-const handleSaveAddress = () => {
+  const handleSaveAddress = () => {
     // Basic validation
     if (!newAddress.label || !newAddress.address) {
       alert("Please fill out all address fields.");
       return;
     }
-    
+
     // Create the new address object with a unique ID
     const addressToAdd = {
       ...newAddress,
@@ -72,8 +74,8 @@ const handleSaveAddress = () => {
     };
 
     // 4. Update the main addresses list
-    setSavedAddress(prevAddresses => [...prevAddresses, addressToAdd]);
-    
+    setSavedAddress((prevAddresses) => [...prevAddresses, addressToAdd]);
+
     // 5. Reset the form and hide it
     setNewAddress({ label: "", address: "" });
     setIsAddingAddress(false);
@@ -88,30 +90,15 @@ const handleSaveAddress = () => {
   ];
 
   const paymentMethods = [
-    { id: "stripe", name: "Credit/Debit Card", icon: "CreditCard" },
-    { id: "razorpay", name: "UPI/Wallet", icon: "Smartphone" },
+    {
+      id: "razorpay",
+      name: "UPI/Wallet/Credit/Debit Card",
+      icon: "Smartphone",
+    },
     { id: "cod", name: "Cash on Delivery", icon: "Banknote" },
   ];
 
-//   useEffect(() => {
-//     const onLogin = async () => {
-//       try {
-//         setIsLoading(true);
-//         const response = await axios.post("/api/getData");
-//         console.log("Login success", response.data, isLoading);
-//         setCartItems(response.data);
-//         return true;
-//       } catch (error) {
-//         console.log("Login failed", error.message);
-//         toast.error(error.message);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
-    // onLogin();
-
-//     console.log(cartItems);
-   useEffect(() => {
+  useEffect(() => {
     if (savedAddresses.length > 0) {
       setSelectedAddress(savedAddresses[0].id);
     }
@@ -122,31 +109,6 @@ const handleSaveAddress = () => {
       setPaymentMethod(paymentMethods[0].id);
     }
   }, []);
-
- 
-//   useEffect(() => {
-//     // This code will only run AFTER the cartItems state has been successfully updated
-//     if (cartItems) {
-//       setIsLoading(false);
-//     }
-//     console.log(
-//       "2. React has re-rendered. The cartItems are now:",
-//       cartItems.data,
-//       typeof cartItems,
-//       isLoading
-//     );
-//     if (!isLoading) {
-//       console.log("data type of cartitem", typeof cartItems.data);
-//       cartItems.data.map((item) => {
-//         console.log("Item:", item);
-//       });
-//     }
-
-//     // You can now do things with the data, like calculate the total
-//     if (cartItems.length > 0) {
-//       calculateTotal();
-//     }
-//   }, []);
 
   const updateQuantity = async (item, productId, newQuantity) => {
     // const productId = items.productId;
@@ -163,7 +125,6 @@ const handleSaveAddress = () => {
       )
     );
   };
-   
 
   const toggleItemExpansion = (itemId) => {
     setExpandedItems((prev) => ({
@@ -189,17 +150,16 @@ const handleSaveAddress = () => {
     }
     console.log("Calculating subtotal...");
     if (!Array.isArray(cartItems)) {
- 
-    return 0; 
-}
- 
+      return 0;
+    }
+
     return cartItems
       .map((item) => item.price * item.quantity)
       .reduce((acc, curr) => acc + curr, 0);
   };
-const handleInputChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewAddress(prev => ({ ...prev, [name]: value }));
+    setNewAddress((prev) => ({ ...prev, [name]: value }));
   };
   const calculateDiscount = () => {
     if (promoMessage.includes("10%")) return calculateSubtotal() * 0.1;
@@ -233,48 +193,88 @@ const handleInputChange = (e) => {
       calculatePointsDiscount()
     );
   };
+  const createOrder = async (total) => {
+    const res = await axios.post("/api/orderpayment", {
+      amount: total,
+    });
+
+    const data = res.data;
+
+    const paymentData = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      order_id: data.id,
+
+      handler: async function (response) {
+        // verify payment
+        const res = await fetch("/api/verifyOrder", {
+          method: "POST",
+          body: JSON.stringify({
+            orderId: response.razorpay_order_id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpaySignature: response.razorpay_signature,
+          }),
+        });
+        const data = await res.json();
+        console.log(data);
+        if (data.isOk) {
+         
+           
+          alert("Payment successful");
+         place(total);
+        } else {
+          alert("Payment failed");
+          setIsLoading(false);
+        }
+      },
+    };
+
+    const payment = new window.Razorpay(paymentData);
+    payment.open();
+  };
 
   const getEstimatedPrepTime = () => {
     if (cartItems.length === 0) return 0;
     const maxPrepTime = Math.max(
-      ...cartItems.map((item) => item.prepTime* item.quantity)
+      ...cartItems.map((item) => item.prepTime * item.quantity)
     );
     const kitchenLoad = 1.2; // Mock ML prediction factor
     return Math.ceil(maxPrepTime * kitchenLoad);
   };
+  const place=async(total)=>{
+     setIsLoading(true);
 
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        const orderId = "ORD-" + Date.now();
+        console.log("placing order");
+        await axios.post("/api/orders/place", {
+          orderId: orderId,
+          paymentMethod: paymentMethod,
+          selectedAddress: selectedAddress,
+          specialInstruction: orderNotes,
+          pickupTime: selectedTimeSlot,
+          orderType: fulfillmentType,
+        });
+        router.push(`/order-tracking-status?orderId=${orderId}&total=${total}`);
+        await axios.delete("/api/users/clearUserCart");
+
+      } catch (error) {
+        console.error("Order placement failed:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  
   const handlePlaceOrder = async () => {
     if (cartItems.length === 0) return;
-    setIsLoading(true);
-    try {
-      // Simulate order placement
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      const orderId = "ORD-" + Date.now();
-      const total = calculateTotal().toFixed(2);
-      console.log("placing order");
-      await axios.post("/api/orders/place",{
-        "orderId":orderId,
-    "paymentMethod": paymentMethod,
-    "selectedAddress":selectedAddress,
-    "specialInstruction":orderNotes,
-    "pickupTime":selectedTimeSlot,
-    "orderType": fulfillmentType
-      })
-      // await axios.post("/api/orders/place", {
-      //   orderId,
-      //   paymentMethod,
-      //   selectedAddress:selectedAddress,
-      //   specialInstruction:orderNotes,
-      //   pickupTime:selectedTimeSlot,
-      //   orderType:fulfillmentType
-       
-      // });
-      router.push(`/order-tracking-status?orderId=${orderId}&total=${total}`);
-    } catch (error) {
-      console.error("Order placement failed:", error);
-    } finally {
-    }
-  };
+    const total = calculateTotal().toFixed(2);
+    if (paymentMethod != "cod") {
+      createOrder(total);
+    } else {
+      place(total);
+     
+  }
+};
 
   const minimumOrderValue = 15.0;
   const isMinimumMet = calculateSubtotal() >= minimumOrderValue;
@@ -284,6 +284,11 @@ const handleInputChange = (e) => {
   return (
     <div className="min-h-screen bg-background">
       <CustomerNavigation />
+      <Script
+        type="text/javascript"
+        src="https://checkout.razorpay.com/v1/checkout.js"
+      />
+
       <div className="pt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
@@ -589,9 +594,7 @@ const handleInputChange = (e) => {
                       ))}
                     </select>
 
-                                        
-                         {isAddingAddress ? (
-         
+                    {isAddingAddress ? (
                       <div className="space-y-3 mt-4">
                         <input
                           type="text"
@@ -610,20 +613,28 @@ const handleInputChange = (e) => {
                           className="w-full px-3 py-2 border rounded-lg"
                         />
                         <div className="flex space-x-2">
-                          <button onClick={handleSaveAddress} className="px-4 py-2 bg-primary text-white rounded-lg">
+                          <button
+                            onClick={handleSaveAddress}
+                            className="px-4 py-2 bg-primary text-white rounded-lg"
+                          >
                             Save
                           </button>
-                          <button onClick={() => setIsAddingAddress(false)} className="px-4 py-2 border rounded-lg">
+                          <button
+                            onClick={() => setIsAddingAddress(false)}
+                            className="px-4 py-2 border rounded-lg"
+                          >
                             Cancel
                           </button>
                         </div>
                       </div>
                     ) : (
-                    <button onClick={() => setIsAddingAddress(true)} className="mt-3 text-sm text-primary hover:text-primary-700 font-body-medium transition-smooth">
-                      + Add New Address
-                    </button>
-                     )}
-
+                      <button
+                        onClick={() => setIsAddingAddress(true)}
+                        className="mt-3 text-sm text-primary hover:text-primary-700 font-body-medium transition-smooth"
+                      >
+                        + Add New Address
+                      </button>
+                    )}
                   </div>
                 )}
 

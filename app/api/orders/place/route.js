@@ -99,7 +99,7 @@ export async function POST(req ) {
         
         user.orderId=orderId;
         await user.save();
-    
+
          await sendOrderToKitchen(newOrder,customerName);
          console.log("order send to kitchen")
         return NextResponse.json({message: "Order created not exist successfully", order: savedOrder}, {status: 201});
