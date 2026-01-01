@@ -31,6 +31,7 @@ export async function POST(req ) {
           password:hashedPassword,
           firstName,
           lastName,
+          role: "customer",
         rememberMe,
         acceptTerms
       });

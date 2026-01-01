@@ -116,7 +116,11 @@ const orderSchema = new mongoose.Schema({
   canCancel: {
     type: Boolean,
     default: true
-  }
+  },
+  totalAmount: {
+    type: Number,
+    required: true
+}
   
 
   },{ timestamps: true }); // Adds createdAt and updatedAt timestamps

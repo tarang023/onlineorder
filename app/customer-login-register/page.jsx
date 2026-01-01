@@ -57,7 +57,7 @@ function CustomerLoginRegister() {
       setIsLoading(true);
       setEmail(formData.email)
       const response = await axios.post(
-        "/api/users/customer-login-register",
+        "/api/users/signup",
         formData
       );
       console.log("Signup success", response.data);
@@ -80,11 +80,17 @@ function CustomerLoginRegister() {
         password,
          
       });
+      
       console.log("Login success", response.data);
       return true;
     } catch (error) {
-      console.log("Login failed", error.message);
-      toast.error(error.message);
+       
+      console.log("Login failed", error.response?.data.error);
+      // console.log("Login failed2", error.message);
+       setErrors({ submit:  error.response?.data.error});
+
+       console.log("out");
+      return false;
     } finally {
       setIsLoading(false);
     }
@@ -138,16 +144,16 @@ function CustomerLoginRegister() {
 
   const validateForm = () => {
     const newErrors = {};
-    console.log("hrere");
+   
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
 
-    if (!formData.password) {
+    if (activeTab!== "verify" && !formData.password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
+    } else if (activeTab!== "verify" && formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
 
@@ -173,14 +179,18 @@ function CustomerLoginRegister() {
   };
 
   const handleSubmit = async (e) => {
+
+    console.log("form submited");
+    console.log("active tab is",activeTab);
     e.preventDefault();
 
     if (!validateForm()) {
+      console.log("form validation failed");
       return;
     }
 
     setIsLoading(true);
-
+   
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -190,29 +200,33 @@ function CustomerLoginRegister() {
         const { email, password } = formData;
         console.log(email, password);
         onLogin(email, password);
-        const isValidCredentials = await onLogin(email, password );
+        const isValidCredentials= await onLogin(email, password );
         console.log("login credential status received", isValidCredentials);
 
         if (!isValidCredentials) {
           setErrors({
-            submit: `Invalid credentials. Try: ${mockCredentials.customer.email} / ${mockCredentials.customer.password}`,
+            submit: `Invalid credentials.please enter correct email and password.,${error}`,
           });
           setIsLoading(false);
           return;
         }
-      } else {
+      } else if(activeTab==="register"){
         sendData();
+        return;
+      }else{
+ 
+        handleVerifyOtp(e);
         return;
       }
 
-      // Success - redirect to intended page or menu
-      console.log("outside credential check");
+       
+    
       const redirectTo = "/menu-browse-search";
       console.log("Redirecting to:", redirectTo);
 
       router.push(redirectTo);
     } catch (error) {
-      setErrors({ submit: "Authentication failed. Please try again." });
+      // setErrors({ submit: "Authentication failed. Please try again.",error });
     } finally {
       setIsLoading(false);
     }
@@ -220,24 +234,29 @@ function CustomerLoginRegister() {
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
+    console.log("Verifying OTP:", otp);
     if (!otp || otp.length < 6) {
+
       toast.error("Please enter a valid 6-digit OTP.");
       return;
     }
     setIsLoading(true);
     try {
       console.log(otp,typeof otp,formData.email);
+      
       await axios.post("/api/users/verify-otp", {
-        email: email,
+        email: formData.email,
         votp: otp,
       });
       toast.success("Email verified successfully! Please sign in.");
+      alert("OTP verified successfully, you are now logged in.");
       setActiveTab("login");
       setOtp("");
     } catch (error) {
       const errorMessage =
         error.response?.data?.error || "Verification failed.";
       console.log("OTP Verification failed", errorMessage);
+      setErrors({ submit: errorMessage });
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -334,33 +353,8 @@ function CustomerLoginRegister() {
           </div>
         </div>
 
-        {/* Form Section */}
-        {activeTab === "verify" ? (
-          <>
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-12">
-          <div className="w-full max-w-md">
        
-            <form onSubmit={handleVerifyOtp} className="space-y-4">
-              <h2 className="text-2xl ...">Verify Your Email</h2>
-              <p>
-                An OTP has been sent to <strong>{formData.email}</strong>.
-              </p>
-              <input
-                type="text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-               
-              />
-            
-            <div className="flex flex-wrap items-center gap-2 md:flex-row">
-                 <button className="bg-black text-white border-r-2" type="submit">Verify & Sign In</button>
-               </div>
-             
-            </form>{" "}
-    </div>
-</div>
-          </>
-        ) : (
+         
           <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-12">
             <div className="w-full max-w-md">
               {/* Mobile Logo */}
@@ -376,8 +370,9 @@ function CustomerLoginRegister() {
                 </p>
               </div>
 
-              {/* Tab Navigation */}
-              <div className="flex bg-secondary-50 rounded-lg p-1 mb-8">
+             
+             <div className="flex bg-secondary-50 rounded-lg p-1 mb-8">
+            {/* Sign In Button */}
                 <button
                   onClick={() => setActiveTab("login")}
                   className={`flex-1 py-3 px-4 rounded-md font-body font-body-medium transition-smooth ${
@@ -388,6 +383,8 @@ function CustomerLoginRegister() {
                 >
                   Sign In
                 </button>
+
+                {/* Sign Up Button */}
                 <button
                   onClick={() => setActiveTab("register")}
                   className={`flex-1 py-3 px-4 rounded-md font-body font-body-medium transition-smooth ${
@@ -398,7 +395,20 @@ function CustomerLoginRegister() {
                 >
                   Sign Up
                 </button>
+
+                {/* Verify Button (New) */}
+                <button
+                  onClick={() => setActiveTab("verify")}
+                  className={`flex-1 py-3 px-4 rounded-md font-body font-body-medium transition-smooth ${
+                    activeTab === "verify"
+                      ? "bg-surface text-primary shadow-soft"
+                      : "text-text-secondary hover:text-primary"
+                  }`}
+                >
+                  Verify
+                </button>
               </div>
+              
 
               {/* Social Login */}
               {/* <div className="space-y-3 mb-6">
@@ -485,6 +495,7 @@ function CustomerLoginRegister() {
                   </div>
                 )}
 
+               
                 <div>
                   <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
                     Email Address *
@@ -505,6 +516,7 @@ function CustomerLoginRegister() {
                     </p>
                   )}
                 </div>
+             
 
                 {activeTab === "register" && (
                   <div>
@@ -522,6 +534,7 @@ function CustomerLoginRegister() {
                   </div>
                 )}
 
+                { activeTab !== "verify" &&
                 <div>
                   <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
                     Password *
@@ -568,6 +581,7 @@ function CustomerLoginRegister() {
                   )}
                 </div>
 
+                 }
                 {activeTab === "register" && (
                   <div>
                     <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
@@ -639,6 +653,29 @@ function CustomerLoginRegister() {
                     </label>
                   )}
                 </div>
+                {
+                  activeTab==="verify" &&
+                  <div>
+                  <label className="block text-sm font-body font-body-medium text-text-primary mb-2">
+                    Enter OTP *
+                  </label>
+                  <input
+                    type="text"
+                    name="otp"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-smooth font-body min-h-touch ${
+                      errors.otp ? "border-error" : "border-border"
+                    }`}
+                    placeholder="Enter the 6-digit OTP"
+                  />
+                  {errors.otp && (
+                    <p className="text-error text-sm font-body mt-1">
+                      {errors.otp}
+                    </p>
+                  )}
+                </div>
+                }
 
                 {errors.acceptTerms && (
                   <p className="text-error text-sm font-body">
@@ -668,17 +705,22 @@ function CustomerLoginRegister() {
                       ? "Please wait..."
                       : activeTab === "login"
                       ? "Sign In"
-                      : "Create Account"}
+                      : activeTab === "register"
+                      ? "Sign Up"
+                      : "Verify & Sign In"}
                   </span>
                 </button>
               </form>
 
+
+
               {/* Additional Links */}
+
               
            
             </div>
           </div>
-        )}
+        
       </div>
     </div>
   );

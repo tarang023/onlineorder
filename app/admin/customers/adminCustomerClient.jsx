@@ -21,6 +21,7 @@ const App = ({customers}) => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Last Name</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Email</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Phone</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">role</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-slate-200">
@@ -30,6 +31,7 @@ const App = ({customers}) => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{customer.lastName}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{customer.email}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{customer.phone}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{customer.role}</td>
                     </tr>
                   ))}
                 </tbody>

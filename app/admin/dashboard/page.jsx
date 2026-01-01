@@ -1,15 +1,16 @@
 "use client";
 
-import Icon from "../components/AppIcon";
-import AdminNavigation from "../components/ui/AdminNavigation";
+import Icon from "../../components/AppIcon"
+import AdminNavigation from "../../components/ui/AdminNavigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import CustomerSatisfaction from "../components/restaurant-admin/CustomerSatisfaction";
-import LocationPerformance from "../components/restaurant-admin/LocationPerformance";
-import OrderStatusChart from "../components/restaurant-admin/OrderStatusChart";
-import RecentActivity from "../components/restaurant-admin/RecentActivity";
-import SalesOverview from "../components/restaurant-admin/SalesOverview";
-import TopSellingItems from "../components/restaurant-admin/TopSellingItems";
+import axios from "axios";
+import CustomerSatisfaction from "../../components/restaurant-admin/CustomerSatisfaction";
+import LocationPerformance from "../../components/restaurant-admin/LocationPerformance";
+import OrderStatusChart from "../../components/restaurant-admin/OrderStatusChart";
+import RecentActivity from "../../components/restaurant-admin/RecentActivity";
+import SalesOverview from "../../components/restaurant-admin/SalesOverview";
+import TopSellingItems from "../../components/restaurant-admin/TopSellingItems";
 
 function RestaurantAdminDashboard() {
   const [dateRange, setDateRange] = useState("week");
@@ -21,14 +22,16 @@ function RestaurantAdminDashboard() {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setDashboardData(mockDashboardData);
-      } catch (error) {
-        console.error("Error loading dashboard data:", error);
-      } finally {
-        setIsLoading(false);
-      }
+          // const response = await axios.get("/api/admin/dashboard");
+          // if (response.data.success) {
+          //   setDashboardData(response.data.data);
+          // }
+          setDashboardData(mockDashboardData);
+        } catch (error) {
+          console.error("Failed to fetch dashboard data", error);
+        } finally {
+          setIsLoading(false);
+        }
     };
 
     loadData();

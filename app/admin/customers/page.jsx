@@ -8,11 +8,7 @@ async function getCustomer() {
      const plainUsers = JSON.parse(JSON.stringify(usersFromDb));
      return plainUsers
    } catch (error) {
-     console.error("========================================");
-     console.error("!!! SERIALIZATION FAILED ON SERVER !!!");
-     console.error("========================================");
-     console.error("The error message is:", error.message); 
-     console.log("Data that could not be serialized:", JSON.stringify(usersFromDb, null, 2));
+    
      return [];
    }
 }

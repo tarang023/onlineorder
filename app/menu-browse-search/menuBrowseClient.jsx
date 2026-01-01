@@ -73,7 +73,7 @@ function MenuBrowseSearch({menuItems,categories}) {
  
 
   const handleItemClick = (item) => {
-    // Pass the item ID as a query parameter
+ 
     router.push(`/item-detail-customization?id=${item.productId}`);
   };
 

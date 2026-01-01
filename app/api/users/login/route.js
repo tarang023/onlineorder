@@ -18,18 +18,19 @@ export async function POST(req ) {
         if(!user){
             return NextResponse.json({error:"User not found"}, {status:400})
         }
-        console.log(user)
+         
         const validPassword=await bcryptjs.compare(password,user.password)
         if(!validPassword){
             return NextResponse.json({error:"Invalid password check your credentials"}, {status:400})
         }
         if(!user.isVerified){
+            console.log("user is not verified");
             return NextResponse.json({error:"User is not verified"}, {status:400})
         }
         const tokenData ={
             id :user._id,
-           
-            email: user.email
+            email: user.email,
+            role: user.role || "customer"  // Default to 'customer' if role is undefined
         }
         console.log(tokenData);
       const token =  await jwt.sign(tokenData,process.env.TOKEN_SECRET,{expiresIn:'1d'})

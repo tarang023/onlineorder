@@ -9,20 +9,28 @@ export async function POST(req) {
     try {
         const { email, votp } = await req.json();
 
+
+
         // Find the user by email in the database
+
+        console.log("Verifying OTP for email:", email);
         const user = await User.findOne({ email });
+
+
 
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
+        // console.log("user.verifyOtp:", user.verifyOtp);
+        // console.log("otp:", );
 
         // Check if the OTP is correct and not expired
-        if (user.isVerified || (user.verifyOtp !== votp || user.verifyOtpExpiry < Date.now())) {
+        if (user.isVerified || (user.verifyOtp != votp || user.verifyOtpExpiry < Date.now())) {
              if(user.isVerified) {
                 // If user is already verified, let them know. They should log in normally.
                 return NextResponse.json({ error: "Account already verified. Please log in." }, { status: 400 });
              }
-             await deleteUser(email); // Delete the unverified user
+            //  await deleteUser(email); // Delete the unverified user
             return NextResponse.json({ error: "Invalid or expired OTP" }, { status: 400 });
         }
 
@@ -53,6 +61,7 @@ export async function POST(req) {
         response.cookies.set("token", token, {
             httpOnly: true,
         });
+       
 
         return response;
 

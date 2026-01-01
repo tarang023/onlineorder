@@ -36,8 +36,9 @@ function CustomerNavigation() {
     try {
       const response = await axios.get("/api/users/logout");
       if (response.status === 200) {
-        Cookies.remove("token"); // Remove the token cookie
-        // setIsLoggedIn(false); // Update state if using context
+        Cookies.remove("token"); 
+       
+        alert("Logged out successfully");
         window.location.href = "/customer-login-register"; // Redirect to login page
       }
     } catch (error) {

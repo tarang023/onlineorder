@@ -14,11 +14,11 @@ function AdminNavigation() {
       items: [
         {
           label: "Overview",
-          path: "/restaurant-admin-dashboard",
+          path: "/admin/dashboard",
           icon: "BarChart3",
         },
-        { label: "Analytics", path: "/analytics", icon: "TrendingUp" },
-        { label: "Reports", path: "/reports", icon: "FileText" },
+        { label: "Analytics", path: "/admin/analytics", icon: "TrendingUp" },
+        { label: "Reports", path: "/admin/reports", icon: "FileText" },
       ],
     },
     {
@@ -27,12 +27,12 @@ function AdminNavigation() {
         { label: "Live Orders", path: "/admin-orders", icon: "Clock" },
         {
           label: "Order History",
-          path: "/admin-order-history",
+          path: "/admin/order-history",
           icon: "History",
         },
         {
           label: "Kitchen Display",
-          path: "/kitchen-display-system",
+          path: "/admin/kitchen-display-system",
           icon: "Monitor",
         },
       ],
@@ -40,17 +40,17 @@ function AdminNavigation() {
     {
       title: "Menu Management",
       items: [
-        { label: "Menu Items", path: "/admin-menu", icon: "ChefHat" },
-        { label: "Categories", path: "/admin-categories", icon: "Grid3X3" },
-        { label: "Pricing", path: "/admin-pricing", icon: "DollarSign" },
+        { label: "Menu Items", path: "/admin/menu", icon: "ChefHat" },
+        { label: "Categories", path: "/admin/categories", icon: "Grid3X3" },
+        { label: "Pricing", path: "/admin/pricing", icon: "DollarSign" },
       ],
     },
     {
       title: "Customers",
       items: [
-        { label: "Customer List", path: "/admin-customers", icon: "Users" },
-        { label: "Reviews", path: "/admin-reviews", icon: "Star" },
-        { label: "Loyalty", path: "/admin-loyalty", icon: "Gift" },
+        { label: "Customer List", path: "/admin/customers", icon: "Users" },
+        { label: "Reviews", path: "/admin/reviews", icon: "Star" },
+        { label: "Loyalty", path: "/admin/loyalty", icon: "Gift" },
       ],
     },
     {
@@ -58,11 +58,11 @@ function AdminNavigation() {
       items: [
         {
           label: "Restaurant",
-          path: "/admin-restaurant-settings",
+          path: "/admin/restaurant-settings",
           icon: "Store",
         },
-        { label: "Staff", path: "/admin-staff", icon: "UserCheck" },
-        { label: "System", path: "/admin-system-settings", icon: "Settings" },
+        { label: "Add Admin", path: "/admin/add-admin", icon: "UserCheck" },
+        { label: "System", path: "/admin/system-settings", icon: "Settings" },
       ],
     },
   ];
