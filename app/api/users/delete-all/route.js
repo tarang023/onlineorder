@@ -1,7 +1,7 @@
 // app/api/users/delete-all/route.js
 
 import { connect } from "@/dbconfig/dbConfig";
-import  User from "@/models/userModel"; // Import the model you want to clear
+import  User from "@/models/userModel";  
 import { NextResponse } from 'next/server';
 import  Order from '@/models/orderModel'
 import {HelpMessage} from '@/models/helpMessage'
