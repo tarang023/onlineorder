@@ -4,13 +4,13 @@ import { connect } from "@/dbconfig/dbConfig";
 import  User from "@/models/userModel"; // Import the model you want to clear
 import { NextResponse } from 'next/server';
 import  Order from '@/models/orderModel'
-import KitchenOrder from "@/models/kitchenOrderModel";
+import {HelpMessage} from '@/models/helpMessage'
 await connect();
 
 export async function DELETE(request) {
   try {
     // The .deleteMany({}) method with an empty object deletes all documents
-    const result = await   Order.deleteMany({});
+    const result = await HelpMessage.deleteMany({});
 
     return NextResponse.json({
       message: `${result.deletedCount} kitchen orders were deleted successfully.`,

@@ -48,9 +48,9 @@ async function seedAdmin() {
             firstName: "Super",
             lastName: "Admin",
             email: adminEmail,
-            phone: "0000000000", // Dummy phone number
+            phone: "0000000000",  
             password: hashedPassword,
-            role: "super_admin", // <--- THE IMPORTANT PART
+            role: "super_admin",  
             isVerified: true
         });
 
