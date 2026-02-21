@@ -7,6 +7,7 @@ export const sendEmail = async ({email,emailType,userId,otp})=>{
 
         //configure mail for usage has to add
        const hashedToken= await bcryptjs.hash(userId.toString(), 10)
+    //    console.log("hashedToken",hashedToken);
         if(emailType==="VERIFY"){
            const updatedUser= await User.findByIdAndUpdate(userId,{$set : {verifyToken:hashedToken,verifyTokenExpiry:Date.now() + 3600000}}) // 1 hour expiry;
             //verification email
@@ -16,6 +17,10 @@ export const sendEmail = async ({email,emailType,userId,otp})=>{
         }
 
         const nodemailerr = require("nodemailer");
+        console.log("process.env.MAIL_HOST",process.env.MAIL_HOST);
+        console.log("process.env.MAIL_PORT",process.env.MAIL_PORT);
+        console.log("process.env.MAIL_USER",process.env.MAIL_USER);
+        console.log("process.env.MAIL_PASS",process.env.MAIL_PASS);
 
           // Looking to send emails in production? Check out our Email API/SMTP product!
            // Looking to send emails in production? Check out our Email API/SMTP product!
@@ -28,7 +33,7 @@ export const sendEmail = async ({email,emailType,userId,otp})=>{
             }
             });
                         const mailOptions = {
-                from: "tarangkathiriya33@gmail.com",
+                from: process.env.MAIL_FROM,
                 to: email,
                 subject: emailType==='VERIFY' ? "Email Verification" : "FORGOT PASSWORD",
                 html: `

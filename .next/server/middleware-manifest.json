@@ -10,50 +10,18 @@
       "page": "/",
       "matchers": [
         {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/(\\/?index|\\/?index\\.json))?[\\/#\\?]?$",
-          "originalSource": "/"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/customer-login-register(\\.json)?[\\/#\\?]?$",
-          "originalSource": "/customer-login-register"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/verify(\\.json)?[\\/#\\?]?$",
-          "originalSource": "/verify"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/menu-browse-search(\\.json)?[\\/#\\?]?$",
-          "originalSource": "/menu-browse-search"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/shopping-cart-checkout(\\.json)?[\\/#\\?]?$",
-          "originalSource": "/shopping-cart-checkout"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/order-tracking-status(\\.json)?[\\/#\\?]?$",
-          "originalSource": "/order-tracking-status"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/kitchen-display-system(\\.json)?[\\/#\\?]?$",
-          "originalSource": "/kitchen-display-system"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/customer-account-history(\\.json)?[\\/#\\?]?$",
-          "originalSource": "/customer-account-history"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/admin(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(\\.json)?[\\/#\\?]?$",
-          "originalSource": "/admin/:path*"
+          "regexp": "^/.*$",
+          "originalSource": "/:path*"
         }
       ],
       "wasm": [],
       "assets": [],
       "env": {
-        "__NEXT_BUILD_ID": "b2RhxZHkY8SgaUd1K9fUE",
+        "__NEXT_BUILD_ID": "development",
         "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "ufA7lduEKzHQzDrIMZ9TXeLlYiHuyM0NgoaHSIrW4So=",
-        "__NEXT_PREVIEW_MODE_ID": "51a957c29cbcc4de80cb5b46441803a1",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "88c4bce8fca33b692138e49653bde911fc5111661d3d919e26b14aa49340fbb4",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "a98e1e7f22a7b12461ddc100d380334eb03d9ded4b8f3a0c22f06333ebb4b263"
+        "__NEXT_PREVIEW_MODE_ID": "12f363b33141ff9af1e4a398d0d4bccc",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "f425a406b21f343320a7b410eeb8f9646415624d48ec179e0d4695ec2bf6998c",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "e2fec337283ace665f451758810840fff5fc1fd56aa8ee8b94c6d8cc0e241ad4"
       }
     }
   },
