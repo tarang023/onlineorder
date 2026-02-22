@@ -32,7 +32,7 @@ function AdminNavigation() {
         },
         {
           label: "Kitchen Display",
-          path: "/admin/kitchen-display-system",
+          path: "/kitchen-display-system",
           icon: "Monitor",
         },
       ],

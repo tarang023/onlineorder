@@ -237,7 +237,7 @@ function CheckoutClient({ initialCartItems }) {
     const maxPrepTime = Math.max(
       ...cartItems.map((item) => item.prepTime * item.quantity)
     );
-    const kitchenLoad = 1.2; // Mock ML prediction factor
+    const kitchenLoad = 1.2; 
     return Math.ceil(maxPrepTime * kitchenLoad);
   };
   const place=async(total)=>{
@@ -254,6 +254,7 @@ function CheckoutClient({ initialCartItems }) {
           specialInstruction: orderNotes,
           pickupTime: selectedTimeSlot,
           orderType: fulfillmentType,
+          
         });
         router.push(`/order-tracking-status?orderId=${orderId}&total=${total}`);
         await axios.delete("/api/users/clearUserCart");

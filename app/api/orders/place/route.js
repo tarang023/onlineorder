@@ -77,7 +77,7 @@ export async function POST(req ) {
         estimatedCompletion:new Date(Date.now() + 140000),
       },
     ];
-  
+    const totalAmountnt = 500;
          const newOrder= new Order({
            orderId,
             status,
@@ -85,6 +85,7 @@ export async function POST(req ) {
             estimatedDelivery, 
             pickupTime,
             address,
+            totalAmountnt,
             orderType,
             user, 
             customer,

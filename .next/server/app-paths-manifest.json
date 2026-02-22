@@ -1,10 +1,12 @@
 {
-  "/api/users/login/route": "app/api/users/login/route.js",
   "/api/getData/route": "app/api/getData/route.js",
-  "/api/cart/route": "app/api/cart/route.js",
-  "/api/orderpayment/route": "app/api/orderpayment/route.js",
-  "/page": "app/page.js",
+  "/api/orders/changeOrder/route": "app/api/orders/changeOrder/route.js",
+  "/api/orders/sendDetails/route": "app/api/orders/sendDetails/route.js",
   "/menu-browse-search/page": "app/menu-browse-search/page.js",
+  "/page": "app/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
   "/_not-found/page": "app/_not-found/page.js",
+  "/order-tracking-status/page": "app/order-tracking-status/page.js",
+  "/kitchen-display-system/page": "app/kitchen-display-system/page.js",
   "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js"
 }
