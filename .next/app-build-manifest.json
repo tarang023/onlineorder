@@ -11,75 +11,40 @@
       "static/chunks/main-app.js",
       "static/chunks/app/not-found.js"
     ],
-    "/shopping-cart-checkout/page": [
+    "/admin/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/shopping-cart-checkout/page.js"
+      "static/chunks/app/admin/dashboard/page.js"
     ],
-    "/api/orders/place/route": [
+    "/admin/top-selling/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/orders/place/route.js"
+      "static/chunks/app/admin/top-selling/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/_not-found/page.js"
     ],
-    "/api/getData/route": [
+    "/api/admin/top-selling/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/getData/route.js"
+      "static/chunks/app/api/admin/top-selling/route.js"
     ],
-    "/api/orderpayment/route": [
+    "/api/admin/dashboard/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/orderpayment/route.js"
+      "static/chunks/app/api/admin/dashboard/route.js"
     ],
-    "/api/users/clearUserCart/route": [
+    "/admin/activity-log/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/users/clearUserCart/route.js"
+      "static/chunks/app/admin/activity-log/page.js"
     ],
-    "/order-tracking-status/page": [
+    "/api/admin/activity-log/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/order-tracking-status/page.js"
-    ],
-    "/api/orders/sendDetails/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/orders/sendDetails/route.js"
-    ],
-    "/menu-browse-search/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/menu-browse-search/page.js"
-    ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
-    "/api/users/login/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/users/login/route.js"
-    ],
-    "/admin/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/dashboard/page.js"
-    ],
-    "/kitchen-display-system/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/kitchen-display-system/page.js"
-    ],
-    "/api/orders/changeOrder/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/orders/changeOrder/route.js"
+      "static/chunks/app/api/admin/activity-log/route.js"
     ]
   }
 }

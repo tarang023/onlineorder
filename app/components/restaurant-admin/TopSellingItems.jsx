@@ -9,7 +9,7 @@ function TopSellingItems({ items }) {
           Top Selling Items
         </h2>
         <Link
-          href="/admin-menu"
+          href="/admin/top-selling"
           className="text-sm text-primary hover:text-primary-700 font-body font-body-medium flex items-center"
         >
           <span>View All</span>

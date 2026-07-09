@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connect } from "../../../../dbconfig/dbConfig";
 import Order from "../../../../models/orderModel";
+import MenuItem from "../../../../models/menuItemsModel";
 
 connect();
 
@@ -61,6 +62,54 @@ export async function GET(request) {
       { $project: { date: "$_id", sales: 1, _id: 0 } }
     ]);
 
+    // Previous 7 Days calculation for trend
+    const fourteenDaysAgo = new Date(sevenDaysAgo);
+    fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 7);
+
+    const prevSummaryStats = await Order.aggregate([
+      { $match: { createdAt: { $gte: fourteenDaysAgo, $lt: sevenDaysAgo } } },
+      {
+        $addFields: {
+          computedTotal: {
+            $sum: {
+              $map: {
+                input: "$items",
+                as: "item",
+                in: { $multiply: ["$$item.price", "$$item.quantity"] }
+              }
+            }
+          }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalSales: { $sum: "$computedTotal" },
+          totalOrders: { $count: {} },
+          averageOrderValue: { $avg: "$computedTotal" }
+        }
+      }
+    ]);
+
+    const currSales = summaryStats[0]?.totalSales || 0;
+    const prevSales = prevSummaryStats[0]?.totalSales || 0;
+    const salesTrendPercent = prevSales === 0 ? (currSales > 0 ? 100 : 0) : ((currSales - prevSales) / prevSales) * 100;
+
+    const currOrders = summaryStats[0]?.totalOrders || 0;
+    const prevOrders = prevSummaryStats[0]?.totalOrders || 0;
+    const ordersTrendPercent = prevOrders === 0 ? (currOrders > 0 ? 100 : 0) : ((currOrders - prevOrders) / prevOrders) * 100;
+
+    const currAvg = summaryStats[0]?.averageOrderValue || 0;
+    const prevAvg = prevSummaryStats[0]?.averageOrderValue || 0;
+    const avgTrendPercent = prevAvg === 0 ? (currAvg > 0 ? 100 : 0) : ((currAvg - prevAvg) / prevAvg) * 100;
+
+    // Calculate customer satisfaction
+    const ratingStats = await MenuItem.aggregate([
+      { $match: { rating: { $exists: true, $ne: null } } },
+      { $group: { _id: null, avgRating: { $avg: "$rating" } } }
+    ]);
+    const customerSatisfaction = ratingStats[0]?.avgRating ? Math.round(ratingStats[0].avgRating * 10) / 10 : 4.8;
+
     // 3. Top Selling Items
     const topSellingItems = await Order.aggregate([
       { $unwind: "$items" },
@@ -115,7 +164,13 @@ export async function GET(request) {
         totalSales: summaryStats[0]?.totalSales || 0,
         totalOrders: summaryStats[0]?.totalOrders || 0,
         averageOrderValue: Math.round(summaryStats[0]?.averageOrderValue || 0),
-        customerSatisfaction: 4.8, // Hardcoded (User reviews not in schema)
+        customerSatisfaction: customerSatisfaction,
+        trends: {
+          sales: Number(salesTrendPercent.toFixed(1)),
+          orders: Number(ordersTrendPercent.toFixed(1)),
+          averageOrder: Number(avgTrendPercent.toFixed(1)),
+          satisfaction: 0
+        }
       },
       salesTrend,
       topSellingItems: topSellingItems.map((item, index) => ({

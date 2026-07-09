@@ -18,15 +18,14 @@ function RestaurantAdminDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
-    // Simulate data loading
+    // Fetch data from API
     const loadData = async () => {
       setIsLoading(true);
       try {
-          // const response = await axios.get("/api/admin/dashboard");
-          // if (response.data.success) {
-          //   setDashboardData(response.data.data);
-          // }
-          setDashboardData(mockDashboardData);
+          const response = await axios.get("/api/admin/dashboard");
+          if (response.data.success) {
+            setDashboardData(response.data.data);
+          }
         } catch (error) {
           console.error("Failed to fetch dashboard data", error);
         } finally {
@@ -39,130 +38,6 @@ function RestaurantAdminDashboard() {
 
   const handleDateRangeChange = (range) => {
     setDateRange(range);
-  };
-
-  // Mock dashboard data
-  const mockDashboardData = {
-    summary: {
-      totalSales: 28456.75,
-      totalOrders: 427,
-      averageOrderValue: 66.64,
-      customerSatisfaction: 4.7,
-    },
-    salesTrend: [
-      { date: "2023-05-01", sales: 3200 },
-      { date: "2023-05-02", sales: 3800 },
-      { date: "2023-05-03", sales: 4200 },
-      { date: "2023-05-04", sales: 3900 },
-      { date: "2023-05-05", sales: 4800 },
-      { date: "2023-05-06", sales: 5200 },
-      { date: "2023-05-07", sales: 4600 },
-    ],
-
-    topSellingItems: [
-      {
-        id: 1,
-        name: "Margherita Pizza",
-        category: "Pizza",
-        sales: 89,
-        revenue: 1424,
-        growth: 12,
-      },
-      {
-        id: 2,
-        name: "Chicken Alfredo Pasta",
-        category: "Pasta",
-        sales: 76,
-        revenue: 1216,
-        growth: 8,
-      },
-      {
-        id: 3,
-        name: "Classic Cheeseburger",
-        category: "Burgers",
-        sales: 72,
-        revenue: 864,
-        growth: -3,
-      },
-      {
-        id: 4,
-        name: "Caesar Salad",
-        category: "Salads",
-        sales: 65,
-        revenue: 780,
-        growth: 15,
-      },
-      {
-        id: 5,
-        name: "Chocolate Lava Cake",
-        category: "Desserts",
-        sales: 58,
-        revenue: 522,
-        growth: 20,
-      },
-    ],
-
-    orderStatusDistribution: [
-      { status: "Completed", value: 380 },
-      { status: "In Progress", value: 27 },
-      { status: "Cancelled", value: 20 },
-    ],
-
-    locationPerformance: [
-      { id: 1, name: "Downtown", orders: 187, sales: 12450, satisfaction: 4.8 },
-      { id: 2, name: "Westside", orders: 142, sales: 9320, satisfaction: 4.6 },
-      {
-        id: 3,
-        name: "Northgate",
-        orders: 98,
-        sales: 6686.75,
-        satisfaction: 4.7,
-      },
-    ],
-
-    recentActivity: [
-      {
-        id: 1,
-        type: "order",
-        title: "New Order #ORD-7829",
-        description: "New order received from John D. for $78.50",
-        timestamp: new Date(Date.now() - 5 * 60000),
-        status: "new",
-      },
-      {
-        id: 2,
-        type: "inventory",
-        title: "Low Stock Alert",
-        description:
-          "Chicken wings inventory below threshold (5 units remaining)",
-        timestamp: new Date(Date.now() - 25 * 60000),
-        status: "warning",
-      },
-      {
-        id: 3,
-        type: "review",
-        title: "New 5-Star Review",
-        description: "Sarah M. left a 5-star review for their recent order",
-        timestamp: new Date(Date.now() - 120 * 60000),
-        status: "positive",
-      },
-      {
-        id: 4,
-        type: "order",
-        title: "Order #ORD-7820 Completed",
-        description: "Order successfully delivered to customer",
-        timestamp: new Date(Date.now() - 180 * 60000),
-        status: "success",
-      },
-      {
-        id: 5,
-        type: "system",
-        title: "System Update",
-        description: "Menu pricing updated for 12 items",
-        timestamp: new Date(Date.now() - 240 * 60000),
-        status: "info",
-      },
-    ],
   };
 
   return (
@@ -226,7 +101,7 @@ function RestaurantAdminDashboard() {
                     { minimumFractionDigits: 2, maximumFractionDigits: 2 }
                   )}`}
                   icon="DollarSign"
-                  trend={+8.2}
+                  trend={dashboardData.summary.trends?.sales || 0}
                   color="primary"
                 />
 
@@ -234,7 +109,7 @@ function RestaurantAdminDashboard() {
                   title="Total Orders"
                   value={dashboardData.summary.totalOrders}
                   icon="ShoppingBag"
-                  trend={+12.5}
+                  trend={dashboardData.summary.trends?.orders || 0}
                   color="secondary"
                 />
 
@@ -244,7 +119,7 @@ function RestaurantAdminDashboard() {
                     2
                   )}`}
                   icon="TrendingUp"
-                  trend={-2.1}
+                  trend={dashboardData.summary.trends?.averageOrder || 0}
                   color="accent"
                 />
 
@@ -252,7 +127,7 @@ function RestaurantAdminDashboard() {
                   title="Customer Satisfaction"
                   value={`${dashboardData.summary.customerSatisfaction}/5`}
                   icon="Star"
-                  trend={+0.3}
+                  trend={dashboardData.summary.trends?.satisfaction || 0}
                   color="success"
                 />
               </div>
@@ -276,34 +151,18 @@ function RestaurantAdminDashboard() {
               </div>
 
               {/* Second Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                {/* Top Selling Items - 1/3 width */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                {/* Top Selling Items */}
                 <div className="bg-surface rounded-xl shadow-soft p-6">
                   <TopSellingItems items={dashboardData.topSellingItems} />
                 </div>
 
-                {/* Location Performance - 2/3 width */}
-                <div className="lg:col-span-2 bg-surface rounded-xl shadow-soft p-6">
-                  <LocationPerformance
-                    locations={dashboardData.locationPerformance}
-                  />
-                </div>
-              </div>
-
-              {/* Third Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                {/* Recent Activity - 1/3 width */}
+                {/* Recent Activity */}
                 <div className="bg-surface rounded-xl shadow-soft p-6">
                   <RecentActivity activities={dashboardData.recentActivity} />
                 </div>
-
-                {/* Customer Satisfaction - 2/3 width */}
-                <div className="lg:col-span-2 bg-surface rounded-xl shadow-soft p-6">
-                  <CustomerSatisfaction />
-                </div>
               </div>
-
-              {/* Quick Actions */}
+                   
               <div className="bg-surface rounded-xl shadow-soft p-6 mb-8">
                 <h2 className="text-xl font-heading font-heading-medium text-text-primary mb-4">
                   Quick Actions

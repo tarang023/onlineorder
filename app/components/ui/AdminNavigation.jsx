@@ -141,23 +141,11 @@ function AdminNavigation() {
 
       {/* Desktop Sidebar */}
       <aside
-        className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-dropdown lg:block lg:bg-surface lg:border-r lg:border-border lg:shadow-soft transition-all duration-300 ${
+        className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-[990] lg:block lg:bg-surface lg:border-r lg:border-border lg:shadow-soft transition-all duration-300 ${
           isSidebarCollapsed ? "lg:w-16" : "lg:w-64"
         }`}
       >
         <div className="flex flex-col h-full pt-16">
-          {/* Sidebar Toggle */}
-          <div className="px-4 py-4 border-b border-border">
-            <button
-              onClick={toggleSidebar}
-              className="w-full flex items-center justify-center p-2 text-text-secondary hover:text-primary hover:bg-primary-50 rounded-lg transition-smooth"
-            >
-              <Icon
-                name={isSidebarCollapsed ? "ChevronRight" : "ChevronLeft"}
-                size={20}
-              />
-            </button>
-          </div>
 
           {/* Navigation */}
           <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto">

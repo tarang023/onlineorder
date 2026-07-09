@@ -1,12 +1,7 @@
 {
-  "/api/getData/route": "app/api/getData/route.js",
-  "/api/orders/changeOrder/route": "app/api/orders/changeOrder/route.js",
-  "/api/orders/sendDetails/route": "app/api/orders/sendDetails/route.js",
-  "/menu-browse-search/page": "app/menu-browse-search/page.js",
-  "/page": "app/page.js",
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/api/admin/activity-log/route": "app/api/admin/activity-log/route.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/order-tracking-status/page": "app/order-tracking-status/page.js",
-  "/kitchen-display-system/page": "app/kitchen-display-system/page.js",
-  "/shopping-cart-checkout/page": "app/shopping-cart-checkout/page.js"
+  "/admin/top-selling/page": "app/admin/top-selling/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/admin/activity-log/page": "app/admin/activity-log/page.js"
 }
