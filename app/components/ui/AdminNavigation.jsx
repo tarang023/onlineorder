@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Link from "next/link";
 import Icon from "../AppIcon";
 import pathname, { usePathname } from "next/navigation";
@@ -6,7 +7,23 @@ import pathname, { usePathname } from "next/navigation";
 function AdminNavigation() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [adminUser, setAdminUser] = useState(null);
   const location = usePathname();
+
+  useEffect(() => {
+    const fetchAdminDetails = async () => {
+      try {
+        const response = await axios.post("/api/users/me");
+        if (response.data?.data) {
+          setAdminUser(response.data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch admin details:", error);
+      }
+    };
+    fetchAdminDetails();
+  }, []);
 
   const navigationSections = [
     {
@@ -17,14 +34,12 @@ function AdminNavigation() {
           path: "/admin/dashboard",
           icon: "BarChart3",
         },
-        { label: "Analytics", path: "/admin/analytics", icon: "TrendingUp" },
-        { label: "Reports", path: "/admin/reports", icon: "FileText" },
       ],
     },
     {
       title: "Orders",
       items: [
-        { label: "Live Orders", path: "/admin-orders", icon: "Clock" },
+        { label: "Live Orders", path: "/admin/live-orders", icon: "Clock" },
         {
           label: "Order History",
           path: "/admin/order-history",
@@ -40,9 +55,8 @@ function AdminNavigation() {
     {
       title: "Menu Management",
       items: [
-        { label: "Menu Items", path: "/admin/menu", icon: "ChefHat" },
-        { label: "Categories", path: "/admin/categories", icon: "Grid3X3" },
-        { label: "Pricing", path: "/admin/pricing", icon: "DollarSign" },
+        { label: "Add Menu Items", path: "/admin/menu", icon: "ChefHat" },
+        { label: "Add Categories", path: "/admin/categories", icon: "Grid3X3" },
       ],
     },
     {
@@ -50,17 +64,11 @@ function AdminNavigation() {
       items: [
         { label: "Customer List", path: "/admin/customers", icon: "Users" },
         { label: "Reviews", path: "/admin/reviews", icon: "Star" },
-        { label: "Loyalty", path: "/admin/loyalty", icon: "Gift" },
       ],
     },
     {
       title: "Settings",
       items: [
-        {
-          label: "Restaurant",
-          path: "/admin/restaurant-settings",
-          icon: "Store",
-        },
         { label: "Add Admin", path: "/admin/add-admin", icon: "UserCheck" },
         { label: "System", path: "/admin/system-settings", icon: "Settings" },
       ],
@@ -111,22 +119,17 @@ function AdminNavigation() {
             </div>
 
             {/* Header Actions */}
-            <div className="flex items-center space-x-4">
-              {/* Notifications */}
-              <button className="relative p-2 text-text-secondary hover:text-primary transition-smooth">
-                <Icon name="Bell" size={20} />
-                <span className="absolute -top-1 -right-1 bg-error text-white text-xs font-body font-body-medium rounded-full h-5 w-5 flex items-center justify-center">
-                  3
-                </span>
-              </button>
-
+            <div className="flex items-center space-x-4 relative">
               {/* User Menu */}
-              <div className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-secondary-50 transition-smooth cursor-pointer">
+              <div 
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-secondary-50 transition-smooth cursor-pointer"
+              >
                 <div className="w-8 h-8 bg-secondary-200 rounded-full flex items-center justify-center">
                   <Icon name="User" size={16} className="text-secondary" />
                 </div>
                 <span className="hidden sm:block text-sm font-body font-body-medium text-text-primary">
-                  Admin User
+                  {adminUser ? `${adminUser.firstName} ${adminUser.lastName}` : "Admin User"}
                 </span>
                 <Icon
                   name="ChevronDown"
@@ -134,6 +137,40 @@ function AdminNavigation() {
                   className="text-text-secondary"
                 />
               </div>
+
+              {/* Profile Dropdown */}
+              {isProfileOpen && (
+                <div className="absolute top-full right-0 mt-2 w-64 bg-surface rounded-xl shadow-floating border border-border z-dropdown overflow-hidden">
+                  <div className="p-4 border-b border-border bg-surface-50">
+                    <p className="font-heading font-heading-bold text-text-primary">
+                      {adminUser ? `${adminUser.firstName} ${adminUser.lastName}` : "Admin User"}
+                    </p>
+                    <p className="text-sm font-body text-text-secondary truncate">
+                      {adminUser?.email || "admin@tastebite.com"}
+                    </p>
+                  </div>
+                  <div className="p-2">
+                    <div className="px-3 py-2">
+                      <p className="text-xs font-body font-body-medium text-text-secondary uppercase tracking-wider mb-1">Role</p>
+                      <p className="text-sm font-body text-text-primary capitalize">{adminUser?.role || "Admin"}</p>
+                    </div>
+                    {adminUser?.phone && (
+                      <div className="px-3 py-2">
+                        <p className="text-xs font-body font-body-medium text-text-secondary uppercase tracking-wider mb-1">Phone</p>
+                        <p className="text-sm font-body text-text-primary">{adminUser.phone}</p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-2 border-t border-border bg-surface-50">
+                    <button 
+                      onClick={() => setIsProfileOpen(false)}
+                      className="w-full text-left px-3 py-2 text-sm text-text-secondary hover:text-primary transition-smooth font-body"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

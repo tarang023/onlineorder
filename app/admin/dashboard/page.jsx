@@ -11,7 +11,6 @@ import OrderStatusChart from "../../components/restaurant-admin/OrderStatusChart
 import RecentActivity from "../../components/restaurant-admin/RecentActivity";
 import SalesOverview from "../../components/restaurant-admin/SalesOverview";
 import TopSellingItems from "../../components/restaurant-admin/TopSellingItems";
-
 function RestaurantAdminDashboard() {
   const [dateRange, setDateRange] = useState("week");
   const [isLoading, setIsLoading] = useState(true);
@@ -196,12 +195,6 @@ function RestaurantAdminDashboard() {
                     color="success"
                   />
 
-                  <QuickActionCard
-                    title="Reports"
-                    icon="BarChart2"
-                    path="/reports"
-                    color="warning"
-                  />
 
                   <QuickActionCard
                     title="Settings"

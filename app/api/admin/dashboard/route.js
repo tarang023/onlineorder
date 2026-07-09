@@ -158,6 +158,23 @@ export async function GET(request) {
       };
     });
 
+    // 7. Live Orders (Active, not delivered)
+    const liveOrdersData = await Order.find({ status: { $ne: 'delivered' } })
+      .sort({ createdAt: -1 })
+      .select("orderId items status createdAt customer totalAmount");
+
+    const liveOrders = liveOrdersData.map((order) => {
+      const orderTotal = order.totalAmount || order.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+      return {
+        id: order._id,
+        orderId: order.orderId,
+        customerName: order.customer?.name || "Customer",
+        status: order.status,
+        timestamp: order.createdAt,
+        total: orderTotal
+      };
+    });
+
     // 6. Construct Final Data
     const dashboardData = {
       summary: {
@@ -184,7 +201,8 @@ export async function GET(request) {
       orderStatusDistribution,
       // Location data requires a 'branch' field which is missing, returning empty to prevent errors
       locationPerformance: [], 
-      recentActivity
+      recentActivity,
+      liveOrders
     };
 
     return NextResponse.json({ success: true, data: dashboardData });

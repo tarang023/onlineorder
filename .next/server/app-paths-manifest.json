@@ -1,7 +1,0 @@
-{
-  "/api/admin/activity-log/route": "app/api/admin/activity-log/route.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/admin/top-selling/page": "app/admin/top-selling/page.js",
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/admin/activity-log/page": "app/admin/activity-log/page.js"
-}

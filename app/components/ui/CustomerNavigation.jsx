@@ -49,6 +49,7 @@ function CustomerNavigation() {
     { label: "Menu", path: "/menu-browse-search", icon: "ChefHat" },
     { label: "Orders", path: "/order-tracking-status", icon: "Clock" },
     { label: "Account", path: "/customer-account-order-history", icon: "User" },
+    { label: "Review Us", path: "/review-us", icon: "Star" },
   ];
 
   const isActivePath = (path) => location.pathname === path;
