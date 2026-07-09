@@ -77,7 +77,13 @@ export async function POST(req ) {
         estimatedCompletion:new Date(Date.now() + 140000),
       },
     ];
-    const totalAmountnt = 500;
+    let calculatedTotal = 0;
+    if (user.cart && user.cart.length > 0) {
+      calculatedTotal = user.cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+      calculatedTotal = calculatedTotal * 1.08; // add 8% tax
+    }
+    const totalAmount = reqBody.total || calculatedTotal;
+
          const newOrder= new Order({
            orderId,
             status,
@@ -85,7 +91,7 @@ export async function POST(req ) {
             estimatedDelivery, 
             pickupTime,
             address,
-            totalAmountnt,
+            totalAmount: totalAmount,
             orderType,
             user, 
             customer,

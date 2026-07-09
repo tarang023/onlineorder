@@ -267,13 +267,7 @@ useEffect(() => {
                 currentStatus={currentOrder.status}
               />
 
-              {/* Delivery Map (for delivery orders) */}
-              {currentOrder.orderType === "delivery" && (
-                <DeliveryMap
-                  order={currentOrder}
-                  driver={currentOrder.driver}
-                />
-              )}
+
 
               {/* Driver Details (when out for delivery) */}
               {currentOrder.status === "out_for_delivery" &&
@@ -311,23 +305,7 @@ useEffect(() => {
                       <p className="font-body font-body-medium text-text-primary">
                         {currentOrder.restaurant.name}
                       </p>
-                      <p className="text-sm text-text-secondary font-body">
-                        {currentOrder.restaurant.address}
-                      </p>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Icon
-                      name="Phone"
-                      size={20}
-                      className="text-text-secondary"
-                    />
-                    <a
-                      href={`tel:${currentOrder.restaurant.phone}`}
-                      className="text-primary hover:text-primary-700 font-body font-body-medium transition-smooth"
-                    >
-                      {currentOrder.restaurant.phone}
-                    </a>
                   </div>
                 </div>
               </div>

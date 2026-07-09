@@ -32,7 +32,7 @@ export async function POST(req ) {
             order.status='ready'
         }
         if(status=='completed'){
-            order.status='out_for_delivery';
+            order.status='ready';
         }
         // order.status = status;
         const customerName=user.firstName+" "+user.lastName;

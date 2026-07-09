@@ -10,7 +10,7 @@ export async function POST(req ) {
     try{
        const reqBody= await req.json()
        console.log("reqBody",reqBody);
-       const {email,phone,password,firstName,lastName,rememberMe,acceptTerms}=reqBody
+       const {email,phone,password,firstName,lastName,rememberMe,acceptTerms,isRider}=reqBody
  
       const user = await User.findOne({email})
       if(user){
@@ -31,7 +31,7 @@ export async function POST(req ) {
           password:hashedPassword,
           firstName,
           lastName,
-          role: "customer",
+          role: isRider ? "rider" : "customer",
         rememberMe,
         acceptTerms
       });

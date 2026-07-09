@@ -47,6 +47,7 @@ function CustomerLoginRegister() {
       firstName: "",
       lastName: "",
       acceptTerms: false,
+      isRider: false,
     });
     setErrors({});
     setPasswordStrength(0);
@@ -626,22 +627,35 @@ function CustomerLoginRegister() {
                 
 
                   {activeTab === "register" && (
-                    <label className="flex items-start space-x-3">
-                      <input
-                        type="checkbox"
-                        name="acceptTerms"
-                        checked={formData.acceptTerms}
-                        onChange={handleInputChange}
-                        className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2 mt-0.5"
-                      />
-                      <span className="text-sm font-body text-text-secondary">
-                        I agree to the{" "}
-                        <button
-                          type="button"
-                          className="text-primary hover:text-primary-700 font-body-medium"
-                        >
-                          Terms of Service
-                        </button>{" "}
+                    <>
+                      <label className="flex items-start space-x-3 mb-2">
+                        <input
+                          type="checkbox"
+                          name="isRider"
+                          checked={formData.isRider}
+                          onChange={handleInputChange}
+                          className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2 mt-0.5"
+                        />
+                        <span className="text-sm font-body text-text-secondary">
+                          I want to register as a Delivery Rider
+                        </span>
+                      </label>
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="checkbox"
+                          name="acceptTerms"
+                          checked={formData.acceptTerms}
+                          onChange={handleInputChange}
+                          className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2 mt-0.5"
+                        />
+                        <span className="text-sm font-body text-text-secondary">
+                          I agree to the{" "}
+                          <button
+                            type="button"
+                            className="text-primary hover:text-primary-700 font-body-medium"
+                          >
+                            Terms of Service
+                          </button>{" "}
                         and{" "}
                         <button
                           type="button"
@@ -651,6 +665,7 @@ function CustomerLoginRegister() {
                         </button>
                       </span>
                     </label>
+                    </>
                   )}
                 </div>
                 {

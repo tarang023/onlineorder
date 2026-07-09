@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema({
   },
   status:{
     type:String,
-    enum:['new','confirmed', 'preparing', 'ready', 'out_for_delivery', 'delivered'],
+    enum:['new','confirmed', 'preparing', 'ready', 'waiting_for_rider', 'out_for_delivery', 'delivered'],
     default:'preparing'
   },
   orderTime:{
@@ -70,7 +70,7 @@ const orderSchema = new mongoose.Schema({
     {
       status: {
         type: String,
-        enum: ['confirmed', 'preparing', 'ready', 'out_for_delivery', 'delivered'],
+        enum: ['confirmed', 'preparing', 'ready', 'waiting_for_rider', 'out_for_delivery', 'delivered'],
         default: 'preparing'
       },
       timestamp: {
@@ -92,6 +92,7 @@ const orderSchema = new mongoose.Schema({
     }
   ],
   driver: {
+    assignedRiderId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
     name: { type: String, default:"Mike Rodriguez" },
     photo: { type: String, default: "https://randomuser.me/api/portraits/men/32.jpg" },
     phone: { type: String, default: "+1 (555) 456-7890" },

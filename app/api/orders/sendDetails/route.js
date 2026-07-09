@@ -21,10 +21,9 @@ import User from "@/models/userModel"
       // const orderId = reqBody.orderId;
       const orderId=user.orderId;
       const order=await Order.findOne({ orderId: orderId });
-      if(!order){
+        if(!order){
              return NextResponse.json({message: "Order not found"}, {status: 404});
         }
-         order.items=user.cart;
     return NextResponse.json({
              message:"User found",
              data:order

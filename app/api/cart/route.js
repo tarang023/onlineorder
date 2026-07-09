@@ -34,23 +34,16 @@ export async function POST(request) {
     const userId = await getDataFromToken(request);
     const itemToAdd = await request.json();
 
-    const user = await User.findById(userId);
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-     
-    
-
-    const itemIndex = user.cart.findIndex(
-      (cartItem) => cartItem.productId === itemToAdd.id
+    // Attempt 1: Try to increment if the item already exists in the cart
+    let updatedUser = await User.findOneAndUpdate(
+      { _id: userId, "cart.productId": itemToAdd.id },
+      { $inc: { "cart.$.quantity": 1 } },
+      { new: true }
     );
 
-    if (itemIndex > -1) {
-      // If item exists, update its quantity
-      user.cart[itemIndex].quantity += 1;
-    } else {
-      // If item doesn't exist, add it to the cart
-       user.cart.push({
+    // If it didn't exist, try to push it
+    if (!updatedUser) {
+      const newItem = {
         productId: itemToAdd.id,
         name: itemToAdd.name,
         price: itemToAdd.price,
@@ -61,10 +54,28 @@ export async function POST(request) {
         prepTime: itemToAdd.prepTime,
         isAvailable: itemToAdd.isAvailable,
         rating: itemToAdd.rating,
-      });
+      };
+
+      // Attempt 2: Push only if the item is still NOT in the cart
+      updatedUser = await User.findOneAndUpdate(
+        { _id: userId, "cart.productId": { $ne: itemToAdd.id } },
+        { $push: { cart: newItem } },
+        { new: true }
+      );
+
+      // Attempt 3: If push failed, it means another concurrent request JUST pushed it, so we can now increment it safely
+      if (!updatedUser) {
+        updatedUser = await User.findOneAndUpdate(
+          { _id: userId, "cart.productId": itemToAdd.id },
+          { $inc: { "cart.$.quantity": 1 } },
+          { new: true }
+        );
+      }
     }
 
-    const updatedUser = await user.save();
+    if (!updatedUser) {
+      return NextResponse.json({ error: 'Failed to update cart' }, { status: 500 });
+    }
     return NextResponse.json({ cart: updatedUser.cart }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

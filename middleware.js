@@ -27,7 +27,10 @@ export async function middleware(request) {
     // B. Admin Paths (Only Admins allowed)
     const isAdminPath = path.startsWith('/admin') || path === '/kitchen-display-system';
 
-    // C. Customer Paths (Admins should NOT see these)
+    // C. Rider Paths (Only Riders allowed)
+    const isRiderPath = path.startsWith('/rider');
+
+    // D. Customer Paths (Admins should NOT see these)
     const customerPaths = [
         '/menu-browse-search',
         '/shopping-cart-checkout',
@@ -44,30 +47,49 @@ export async function middleware(request) {
     if (isAuthPage && userRole) {
         if (userRole === 'admin' || userRole === 'super_admin') {
             return NextResponse.redirect(new URL('/admin/dashboard', request.nextUrl));
+        } else if (userRole === 'rider') {
+            return NextResponse.redirect(new URL('/rider/dashboard', request.nextUrl));
         } else {
             return NextResponse.redirect(new URL('/menu-browse-search', request.nextUrl));
         }
     }
 
-    // 2. PROTECT ADMIN ROUTES (Block Customers)
+    // 2. PROTECT ADMIN ROUTES (Block Customers & Riders)
     if (isAdminPath) {
         if (!userRole) {
             return NextResponse.redirect(new URL('/customer-login-register', request.nextUrl));
         }
         if (userRole !== 'admin' && userRole !== 'super_admin') {
-            // If a customer tries to go to Admin Dashboard, send them to Menu
+            if (userRole === 'rider') {
+                return NextResponse.redirect(new URL('/rider/dashboard', request.nextUrl));
+            }
             return NextResponse.redirect(new URL('/menu-browse-search', request.nextUrl));
         }
     }
 
-    // 3. PROTECT CUSTOMER ROUTES (Block Admins) <--- NEW LOGIC HERE
+    // 3. PROTECT RIDER ROUTES (Block Customers & Admins)
+    if (isRiderPath) {
+        if (!userRole) {
+            return NextResponse.redirect(new URL('/customer-login-register', request.nextUrl));
+        }
+        if (userRole !== 'rider') {
+            if (userRole === 'admin' || userRole === 'super_admin') {
+                return NextResponse.redirect(new URL('/admin/dashboard', request.nextUrl));
+            }
+            return NextResponse.redirect(new URL('/menu-browse-search', request.nextUrl));
+        }
+    }
+
+    // 4. PROTECT CUSTOMER ROUTES (Block Admins & Riders)
     if (isCustomerPath) {
         if (!userRole) {
             return NextResponse.redirect(new URL('/customer-login-register', request.nextUrl));
         }
         if (userRole === 'admin' || userRole === 'super_admin') {
-            // If an Admin tries to buy food, send them back to Dashboard
             return NextResponse.redirect(new URL('/admin/dashboard', request.nextUrl));
+        }
+        if (userRole === 'rider') {
+            return NextResponse.redirect(new URL('/rider/dashboard', request.nextUrl));
         }
     }
 
@@ -86,5 +108,6 @@ export const config = {
         '/kitchen-display-system',
         '/customer-account-history',
         '/admin/:path*',
+        '/rider/:path*',
     ],
 };

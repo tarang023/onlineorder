@@ -18,16 +18,7 @@ function DriverDetails({ driver }) {
       </h3>
 
       <div className="flex items-start space-x-4">
-        {/* Driver Photo */}
-        <div className="flex-shrink-0">
-          <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-border">
-            <Image
-              src={driver.photo}
-              alt={driver.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
+
 
         {/* Driver Info */}
         <div className="flex-1 min-w-0">
@@ -76,46 +67,6 @@ function DriverDetails({ driver }) {
               <span>Message</span>
             </button>
           </div>
-        </div>
-      </div>
-
-      {/* Driver Stats */}
-      <div className="mt-6 pt-4 border-t border-border">
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div>
-            <p className="text-lg font-heading font-heading-medium text-text-primary">
-              1,247
-            </p>
-            <p className="text-sm text-text-secondary font-body">
-              Deliveries
-            </p>
-          </div>
-          <div>
-            <p className="text-lg font-heading font-heading-medium text-text-primary">
-              98%
-            </p>
-            <p className="text-sm text-text-secondary font-body">
-              On Time
-            </p>
-          </div>
-          <div>
-            <p className="text-lg font-heading font-heading-medium text-text-primary">
-              4.8
-            </p>
-            <p className="text-sm text-text-secondary font-body">
-              Rating
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Safety Features */}
-      <div className="mt-4 p-3 bg-accent-50 rounded-lg">
-        <div className="flex items-center space-x-2">
-          <Icon name="Shield" size={16} className="text-accent" />
-          <span className="text-sm text-accent font-body font-body-medium">
-            Verified driver with background check and insurance
-          </span>
         </div>
       </div>
     </div>
